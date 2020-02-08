@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_medium"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="4dp"
+        app:strokeColor="#A8A8A8"
+        app:strokeWidth="1dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/item_expert_profession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_margin="@dimen/margin_medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="Тренер по фигурному катанию" />
+
+            <TextView
+                android:id="@+id/item_expert_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_expert_profession"
+                android:layout_alignStart="@+id/item_expert_profession"
+
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="@string/expert_name_example" />
+
+            <TextView
+                android:id="@+id/item_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_expert_name"
+                android:layout_alignStart="@+id/item_expert_name"
+                android:layout_margin="@dimen/margin_medium"
+
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="11:15" />
+
+            <TextView
+                android:id="@+id/item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_expert_name"
+                android:layout_margin="@dimen/margin_medium"
+                android:layout_toEndOf="@+id/item_start_time"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="11 декабря 2020" />
+
+            <TextView
+                android:id="@+id/item_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_expert_name"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/margin_medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="1500 рублей" />
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

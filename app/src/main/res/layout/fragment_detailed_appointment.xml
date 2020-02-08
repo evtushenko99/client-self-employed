@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_medium"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/expert_profession_detailed_appointment"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="Тренер по фигурному катанию" />
+
+
+        <TextView
+            android:id="@+id/expert_name_detailed_appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            tools:text="@string/expert_name_example" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/expert_phone_number_detailed_appointment"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                tools:text="8-906-087-11-00" />
+
+            <ImageButton
+                android:id="@+id/call_with_whatsapp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_toStartOf="@+id/call_with_phone"
+                android:src="@drawable/whatsapp_icon" />
+
+            <ImageButton
+                android:id="@+id/call_with_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_phone_black_24dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/time_detailed_appointment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            tools:text="11:15" />
+
+        <TextView
+            android:id="@+id/date_detailed_appointment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            tools:text="11 декабря 2020" />
+
+        <TextView
+            android:id="@+id/cost_detailed_appointment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            tools:text="1500 рублей" />
+
+        <TextView
+            android:id="@+id/location_detailed_appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            tools:text="ТЦ Европейский" />
+
+        <TextView
+            android:id="@+id/additional_information_detailed_appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            tools:text="На катке очень холодно, нужно утеплиться" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancel_appointment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/corners_for_buttons"
+        android:padding="@dimen/padding_high"
+        android:text="@string/cancel_appointment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button" />
+
+
+</RelativeLayout>
