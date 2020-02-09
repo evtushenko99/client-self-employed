@@ -14,7 +14,7 @@ public class AppointmentsIteractor {
                 2);
         Appointment appointment2 = new Appointment(2, "Подкатка", "90 минут", 15000,
                 "Европейский", 2020, 2, 1, 12, 0,
-                2,
+                1,
                 1);
         Appointment appointment3 = new Appointment(3, "Подкатка", "90 минут", 500,
                 "Европейский", 2020, 2, 1, 9, 0,

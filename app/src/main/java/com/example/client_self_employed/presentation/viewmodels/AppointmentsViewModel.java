@@ -62,7 +62,7 @@ public class AppointmentsViewModel extends ViewModel {
 
             if (expertList.size() != 0) {
                 for (Expert expert : expertList) {
-                    list.add(new ClientSelectedExportItem(expert.getId(), expert.getFirstName(), null));
+                    list.add(new ClientSelectedExportItem(expert.getId(), expert.getAbbreviatedFullName(), null));
                 }
                 ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
                 mRowTypes.add(0, item);
@@ -139,7 +139,7 @@ public class AppointmentsViewModel extends ViewModel {
         for (int i = 0; i < appointments.size(); i++) {
             for (int j = 0; j < experts.size(); j++) {
                 if (appointments.get(i).getExpertId() == experts.get(j).getId()) {
-                    expertsName.put(i, experts.get(j).getFirstName());
+                    expertsName.put(i, experts.get(j).getFullName());
                     expertsProfession.put(i, experts.get(j).getProfession());
                     expertsNumber.put(i, experts.get(j).getPhoneNumber());
                 }

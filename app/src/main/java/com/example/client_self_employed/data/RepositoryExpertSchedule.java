@@ -43,7 +43,7 @@ public class RepositoryExpertSchedule implements IExpertRepository {
                         String name = null;
                         for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                             Expert expert = keyExpert.getValue(Expert.class);
-                            name = expert.getFirstName();
+                            name = expert.getFullName();
                         }
                         expertScheduleStatus.scheduleIsLoaded(mAppointments, name);
                     }
@@ -57,7 +57,7 @@ public class RepositoryExpertSchedule implements IExpertRepository {
 
     @Override
     public void loadExpertSchedule(long expertId, IExpertScheduleStatus expertScheduleStatus) {
-        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID).equalTo(expertId).getRef()
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID).equalTo(expertId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -17,6 +17,7 @@
         android:id="@+id/item_schedule_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/primaryDarkColor"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.Compat.Notification.Time.Media"
         android:textSize="24sp"

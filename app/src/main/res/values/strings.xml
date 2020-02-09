@@ -1,13 +1,21 @@
 <resources>
-    <string firstName="app_name">client-self-employed</string>
-    <string firstName="caption_for_expert_selection">Выбрать эксперта</string>
-    <string firstName="new_appointment">Новая запись</string>
-    <string firstName="caption_list_of_active_appointments">Список активных записей</string>
-    <string firstName="confirm_selection_button">Подтвердить выбор</string>
-    <string firstName="recommendations">Рекомендации</string>
-    <string firstName="caption_for_selected_expert">Выбранный эксперт</string>
-    <string firstName="expert_name_example">Евтушенко Максим Евгеньевич</string>
-    <string firstName="cancel_appointment">Отменить запись</string>
-    <string firstName="no_appointments">Вы еще не записаны ни к одному эксперту</string>
-    <string firstName="item_search_expert">Найти эксперта</string>
+    <string name="app_name">client-self-employed</string>
+    <string name="caption_for_expert_selection">Выбрать эксперта</string>
+    <string name="new_appointment">Новая запись</string>
+    <string name="caption_list_of_active_appointments">Список активных записей</string>
+    <string name="confirm_selection_button">Подтвердить выбор</string>
+    <string name="recommendations">Рекомендации</string>
+    <string name="caption_for_selected_expert">Выбранный эксперт</string>
+    <string name="expert_name_example">Евтушенко Максим Евгеньевич</string>
+    <string name="cancel_appointment">Отменить запись</string>
+    <string name="no_appointments">Вы еще не записаны ни к одному эксперту</string>
+    <string name="item_search_expert">Найти эксперта</string>
+    <string name="expert_schedule_no_time">В ближайшее время нет записи у данного специалиста</string>
+    <string name="expert_detailed_appointment_service_name">Название услуги</string>
+    <string name="button_expert_detailed_appointment">Записаться</string>
+    <string name="expert_detailed_appointment_time">Время начала предоставления услуги</string>
+    <string name="expert_detailed_appointment_date">Дата</string>
+    <string name="expert_detailed_appointment_location">Локация</string>
+    <string name="expert_detailed_appointment_duration">Продолжительность услуги</string>
+    <string name="expert_detailed_appointment_cost">Стоимость</string>
 </resources>

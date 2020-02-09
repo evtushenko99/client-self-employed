@@ -20,13 +20,21 @@ public class Expert {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
-
         mPatronymic = patronymic;
         mAge = age;
         mEmail = email;
         mPhoneNumber = phoneNumber;
         mProfession = profession;
         mWorkExperience = workExperience;
+    }
+
+    public String getFullName() {
+        return mLastName + " " + mFirstName + " " + mPatronymic;
+    }
+
+    public String getAbbreviatedFullName() {
+        return mLastName + " " + mFirstName.substring(0, 1) + " " + mPatronymic.substring(0, 1);
+
     }
 
     public String getLastName() {

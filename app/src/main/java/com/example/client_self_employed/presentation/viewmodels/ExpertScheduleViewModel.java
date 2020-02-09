@@ -67,4 +67,10 @@ public class ExpertScheduleViewModel extends ViewModel {
     public LiveData<List<Appointment>> getExpertSchedule() {
         return mExpertSchedule;
     }
+
+    public IResourceWrapper getResourceWrapper() {
+        return mResourceWrapper;
+    }
+
+
 }

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="Евтушенко Максим Евгеньевич" />
 
     <androidx.recyclerview.widget.RecyclerView

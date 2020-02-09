@@ -42,7 +42,15 @@ public class Appointment implements Comparable<Appointment> {
 
     public String getStringTime() {
         StringBuilder stringTime = new StringBuilder();
-        stringTime.append(mStartHourOfDay).append(":").append(mStartMinute);
+        String startHourOfDay = String.valueOf(mStartHourOfDay);
+        String startMinute = String.valueOf(mStartMinute);
+        if (mStartHourOfDay == 0) {
+            startHourOfDay = "00";
+        }
+        if (mStartMinute == 0) {
+            startMinute = "00";
+        }
+        stringTime.append(startHourOfDay).append(":").append(startMinute);
         return stringTime.toString();
     }
 
@@ -54,8 +62,7 @@ public class Appointment implements Comparable<Appointment> {
         } else if (this.getDayOfMonth() > o.getDayOfMonth()) {
             return +1;
         } else if (this.getDayOfMonth() == o.getDayOfMonth()
-                && this.getStartHourOfDay() < o.getStartHourOfDay()
-                && this.getStartMinute() < o.getStartMinute()) {
+                && this.getStartHourOfDay() < o.getStartHourOfDay()) {
             return -1;
         } else return +1;
     }

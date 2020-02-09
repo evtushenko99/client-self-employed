@@ -118,6 +118,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/corners_for_buttons"
         android:padding="@dimen/padding_high"
+        android:textColor="#FFF"
         android:text="@string/cancel_appointment"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button" />
 

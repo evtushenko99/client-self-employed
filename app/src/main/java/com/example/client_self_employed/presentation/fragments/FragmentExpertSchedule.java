@@ -1,5 +1,6 @@
 package com.example.client_self_employed.presentation.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,6 +44,7 @@ public class FragmentExpertSchedule extends Fragment {
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -61,6 +64,7 @@ public class FragmentExpertSchedule extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setupScheduleMVVM(long id) {
         mScheduleViewModel = ViewModelProviders.of(getActivity(), new ExpertScheduleViewModelFactory(getActivity()))
                 .get(ExpertScheduleViewModel.class);
@@ -69,7 +73,7 @@ public class FragmentExpertSchedule extends Fragment {
             mExpertNameTitle.setText(expertName);
         });
         mScheduleViewModel.getExpertSchedule().observe(this, expertSchedule -> {
-            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule));
+            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper()));
         });
 
 

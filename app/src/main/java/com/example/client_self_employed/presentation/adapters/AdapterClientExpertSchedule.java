@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Appointment;
+import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+
 
 /**
  * Адаптер для отображения расписания эксперта
@@ -34,42 +37,58 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
      * Тип элемента списка - время
      */
     private static final int ITEM_VIEW_TYPE_TIME = 1;
+
     private List<Object> mAdapterItems;
     private List<Appointment> mExpertSchedule;
+    private IResourceWrapper mResourceWrapper;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public AdapterClientExpertSchedule(List<Appointment> expertSchedule) {
+    public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper) {
         mExpertSchedule = expertSchedule;
+        mResourceWrapper = resourceWrapper;
         groupAppointmentByDate(mExpertSchedule);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void groupAppointmentByDate(@NonNull List<Appointment> expertSchedule) {
+    private void groupAppointmentByDate(List<Appointment> expertSchedule) {
+
         mAdapterItems = new ArrayList<>();
+        if (expertSchedule.size() != 0) {
+            ArrayList<Appointment> timesForDay = new ArrayList<>();
 
-        ArrayList<Appointment> timesForDay = new ArrayList<>();
+            int day = 0;
+            for (Appointment appointment : expertSchedule) {
 
-        int day = 0;
-
-        for (Appointment appointment : expertSchedule) {
-
-            if (appointment.getDayOfMonth() > day) {
-                day = appointment.getDayOfMonth();
-                timesForDay = new ArrayList<>();
-                Calendar calendar = new GregorianCalendar(appointment.getYear(), appointment.getMonth(), appointment.getDayOfMonth());
-                Date date = calendar.getTime();
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat format = new SimpleDateFormat("d MMMM yyyy");
-                // time.put(appointment.getDayOfMonth(),appointment );
-
-                mAdapterItems.add(format.format(date));
-                mAdapterItems.add(timesForDay);
+                if (appointment.getDayOfMonth() > day) {
+                    day = appointment.getDayOfMonth();
+                    timesForDay = new ArrayList<>();
+                    mAdapterItems.add(ruDateFormat(appointment));
+                    mAdapterItems.add(timesForDay);
+                }
+                timesForDay.add(appointment);
             }
-            timesForDay.add(appointment);
-            // time.put(appointment.getDayOfMonth(),appointment );
-            //mAdapterItems.add(timesForDay);
+        } else {
+            mAdapterItems.add(mResourceWrapper.getString(R.string.expert_schedule_no_time));
         }
+    }
+
+    private String ruDateFormat(Appointment appointment) {
+        String dateFormat = "";
+        try {
+            String date = new StringBuilder().append(appointment.getDayOfMonth()).append(".").append(appointment.getMonth()).append(".").append(appointment.getYear()).toString();
+            @SuppressLint("SimpleDateFormat")
+            Date jud = new SimpleDateFormat("dd.MM.yyyy").parse(date);
+            if (jud != null) {
+                dateFormat = DateFormat.getDateInstance(SimpleDateFormat.LONG, new Locale("ru")).format(jud);
+                String[] month = dateFormat.split(" ");
+                dateFormat = month[0] + " " + month[1];
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateFormat;
     }
 
     @Override
@@ -110,7 +129,6 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
                 List<Appointment> appointments1 = new ArrayList<>((List<Appointment>) item);
                 // ((ScheduleHolder) holder).bindView((Appointment) item);
                 ((ScheduleHolder) holder).mRecycler.setAdapter(new AdapterExpertScheduleDaysTime(appointments1));
-
                 break;
             case ITEM_VIEW_TYPE_DATE:
                 ((DateHolder) holder).bindView((String) item);

@@ -56,7 +56,7 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
         }
 
         public void bindView(@NonNull Appointment appointment) {
-            mTime.setText(appointment.getStartTime());
+            mTime.setText(appointment.getStringTime());
 
         }
 
