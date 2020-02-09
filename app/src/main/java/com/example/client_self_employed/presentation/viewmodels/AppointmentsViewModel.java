@@ -36,98 +36,81 @@ public class AppointmentsViewModel extends ViewModel {
     private List<Expert> mExpertList = new ArrayList<>();
     private List<RowType> mRowTypes = new ArrayList<>();
 
-    private IAppointmentStatus mAppointmentStatus;
+    private IAppointmentStatus mAppointmentStatus = new IAppointmentStatus() {
+        @Override
+        public void clientsAppointmentsIsLoaded(@NonNull List<Appointment> appointmentList, @NonNull List<Expert> expertList) {
+            if (appointmentList.size() != 0 && expertList.size() != 0) {
+                List<RowType> activeAppointments = convertAppointmentToRowType(appointmentList, expertList);
+                if (activeAppointments != null) {
+
+                    mRowTypes.addAll(activeAppointments);
+                    mLiveData.postValue(mRowTypes);
+                    mIsLoading.postValue(false);
+                }
+            } else {
+                mRowTypes.add(new ClientNoAppoinmentItem());
+                mLiveData.postValue(mRowTypes);
+                mIsLoading.postValue(false);
+            }
+
+
+        }
+
+        @Override
+        public void clientsExpertsIsLoaded(List<Expert> expertList) {
+            List<ClientSelectedExportItem> list = new ArrayList<>();
+
+            if (expertList.size() != 0) {
+                for (Expert expert : expertList) {
+                    list.add(new ClientSelectedExportItem(expert.getId(), expert.getFirstName(), null));
+                }
+                ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
+                mRowTypes.add(0, item);
+                mLiveData.postValue(mRowTypes);
+            }
+        }
+
+        @Override
+        public void clientAppointmentIsDeleted(Boolean isDeleted) {
+            if (isDeleted) {
+                Log.d(TAG, "clientAppointmentIsDeleted: true");
+                //mIsLoading.setValue(true);
+            }
+        }
+
+        @Override
+        public void dataIsInserted() {
+
+        }
+
+        @Override
+        public void dataIsUpdates() {
+
+        }
+
+        @Override
+        public void dataIsDeleted() {
+
+        }
+    };
 
     public AppointmentsViewModel(
             @NonNull AppointmentsIteractor iteractor,
             @NonNull Executor executor) {
         mAppointmentsIteractor = iteractor;
         mExecutor = executor;
-        mAppointmentStatus = new IAppointmentStatus() {
-            @Override
-            public void clientsAppointmentsIsLoaded(@NonNull List<Appointment> appointmentList, @NonNull List<Expert> expertList) {
-                if (appointmentList.size() != 0 && expertList.size() != 0) {
-                    mAppointmentList.clear();
-                    mExpertList.clear();
-
-                    mAppointmentList = appointmentList;
-                    mExpertList = expertList;
-
-                    List<RowType> activeAppointments = convertAppointmentToRowType(mAppointmentList, mExpertList);
-                    if (activeAppointments != null) {
-                        mRowTypes.addAll(activeAppointments);
-                        mLiveData.postValue(mRowTypes);
-                        mIsLoading.postValue(false);
-                    }
-                }else {
-                    mRowTypes.add(new ClientNoAppoinmentItem());
-                    mLiveData.postValue(mRowTypes);
-                    mIsLoading.postValue(false);
-                }
-
-
-            }
-
-            @Override
-            public void clientsExpertsIsLoaded(List<Expert> expertList) {
-                List<ClientSelectedExportItem> list = new ArrayList<>();
-
-                if (expertList.size() != 0) {
-                    for (Expert expert : expertList) {
-                        list.add(new ClientSelectedExportItem(expert.getId(), expert.getName(), null));
-                    }
-                    ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
-                    mRowTypes.add(0, item);
-                    mLiveData.postValue(mRowTypes);
-                }
-            }
-
-            @Override
-            public void clientAppointmentIsDeleted(Boolean isDeleted) {
-                if (isDeleted){
-                    Log.d(TAG, "clientAppointmentIsDeleted: true");
-                    mIsLoading.setValue(true);
-                    mExecutor.execute(()->{
-                        mAppointmentsIteractor.loadClientsAppointments(2, mAppointmentStatus);
-                        mAppointmentsIteractor.loadClientsExperts(mAppointmentStatus);
-                    });
-                }
-            }
-
-            @Override
-            public void dataIsInserted() {
-
-            }
-
-            @Override
-            public void dataIsUpdates() {
-
-            }
-
-            @Override
-            public void dataIsDeleted() {
-
-            }
-        };
     }
 
     public void loadClientAppointments() {
         mIsLoading.setValue(true);
         mExecutor.execute(() -> {
-
             mAppointmentsIteractor.loadClientsAppointments(2, mAppointmentStatus);
-            mAppointmentsIteractor.loadClientsExperts(mAppointmentStatus);
-            //mAppointmentsIteractor.loadExpert(1, mAppointmentStatus);
-            //List<RowType> rowTypes = new ArrayList<>();
-
-            mRowTypes.add(new ClientButtonItem());
-            if (mAppointmentList.size() != 0 && mExpertList.size() != 0) {
-                List<RowType> appointmentList = convertAppointmentToRowType(mAppointmentList, mExpertList);
-                mRowTypes.addAll(appointmentList);
-            }
-
-
         });
+        mExecutor.execute(() -> {
+            mAppointmentsIteractor.loadClientsExperts(mAppointmentStatus);
+        });
+        mRowTypes.add(new ClientButtonItem());
+        mLiveData.postValue(mRowTypes);
 
 
     }
@@ -136,9 +119,11 @@ public class AppointmentsViewModel extends ViewModel {
         return mLiveData;
     }
 
-   public void deleteClientAppointment(long appoinmentId){
-        mAppointmentsIteractor.deleteClientAppointment(appoinmentId, mAppointmentStatus);
-   }
+    public void deleteClientAppointment(long appointmentId, int position) {
+        mAppointmentsIteractor.deleteClientAppointment(appointmentId, mAppointmentStatus);
+        mRowTypes.remove(position);
+        mLiveData.postValue(mRowTypes);
+    }
 
     public LiveData<Boolean> getIsLoading() {
         return mIsLoading;
@@ -154,7 +139,7 @@ public class AppointmentsViewModel extends ViewModel {
         for (int i = 0; i < appointments.size(); i++) {
             for (int j = 0; j < experts.size(); j++) {
                 if (appointments.get(i).getExpertId() == experts.get(j).getId()) {
-                    expertsName.put(i, experts.get(j).getName());
+                    expertsName.put(i, experts.get(j).getFirstName());
                     expertsProfession.put(i, experts.get(j).getProfession());
                     expertsNumber.put(i, experts.get(j).getPhoneNumber());
                 }
@@ -167,11 +152,11 @@ public class AppointmentsViewModel extends ViewModel {
                     expertsName.get(i),
                     expertsNumber.get(i),
                     appointments.get(i).getServiceName(),
-                    appointments.get(i).getStartTime(),
+                    appointments.get(i).getStringTime(),
                     appointments.get(i).getSessionDuration(),
                     appointments.get(i).getCost(),
                     appointments.get(i).getLocation(),
-                    appointments.get(i).getDate()));
+                    appointments.get(i).getStringDate()));
         }
         return data;
 

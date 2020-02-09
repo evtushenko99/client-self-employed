@@ -6,12 +6,14 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.fragments.FragmentsActiveAppointments;
 
-public class ActivityActiveAppointments extends AppCompatActivity {
-
+public class ActivityActiveAppointments extends AppCompatActivity implements IUpdateRecyclerListener {
+    private static final String SAVED_HOLDER_POSITION = "POSITION";
     private static final String TAG = "TAG";
 
     @Override
@@ -19,11 +21,10 @@ public class ActivityActiveAppointments extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_host_appointments_with_experts) == null ) {
-            getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_host_appointments_with_experts, FragmentsActiveAppointments.newInstance())
                     .commit();
-        }
+
     }
 
     @Override
@@ -50,5 +51,17 @@ public class ActivityActiveAppointments extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void deleteAppointmentFromRecycler(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(SAVED_HOLDER_POSITION, position);
+        Fragment fragment = new FragmentsActiveAppointments();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_host_appointments_with_experts, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .commit();
     }
 }

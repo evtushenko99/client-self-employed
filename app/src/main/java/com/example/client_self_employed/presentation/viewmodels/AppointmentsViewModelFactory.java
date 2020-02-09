@@ -26,7 +26,7 @@ public class AppointmentsViewModelFactory extends ViewModelProvider.NewInstanceF
         if (AppointmentsViewModel.class.equals(modelClass)) {
             IAppointmentsRepository appointmentsRepository = new RepositoryAppointments();
             AppointmentsIteractor iteractor = new AppointmentsIteractor(appointmentsRepository);
-            Executor executor = Executors.newSingleThreadExecutor();
+            Executor executor = Executors.newFixedThreadPool(10);
             return (T) new AppointmentsViewModel(iteractor, executor);
         } else {
             return super.create(modelClass);

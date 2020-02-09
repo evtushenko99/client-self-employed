@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ClientAppointmentItem implements RowType, Serializable {
 
@@ -17,10 +16,10 @@ public class ClientAppointmentItem implements RowType, Serializable {
     private String mSessionDuration;//Продолжительность занятия
     private int mCost;//стоимость занятия
     private String mLocation; // место проведения
-    private Date mDate;
+    private String mDate;
 
 
-    public ClientAppointmentItem(long id, String expertProfession, String expertName, String expertNumber, String serviceName, String startTime, String sessionDuration, int cost, String location, Date date) {
+    public ClientAppointmentItem(long id, String expertProfession, String expertName, String expertNumber, String serviceName, String startTime, String sessionDuration, int cost, String location, String date) {
         mId = id;
         mExpertProfession = expertProfession;
         mExpertName = expertName;
@@ -117,11 +116,11 @@ public class ClientAppointmentItem implements RowType, Serializable {
         mLocation = location;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return mDate;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         mDate = date;
     }
 

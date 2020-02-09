@@ -48,10 +48,10 @@ public class FragmentExpertSchedule extends Fragment {
         mExpertNameTitle = view.findViewById(R.id.schedule_expert_name);
 
         mScheduleRecycler = view.findViewById(R.id.schedule_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
         //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL);
-        mScheduleRecycler.setLayoutManager(gridLayoutManager);
+        mScheduleRecycler.setLayoutManager(layoutManager);
         //mScheduleRecycler.addItemDecoration(dividerItemDecoration);
         if (this.getArguments() != null) {
             long id = this.getArguments().getLong(Arguments.EXPERT_ID);

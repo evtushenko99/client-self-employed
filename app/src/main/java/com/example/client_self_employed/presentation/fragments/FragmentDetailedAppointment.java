@@ -29,6 +29,7 @@ import com.example.client_self_employed.presentation.viewmodels.AppointmentsView
 public class FragmentDetailedAppointment extends Fragment implements View.OnClickListener {
     public static final int REQUEST_CALL_PHONE = 0;
     public static final String SAVED_APPOINTMENT = "APPOINTMENT";
+    private static final String SAVED_HOLDER_POSITION = "POSITION";
     private TextView mExpertProfessionTextView;
     private TextView mExpertNameTextView;
     private TextView mExpertPhoneNumberTextView;
@@ -42,6 +43,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
 
     private AppointmentsViewModel mViewModel;
     private ClientAppointmentItem mAppointment;
+    private int mPosition;
 
     public static FragmentDetailedAppointment newInstance() {
 
@@ -57,6 +59,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (this.getArguments() != null) {
             mAppointment = (ClientAppointmentItem) this.getArguments().getSerializable(SAVED_APPOINTMENT);
+            mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
 
         }
         return inflater.inflate(R.layout.fragment_detailed_appointment, container, false);
@@ -85,7 +88,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
         mExpertNameTextView.setText(mAppointment.getExpertName());
         mExpertPhoneNumberTextView.setText(mAppointment.getExpertNumber());
         mTimeTextView.setText(mAppointment.getStartTime());
-        mDateTextView.setText(mAppointment.getStringDate());
+        mDateTextView.setText(mAppointment.getDate());
         mCostTextView.setText(String.valueOf(mAppointment.getCost()));
         mLocationTextView.setText(mAppointment.getLocation());
         mAdditionalInformationTextView.setText("");
@@ -102,9 +105,11 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
 
                         mViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
                                 .get(AppointmentsViewModel.class);
-                        mViewModel.deleteClientAppointment(mAppointment.getId());
-                        Intent intent = new Intent(getActivity(), ActivityActiveAppointments.class);
-                        startActivity(intent );
+                        mViewModel.deleteClientAppointment(mAppointment.getId(), mPosition);
+
+                        ((ActivityActiveAppointments) getActivity()).deleteAppointmentFromRecycler(mPosition);
+                        //Intent intent = new Intent(getActivity(), ActivityActiveAppointments.class);
+                        //startActivity(intent);
                     }
                 });
                 builder.setNegativeButton("Нет", null);

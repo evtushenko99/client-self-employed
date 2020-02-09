@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,16 +14,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.ActivityExpertSchedule;
-import com.example.client_self_employed.presentation.clicklisteners.AppointmentsItemClickListener;
 import com.example.client_self_employed.presentation.Arguments;
-import com.example.client_self_employed.presentation.clicklisteners.ButtonItemClickListener;
-import com.example.client_self_employed.presentation.ActivityDetailedAppointment;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertsItemClickListener;
 import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
 import com.example.client_self_employed.presentation.adapters.items.ClientAppointmentItem;
+import com.example.client_self_employed.presentation.clicklisteners.AppointmentsItemClickListener;
+import com.example.client_self_employed.presentation.clicklisteners.ExpertsItemClickListener;
+import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItemClickListener;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 
@@ -30,10 +31,16 @@ import java.util.Objects;
 
 
 public class FragmentsActiveAppointments extends Fragment {
-    public static final String SAVED_APPOINTMENT = "APPOINTMENT";
+    private static final long MOVE_DEFAULT_TIME = 1000;
+    private static final long FADE_DEFAULT_TIME = 300;
+
+    private static final String SAVED_APPOINTMENT = "APPOINTMENT";
+    private static final String SAVED_HOLDER_POSITION = "POSITION";
+
     private RecyclerView mRecyclerView;
     private AppointmentsViewModel mViewModel;
     private long mExpertId;
+    private int mPosition;
 
     public static FragmentsActiveAppointments newInstance() {
         Bundle args = new Bundle();
@@ -45,13 +52,16 @@ public class FragmentsActiveAppointments extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (this.getArguments() != null) {
+            mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
+        }
         setRetainInstance(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.appointments_with_experts_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_appointments_with_experts_fragment, container, false);
     }
 
     @Override
@@ -63,44 +73,75 @@ public class FragmentsActiveAppointments extends Fragment {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.setAdapter(new AdapterClientsAppointments(null,
+                        new AppointmentsItemClickListener() {
+                            @Override
+                            public void onAppointmentsItemClickListener(ClientAppointmentItem appointment, int holderPosition) {
+                                FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(SAVED_APPOINTMENT, appointment);
+                                bundle.putInt(SAVED_HOLDER_POSITION, holderPosition);
+                                fragmentDetailedAppointment.setArguments(bundle);
+
+                                Fade enterFade = new Fade();
+                                // enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
+                                enterFade.setDuration(FADE_DEFAULT_TIME);
+                                fragmentDetailedAppointment.setEnterTransition(enterFade);
+                                fragmentDetailedAppointment.setExitTransition(enterFade);
+
+                                //intent.putExtra(SAVED_APPOINTMENT, appointment);
+
+                                // int fade = TransitionInflater.from(getActivity()).inflateTransition(R.transition.fade).get;
+
+                                getActivity().getSupportFragmentManager().beginTransaction()
+
+                                        .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
+                                        .addToBackStack(null)
+                                        // .setTransition(fade)
+                                        .commit();
+
+                            }
+                        }, new NewRecordToBestExpertButtonItemClickListener() {
+                    @Override
+                    public void onButtonItemClickListener() {
+                        if (mExpertId != 0) {
+                            Intent intent = new Intent(getActivity(), ActivityExpertSchedule.class);
+                            intent.putExtra(Arguments.EXPERT_ID, mExpertId);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getActivity(), "Выберите желаемого эксперта", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new ExpertsItemClickListener() {
+                    @Override
+                    public void onExpertItemClickListener(long expertId) {
+                        mExpertId = expertId;
+                    }
+                })
+        );
         setupMvvm();
+        if (mPosition > 0) {
+            deleteItem();
+        }
 
+    }
 
+    private void deleteItem() {
+        //  ((AdapterClientsAppointments) mRecyclerView.getAdapter()).deleteItem(mPosition);
     }
 
     private void setupMvvm() {
         mViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
                 .get(AppointmentsViewModel.class);
-        mViewModel.loadClientAppointments();
+        if (!mViewModel.getLiveData().hasObservers()) {
+            mViewModel.loadClientAppointments();
+        }
+
         mViewModel.getLiveData().observe(this, rowTypes -> {
-            mRecyclerView.setAdapter(new AdapterClientsAppointments(rowTypes,
-                            new AppointmentsItemClickListener() {
-                                @Override
-                                public void onAppointmentsItemClickListener(ClientAppointmentItem appointment) {
-                                    Intent intent = new Intent(getActivity(), ActivityDetailedAppointment.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable(SAVED_APPOINTMENT, appointment);
-                                    //intent.putExtra(SAVED_APPOINTMENT, appointment);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                }
-                            }, new ButtonItemClickListener() {
-                        @Override
-                        public void onButtonItemClickListener() {
-                            if (mExpertId != -1) {
-                                Intent intent = new Intent(getActivity(), ActivityExpertSchedule.class);
-                                intent.putExtra(Arguments.EXPERT_ID, mExpertId);
-                                startActivity(intent);
-                            }
-                        }
-                    }, new ExpertsItemClickListener() {
-                        @Override
-                        public void onExpertItemClickListener(long expertId) {
-                            mExpertId = expertId;
-                        }
-                    })
-            );
+
+            ((AdapterClientsAppointments) mRecyclerView.getAdapter()).setRowTypes(rowTypes);
         });
+
     }
 
 

@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -42,7 +43,7 @@ public class RepositoryExpertSchedule implements IExpertRepository {
                         String name = null;
                         for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                             Expert expert = keyExpert.getValue(Expert.class);
-                            name = expert.getName();
+                            name = expert.getFirstName();
                         }
                         expertScheduleStatus.scheduleIsLoaded(mAppointments, name);
                     }
@@ -56,7 +57,7 @@ public class RepositoryExpertSchedule implements IExpertRepository {
 
     @Override
     public void loadExpertSchedule(long expertId, IExpertScheduleStatus expertScheduleStatus) {
-        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID).equalTo(expertId)
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID).equalTo(expertId).getRef()
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -66,6 +67,8 @@ public class RepositoryExpertSchedule implements IExpertRepository {
                             Appointment appointment = keyMode.getValue(Appointment.class);
                             mAppointments.add(appointment);
                         }
+                        Collections.sort(mAppointments);
+
                         loadExpertName(expertId, expertScheduleStatus);
                     }
 

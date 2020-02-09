@@ -26,6 +26,7 @@
 
             <ImageView
                 android:id="@+id/item_selected_expert_photo"
+
                 android:layout_width="108dp"
                 android:layout_height="109dp"
                 android:layout_gravity="center"

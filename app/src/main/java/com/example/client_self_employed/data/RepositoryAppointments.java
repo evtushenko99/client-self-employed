@@ -12,8 +12,6 @@ import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.domain.model.Review;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,26 +53,18 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
-                           Appointment appointment = keyExpert.getValue(Appointment.class);
-                           appointment.setClientId(0);
-                            mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment);
+                            Appointment appointment = keyExpert.getValue(Appointment.class);
+                            appointment.setClientId(0);
+                            mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment)
+                                    .addOnCompleteListener(task -> dataStatus.clientAppointmentIsDeleted(true));
                         }
 
-                        if (mExperts.size() == mExpertIds.size())
-                            dataStatus.clientsAppointmentsIsLoaded(mAppointments, mExperts);
 
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
-                    }
-                });
-        mDatabaseReferenceAppointment.child(FirebaseAppoinment.Fields.CLIENT_ID).setValue(0)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        dataStatus.clientAppointmentIsDeleted(true);
                     }
                 });
     }

@@ -3,7 +3,9 @@ package com.example.client_self_employed.domain.model;
 public class Expert {
 
     private long mId;
-    private String mName;
+    private String mLastName;
+    private String mFirstName;
+    private String mPatronymic;//Отчество
     private int mAge;
     private String mEmail;
     private String mPhoneNumber;
@@ -14,15 +16,33 @@ public class Expert {
     public Expert() {
     }
 
-    public Expert(long id, String name, int age, String email, String phoneNumber, String profession, int workExperience) {
+    public Expert(long id, String lastName, String firstName, String patronymic, int age, String email, String phoneNumber, String profession, int workExperience) {
         mId = id;
-        mName = name;
+        mLastName = lastName;
+        mFirstName = firstName;
+
+        mPatronymic = patronymic;
         mAge = age;
         mEmail = email;
         mPhoneNumber = phoneNumber;
         mProfession = profession;
         mWorkExperience = workExperience;
+    }
 
+    public String getLastName() {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
+    }
+
+    public String getPatronymic() {
+        return mPatronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        mPatronymic = patronymic;
     }
 
     public long getId() {
@@ -33,12 +53,12 @@ public class Expert {
         mId = id;
     }
 
-    public String getName() {
-        return mName;
+    public String getFirstName() {
+        return mFirstName;
     }
 
-    public void setName(String name) {
-        mName = name;
+    public void setFirstName(String firstName) {
+        mFirstName = firstName;
     }
 
     public int getAge() {

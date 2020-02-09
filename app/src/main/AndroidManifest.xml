@@ -5,7 +5,7 @@
     package="com.example.client_self_employed">
 
     <dist:module dist:instant="true" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:firstName="android.permission.CALL_PHONE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,16 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.ActivityDetailedAppointment"></activity>
-        <activity android:name=".presentation.ActivityAuthorization" />
-        <activity android:name=".presentation.ActivityActiveAppointments">
+        <activity android:firstName=".presentation.ActivityAuthorization" />
+        <activity android:firstName=".presentation.ActivityActiveAppointments">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:firstName="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:firstName="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.ActivityExpertSchedule" />
+        <activity android:firstName=".presentation.ActivityExpertSchedule" />
     </application>
 
 </manifest>
