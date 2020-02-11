@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -71,6 +72,7 @@ public class RepositoryAppointments implements IAppointmentsRepository {
 
     //   @Override
     public void loadExpertAppointments(List<Long> expertsId, IAppointmentStatus dataStatus) {
+        mExperts.clear();
         if (mAppointments.size() == 0) {
             dataStatus.clientsAppointmentsIsLoaded(mAppointments, mExperts);
         } else {
@@ -81,12 +83,15 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                                     Expert expert = keyExpert.getValue(Expert.class);
-                                    mExperts.add(expert);
+                                    if (!mExperts.contains(expert)) {
+                                        mExperts.add(expert);
+                                    }
                                 }
 
-                                if (mExperts.size() == mExpertIds.size())
+                                if (mExperts.size() == mExpertIds.size()) {
+                                    Collections.sort(mAppointments);
                                     dataStatus.clientsAppointmentsIsLoaded(mAppointments, mExperts);
-
+                                }
                             }
 
                             @Override
@@ -94,6 +99,7 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                                 Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
                             }
                         });
+
             }
         }
 
@@ -103,20 +109,16 @@ public class RepositoryAppointments implements IAppointmentsRepository {
     public void loadClientsAppointments(long clientId, IAppointmentStatus dataStatus) {
 
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.CLIENT_ID).equalTo(clientId)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         mAppointments.clear();
                         mExpertIds.clear();
                         for (DataSnapshot keyMode : dataSnapshot.getChildren()) {
                             mExpertIds.add(keyMode.getValue(Appointment.class).getExpertId());
-
-                            Appointment appointment = keyMode.getValue(Appointment.class);
-                            mAppointments.add(appointment);
+                            mAppointments.add(keyMode.getValue(Appointment.class));
                         }
                         loadExpertAppointments(mExpertIds, dataStatus);
-                        // dataStatus.clientsAppointmentsIsLoaded(mAppointments, mExperts);
-
 
                     }
 
@@ -131,7 +133,7 @@ public class RepositoryAppointments implements IAppointmentsRepository {
     @Override
     public void loadExperts(IAppointmentStatus status) {
         List<Expert> experts = new ArrayList<>();
-        mDatabaseReferenceExpert.addValueEventListener(new ValueEventListener() {
+        mDatabaseReferenceExpert.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot expertKey : dataSnapshot.getChildren()) {

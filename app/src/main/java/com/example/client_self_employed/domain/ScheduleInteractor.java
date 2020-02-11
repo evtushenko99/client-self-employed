@@ -20,4 +20,8 @@ public class ScheduleInteractor {
     public void loadExpertSchedule(long expertId, IExpertScheduleStatus iExpertScheduleStatus) {
         mExpertRepository.loadExpertSchedule(expertId, iExpertScheduleStatus);
     }
+
+    public void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleStatus iExpertScheduleStatus) {
+        mExpertRepository.updateExpertAppointment(appointmentId, clientId, iExpertScheduleStatus);
+    }
 }

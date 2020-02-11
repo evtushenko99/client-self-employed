@@ -58,7 +58,7 @@ public class RepositoryExpertSchedule implements IExpertRepository {
     @Override
     public void loadExpertSchedule(long expertId, IExpertScheduleStatus expertScheduleStatus) {
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID).equalTo(expertId)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         mAppointments.clear();
@@ -72,7 +72,6 @@ public class RepositoryExpertSchedule implements IExpertRepository {
                         loadExpertName(expertId, expertScheduleStatus);
                     }
 
-
                     // dataStatus.clientsAppointmentsIsLoaded(mAppointments, mExperts);
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -80,4 +79,26 @@ public class RepositoryExpertSchedule implements IExpertRepository {
                     }
                 });
     }
+
+    @Override
+    public void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleStatus expertScheduleStatus) {
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID).equalTo(appointmentId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
+                            Appointment appointment = keyExpert.getValue(Appointment.class);
+                            appointment.setClientId(clientId);
+                            mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment)
+                                    .addOnCompleteListener(task -> expertScheduleStatus.newAppointment(true));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                    }
+                });
+    }
+
 }

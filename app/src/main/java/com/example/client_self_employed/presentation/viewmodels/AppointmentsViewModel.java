@@ -39,6 +39,7 @@ public class AppointmentsViewModel extends ViewModel {
     private IAppointmentStatus mAppointmentStatus = new IAppointmentStatus() {
         @Override
         public void clientsAppointmentsIsLoaded(@NonNull List<Appointment> appointmentList, @NonNull List<Expert> expertList) {
+            mRowTypes = new ArrayList<>(mRowTypes.subList(0, 2));
             if (appointmentList.size() != 0 && expertList.size() != 0) {
                 List<RowType> activeAppointments = convertAppointmentToRowType(appointmentList, expertList);
                 if (activeAppointments != null) {
@@ -67,6 +68,7 @@ public class AppointmentsViewModel extends ViewModel {
                 ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
                 mRowTypes.add(0, item);
                 mLiveData.postValue(mRowTypes);
+                loadActiveAppointments();
             }
         }
 
@@ -74,23 +76,9 @@ public class AppointmentsViewModel extends ViewModel {
         public void clientAppointmentIsDeleted(Boolean isDeleted) {
             if (isDeleted) {
                 Log.d(TAG, "clientAppointmentIsDeleted: true");
+                loadActiveAppointments();
                 //mIsLoading.setValue(true);
             }
-        }
-
-        @Override
-        public void dataIsInserted() {
-
-        }
-
-        @Override
-        public void dataIsUpdates() {
-
-        }
-
-        @Override
-        public void dataIsDeleted() {
-
         }
     };
 
@@ -101,18 +89,23 @@ public class AppointmentsViewModel extends ViewModel {
         mExecutor = executor;
     }
 
-    public void loadClientAppointments() {
+    public void loadClientExperts() {
         mIsLoading.setValue(true);
-        mExecutor.execute(() -> {
-            mAppointmentsIteractor.loadClientsAppointments(2, mAppointmentStatus);
-        });
+
         mExecutor.execute(() -> {
             mAppointmentsIteractor.loadClientsExperts(mAppointmentStatus);
         });
+
         mRowTypes.add(new ClientButtonItem());
         mLiveData.postValue(mRowTypes);
 
 
+    }
+
+    public void loadActiveAppointments() {
+        mExecutor.execute(() -> {
+            mAppointmentsIteractor.loadClientsAppointments(2, mAppointmentStatus);
+        });
     }
 
     public LiveData<List<RowType>> getLiveData() {
@@ -120,7 +113,9 @@ public class AppointmentsViewModel extends ViewModel {
     }
 
     public void deleteClientAppointment(long appointmentId, int position) {
-        mAppointmentsIteractor.deleteClientAppointment(appointmentId, mAppointmentStatus);
+        mExecutor.execute(() -> {
+            mAppointmentsIteractor.deleteClientAppointment(appointmentId, mAppointmentStatus);
+        });
         mRowTypes.remove(position);
         mLiveData.postValue(mRowTypes);
     }

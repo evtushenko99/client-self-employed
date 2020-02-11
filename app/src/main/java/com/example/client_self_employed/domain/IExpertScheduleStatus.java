@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IExpertScheduleStatus {
     void scheduleIsLoaded(List<Appointment> expertSchedule, String expertName);
+
+    void newAppointment(Boolean isCreate);
 }

@@ -16,12 +16,36 @@ import java.util.concurrent.Executor;
 
 public class ExpertScheduleViewModel extends ViewModel {
     private final Executor mExecutor;
+    private long mExpertId;
     private final ScheduleInteractor mScheduleInteractor;
     private final IResourceWrapper mResourceWrapper;
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private MutableLiveData<String> mExpertName = new MutableLiveData<>();
+
+    public LiveData<Boolean> getIsChanged() {
+        return mIsChanged;
+    }
+
+    private MutableLiveData<Boolean> mIsChanged = new MutableLiveData<>();
     private List<Appointment> mExpertAppoinments = new ArrayList<>();
     private MutableLiveData<List<Appointment>> mExpertSchedule = new MutableLiveData<>();
+    private IExpertScheduleStatus mScheduleStatus = new IExpertScheduleStatus() {
+        @Override
+        public void scheduleIsLoaded(List<Appointment> expertSchedule, String expertName) {
+            mExpertSchedule.postValue(expertSchedule);
+            mExpertName.postValue(expertName);
+            mIsLoading.postValue(false);
+
+        }
+
+        @Override
+        public void newAppointment(Boolean isCreate) {
+            if (isCreate && mExpertId != 0) {
+                loadExpertSchedule(mExpertId);
+                mIsChanged.postValue(true);
+            }
+        }
+    };
 
     public ExpertScheduleViewModel(
             @NonNull ScheduleInteractor scheduleInteractor,
@@ -31,6 +55,7 @@ public class ExpertScheduleViewModel extends ViewModel {
         mScheduleInteractor = scheduleInteractor;
         mResourceWrapper = resourceWrapper;
         mIsLoading.setValue(false);
+        mIsChanged.postValue(false);
     }
 
     /***
@@ -38,17 +63,25 @@ public class ExpertScheduleViewModel extends ViewModel {
      * @param id id эксперта
      */
     public void loadExpertSchedule(long id) {
-        mIsLoading.setValue(true);
-        mExecutor.execute(() -> {
-            mScheduleInteractor.loadExpertSchedule(id, new IExpertScheduleStatus() {
-                @Override
-                public void scheduleIsLoaded(List<Appointment> expertSchedule, String expertName) {
-                    //mExpertAppoinments = expertSchedule;
-                    mExpertSchedule.postValue(expertSchedule);
-                    mExpertName.postValue(expertName);
-                }
-            });
 
+        mIsLoading.setValue(true);
+        mExpertId = id;
+        mExecutor.execute(() -> {
+            mScheduleInteractor.loadExpertSchedule(mExpertId, mScheduleStatus);
+
+        });
+    }
+
+    /**
+     * Записывает клиента на определенное время
+     *
+     * @param appointmentId - id записи
+     * @param clientId      - id клиента
+     */
+    public void updateExpertAppointment(long appointmentId, long clientId) {
+        mIsChanged.postValue(false);
+        mExecutor.execute(() -> {
+            mScheduleInteractor.updateExpertAppointment(appointmentId, clientId, mScheduleStatus);
         });
     }
 

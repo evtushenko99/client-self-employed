@@ -25,7 +25,7 @@ public class ExpertScheduleViewModelFactory extends ViewModelProvider.NewInstanc
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (ExpertScheduleViewModel.class.equals(modelClass)) {
-            Executor executor = Executors.newSingleThreadExecutor();
+            Executor executor = Executors.newFixedThreadPool(10);
             ResourceWrapper resourceWrapper = new ResourceWrapper(mApplicationContext.getResources());
             IExpertRepository expertRepository = new RepositoryExpertSchedule();
             ScheduleInteractor scheduleInteractor = new ScheduleInteractor(expertRepository);

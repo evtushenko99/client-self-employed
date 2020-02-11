@@ -1,6 +1,5 @@
 package com.example.client_self_employed.presentation.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Fade;
 
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.presentation.ActivityExpertSchedule;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
 import com.example.client_self_employed.presentation.adapters.items.ClientAppointmentItem;
@@ -96,7 +94,7 @@ public class FragmentsActiveAppointments extends Fragment {
                                 getActivity().getSupportFragmentManager().beginTransaction()
 
                                         .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
-                                        .addToBackStack(null)
+                                        .addToBackStack("active_appointments")
                                         // .setTransition(fade)
                                         .commit();
 
@@ -105,9 +103,18 @@ public class FragmentsActiveAppointments extends Fragment {
                     @Override
                     public void onButtonItemClickListener() {
                         if (mExpertId != 0) {
-                            Intent intent = new Intent(getActivity(), ActivityExpertSchedule.class);
+                            FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
+                            Bundle bundle = new Bundle();
+                            bundle.putLong(Arguments.EXPERT_ID, mExpertId);
+                            fragmentExpertSchedule.setArguments(bundle);
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
+                                    .addToBackStack("active_appointments")
+                                    .commit();
+
+                            /*Intent intent = new Intent(getActivity(), ActivityExpertSchedule.class);
                             intent.putExtra(Arguments.EXPERT_ID, mExpertId);
-                            startActivity(intent);
+                            startActivity(intent);*/
                         } else {
                             Toast.makeText(getActivity(), "Выберите желаемого эксперта", Toast.LENGTH_LONG).show();
                         }
@@ -133,8 +140,9 @@ public class FragmentsActiveAppointments extends Fragment {
     private void setupMvvm() {
         mViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
                 .get(AppointmentsViewModel.class);
+
         if (!mViewModel.getLiveData().hasObservers()) {
-            mViewModel.loadClientAppointments();
+            mViewModel.loadClientExperts();
         }
 
         mViewModel.getLiveData().observe(this, rowTypes -> {
@@ -144,5 +152,16 @@ public class FragmentsActiveAppointments extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // mViewModel.loadActiveAppointments();
+    }
+
+    public void uddateActiveAppointments() {
+        if (mViewModel != null) {
+            mViewModel.loadClientExperts();
+        }
+    }
 
 }

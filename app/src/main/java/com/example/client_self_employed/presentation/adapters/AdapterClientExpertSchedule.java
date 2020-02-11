@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
+import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointmentClickListners;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,11 +43,14 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
     private List<Appointment> mExpertSchedule;
     private IResourceWrapper mResourceWrapper;
 
+    private ExpertScheduleDetailedAppointmentClickListners mClickListeners;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper) {
+    public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper, ExpertScheduleDetailedAppointmentClickListners expertScheduleDetailedAppointmentClickListners) {
         mExpertSchedule = expertSchedule;
         mResourceWrapper = resourceWrapper;
+        mClickListeners = expertScheduleDetailedAppointmentClickListners;
         groupAppointmentByDate(mExpertSchedule);
 
     }
@@ -128,7 +132,7 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
             case ITEM_VIEW_TYPE_TIME:
                 List<Appointment> appointments1 = new ArrayList<>((List<Appointment>) item);
                 // ((ScheduleHolder) holder).bindView((Appointment) item);
-                ((ScheduleHolder) holder).mRecycler.setAdapter(new AdapterExpertScheduleDaysTime(appointments1));
+                ((ScheduleHolder) holder).mRecycler.setAdapter(new AdapterExpertScheduleDaysTime(appointments1, mClickListeners));
                 break;
             case ITEM_VIEW_TYPE_DATE:
                 ((DateHolder) holder).bindView((String) item);

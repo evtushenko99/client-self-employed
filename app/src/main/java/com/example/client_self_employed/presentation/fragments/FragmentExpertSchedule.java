@@ -18,8 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientExpertSchedule;
+import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointmentClickListners;
+import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
+import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
 
@@ -28,6 +32,8 @@ public class FragmentExpertSchedule extends Fragment {
     private TextView mExpertNameTitle;
     private RecyclerView mScheduleRecycler;
     private ExpertScheduleViewModel mScheduleViewModel;
+    private AppointmentsViewModel mAppointmentsViewModel;
+
 
     public static FragmentExpertSchedule newInstance(long expertId) {
         Bundle args = new Bundle();
@@ -68,14 +74,33 @@ public class FragmentExpertSchedule extends Fragment {
     private void setupScheduleMVVM(long id) {
         mScheduleViewModel = ViewModelProviders.of(getActivity(), new ExpertScheduleViewModelFactory(getActivity()))
                 .get(ExpertScheduleViewModel.class);
+        mAppointmentsViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
+                .get(AppointmentsViewModel.class);
         mScheduleViewModel.loadExpertSchedule(this.getArguments().getLong(Arguments.EXPERT_ID));
         mScheduleViewModel.getExpertName().observe(this, expertName -> {
             mExpertNameTitle.setText(expertName);
         });
         mScheduleViewModel.getExpertSchedule().observe(this, expertSchedule -> {
-            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper()));
+            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointmentClickListners() {
+                @Override
+                public void onExpertScheduleDetailedAppointmentClickListners(Appointment appointment, long clientId) {
+                    FragmentExpertScheduleDetailedAppointment.newInstance(appointment, clientId).show(getActivity().getSupportFragmentManager(), null);
+                }
+            }));
+        });
+        mScheduleViewModel.getIsChanged().observe(this, isChanged -> {
+            if (isChanged) {
+                mAppointmentsViewModel.loadActiveAppointments();
+            }
         });
 
+    }
 
+
+    @Override
+    public void onStop() {
+
+
+        super.onStop();
     }
 }

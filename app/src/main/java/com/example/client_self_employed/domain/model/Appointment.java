@@ -1,6 +1,9 @@
 package com.example.client_self_employed.domain.model;
 
-public class Appointment implements Comparable<Appointment> {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Appointment implements Comparable<Appointment>, Parcelable {
     private long mId;
     private String mServiceName;// Название услуги
     private String mSessionDuration;//Продолжительность занятия
@@ -33,6 +36,33 @@ public class Appointment implements Comparable<Appointment> {
         mClientId = clientId;
     }
 
+    protected Appointment(Parcel in) {
+        mId = in.readLong();
+        mServiceName = in.readString();
+        mSessionDuration = in.readString();
+        mCost = in.readInt();
+        mLocation = in.readString();
+        mYear = in.readInt();
+        mMonth = in.readInt();
+        mDayOfMonth = in.readInt();
+        mStartHourOfDay = in.readInt();
+        mStartMinute = in.readInt();
+        mExpertId = in.readLong();
+        mClientId = in.readLong();
+    }
+
+    public static final Creator<Appointment> CREATOR = new Creator<Appointment>() {
+        @Override
+        public Appointment createFromParcel(Parcel in) {
+            return new Appointment(in);
+        }
+
+        @Override
+        public Appointment[] newArray(int size) {
+            return new Appointment[size];
+        }
+    };
+
     public String getStringDate() {
         StringBuilder stringDate = new StringBuilder();
         stringDate.append(mDayOfMonth).append(".").append(mMonth).append(".").append(mYear);
@@ -54,7 +84,26 @@ public class Appointment implements Comparable<Appointment> {
         return stringTime.toString();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mId);
+        dest.writeString(mServiceName);
+        dest.writeString(mSessionDuration);
+        dest.writeInt(mCost);
+        dest.writeString(mLocation);
+        dest.writeInt(mYear);
+        dest.writeInt(mMonth);
+        dest.writeInt(mDayOfMonth);
+        dest.writeInt(mStartHourOfDay);
+        dest.writeInt(mStartMinute);
+        dest.writeLong(mExpertId);
+        dest.writeLong(mClientId);
+    }
     @Override
     public int compareTo(Appointment o) {
         if (this.getDayOfMonth() < o.getDayOfMonth()) {

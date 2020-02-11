@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.fragments.FragmentsActiveAppointments;
@@ -61,7 +60,6 @@ public class ActivityActiveAppointments extends AppCompatActivity implements IUp
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_host_appointments_with_experts, fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                 .commit();
     }
 }

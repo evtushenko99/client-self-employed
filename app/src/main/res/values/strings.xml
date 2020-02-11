@@ -18,4 +18,5 @@
     <string name="expert_detailed_appointment_location">Локация</string>
     <string name="expert_detailed_appointment_duration">Продолжительность услуги</string>
     <string name="expert_detailed_appointment_cost">Стоимость</string>
+    <string name="expert_detailed_appointment_additional_information">Дополнитльная информация</string>
 </resources>

@@ -9,9 +9,5 @@ public interface IAppointmentStatus {
     void clientsAppointmentsIsLoaded(List<Appointment> appointmentList, List<Expert> expertList);
     void clientsExpertsIsLoaded(List<Expert> expertList);
     void clientAppointmentIsDeleted(Boolean isDeleted);
-    void dataIsInserted();
 
-    void dataIsUpdates();
-
-    void dataIsDeleted();
 }
