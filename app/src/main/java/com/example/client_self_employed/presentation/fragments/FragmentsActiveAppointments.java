@@ -13,15 +13,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Fade;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
-import com.example.client_self_employed.presentation.adapters.items.ClientAppointmentItem;
-import com.example.client_self_employed.presentation.clicklisteners.AppointmentsItemClickListener;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertsItemClickListener;
-import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItemClickListener;
+import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointment;
+import com.example.client_self_employed.presentation.clicklisteners.BestExpertItem;
+import com.example.client_self_employed.presentation.clicklisteners.FindExpertButton;
+import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItem;
+import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 
@@ -72,34 +72,24 @@ public class FragmentsActiveAppointments extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(new AdapterClientsAppointments(null,
-                        new AppointmentsItemClickListener() {
-                            @Override
-                            public void onAppointmentsItemClickListener(ClientAppointmentItem appointment, int holderPosition) {
-                                FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable(SAVED_APPOINTMENT, appointment);
-                                bundle.putInt(SAVED_HOLDER_POSITION, holderPosition);
-                                fragmentDetailedAppointment.setArguments(bundle);
+                new ActiveAppointment() {
+                    @Override
+                    public void onAppointmentsItemClickListener(ClientAppointment appointment, int holderPosition) {
+                        FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(SAVED_APPOINTMENT, appointment);
+                        bundle.putInt(SAVED_HOLDER_POSITION, holderPosition);
+                        fragmentDetailedAppointment.setArguments(bundle);
 
-                                Fade enterFade = new Fade();
-                                // enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
-                                enterFade.setDuration(FADE_DEFAULT_TIME);
-                                fragmentDetailedAppointment.setEnterTransition(enterFade);
-                                fragmentDetailedAppointment.setExitTransition(enterFade);
+                        getActivity().getSupportFragmentManager().beginTransaction()
 
-                                //intent.putExtra(SAVED_APPOINTMENT, appointment);
+                                .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
+                                .addToBackStack("active_appointments")
+                                .commit();
 
-                                // int fade = TransitionInflater.from(getActivity()).inflateTransition(R.transition.fade).get;
-
-                                getActivity().getSupportFragmentManager().beginTransaction()
-
-                                        .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
-                                        .addToBackStack("active_appointments")
-                                        // .setTransition(fade)
-                                        .commit();
-
-                            }
-                        }, new NewRecordToBestExpertButtonItemClickListener() {
+                    }
+                },
+                new NewRecordToBestExpertButtonItem() {
                     @Override
                     public void onButtonItemClickListener() {
                         if (mExpertId != 0) {
@@ -111,30 +101,28 @@ public class FragmentsActiveAppointments extends Fragment {
                                     .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
                                     .addToBackStack("active_appointments")
                                     .commit();
-
-                            /*Intent intent = new Intent(getActivity(), ActivityExpertSchedule.class);
-                            intent.putExtra(Arguments.EXPERT_ID, mExpertId);
-                            startActivity(intent);*/
                         } else {
                             Toast.makeText(getActivity(), "Выберите желаемого эксперта", Toast.LENGTH_LONG).show();
                         }
                     }
-                }, new ExpertsItemClickListener() {
+                },
+                new BestExpertItem() {
                     @Override
                     public void onExpertItemClickListener(long expertId) {
-                        mExpertId = expertId;
+
                     }
-                })
-        );
+                },
+                new FindExpertButton() {
+                    @Override
+                    public void onFindExpertButton() {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
+                                .addToBackStack("active_appointments")
+                                .commit();
+                    }
+                }
+        ));
         setupMvvm();
-        if (mPosition > 0) {
-            deleteItem();
-        }
-
-    }
-
-    private void deleteItem() {
-        //  ((AdapterClientsAppointments) mRecyclerView.getAdapter()).deleteItem(mPosition);
     }
 
     private void setupMvvm() {
@@ -146,22 +134,9 @@ public class FragmentsActiveAppointments extends Fragment {
         }
 
         mViewModel.getLiveData().observe(this, rowTypes -> {
-
             ((AdapterClientsAppointments) mRecyclerView.getAdapter()).setRowTypes(rowTypes);
         });
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // mViewModel.loadActiveAppointments();
-    }
-
-    public void uddateActiveAppointments() {
-        if (mViewModel != null) {
-            mViewModel.loadClientExperts();
-        }
     }
 
 }

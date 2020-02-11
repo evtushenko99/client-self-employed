@@ -1,22 +1,24 @@
 package com.example.client_self_employed.presentation.adapters.items;
 
+import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
+
 import java.util.List;
 
 public class ClientExpertItem implements RowType {
     private String mTitle;
-    private List<ClientSelectedExportItem> mClientSelectedExportItems;
+    private List<ClientSelectedExpert> mClientSelectedExperts;
 
-    public ClientExpertItem(String title, List<ClientSelectedExportItem> clientSelectedExportItems) {
+    public ClientExpertItem(String title, List<ClientSelectedExpert> clientSelectedExpertItems) {
         mTitle = title;
-        mClientSelectedExportItems = clientSelectedExportItems;
+        mClientSelectedExperts = clientSelectedExpertItems;
     }
 
     public String getTitle() {
         return mTitle;
     }
 
-    public List<ClientSelectedExportItem> getClientSelectedExportItems() {
-        return mClientSelectedExportItems;
+    public List<ClientSelectedExpert> getClientSelectedExperts() {
+        return mClientSelectedExperts;
     }
 
 }

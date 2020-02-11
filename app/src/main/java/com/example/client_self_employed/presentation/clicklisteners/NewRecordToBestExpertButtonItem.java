@@ -1,5 +1,5 @@
 package com.example.client_self_employed.presentation.clicklisteners;
 
-public interface NewRecordToBestExpertButtonItemClickListener {
+public interface NewRecordToBestExpertButtonItem {
     void onButtonItemClickListener();
 }

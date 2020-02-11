@@ -1,11 +1,13 @@
-package com.example.client_self_employed.presentation.adapters.items;
+package com.example.client_self_employed.presentation.model;
 
 import android.annotation.SuppressLint;
+
+import com.example.client_self_employed.presentation.adapters.items.RowType;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
-public class ClientAppointmentItem implements RowType, Serializable {
+public class ClientAppointment implements RowType, Serializable {
 
     private long mId;
     private String mExpertProfession;
@@ -19,7 +21,7 @@ public class ClientAppointmentItem implements RowType, Serializable {
     private String mDate;
 
 
-    public ClientAppointmentItem(long id, String expertProfession, String expertName, String expertNumber, String serviceName, String startTime, String sessionDuration, int cost, String location, String date) {
+    public ClientAppointment(long id, String expertProfession, String expertName, String expertNumber, String serviceName, String startTime, String sessionDuration, int cost, String location, String date) {
         mId = id;
         mExpertProfession = expertProfession;
         mExpertName = expertName;
@@ -32,7 +34,7 @@ public class ClientAppointmentItem implements RowType, Serializable {
         mDate = date;
     }
 /*
-    public ClientAppointmentItem(Parcel in) {
+    public ClientAppointment(Parcel in) {
         mId = in.readInt();
         mExpertProfession = in.readString();
         mExpertName = in.readString();
@@ -150,16 +152,16 @@ public class ClientAppointmentItem implements RowType, Serializable {
         dest.writeSerializable(mDate);
     }
 
-    public static final Parcelable.Creator<ClientAppointmentItem> CREATOR = new Parcelable.Creator<ClientAppointmentItem>() {
+    public static final Parcelable.Creator<ClientAppointment> CREATOR = new Parcelable.Creator<ClientAppointment>() {
 
         @Override
-        public ClientAppointmentItem createFromParcel(Parcel source) {
-            return new ClientAppointmentItem(source);
+        public ClientAppointment createFromParcel(Parcel source) {
+            return new ClientAppointment(source);
         }
 
         @Override
-        public ClientAppointmentItem[] newArray(int size) {
-            return new ClientAppointmentItem[size];
+        public ClientAppointment[] newArray(int size) {
+            return new ClientAppointment[size];
         }
     };*/
 

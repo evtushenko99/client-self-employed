@@ -11,12 +11,12 @@ import com.example.client_self_employed.domain.AppointmentsIteractor;
 import com.example.client_self_employed.domain.IAppointmentStatus;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
-import com.example.client_self_employed.presentation.adapters.items.ClientAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientButtonItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
-import com.example.client_self_employed.presentation.adapters.items.ClientNoAppoinmentItem;
-import com.example.client_self_employed.presentation.adapters.items.ClientSelectedExportItem;
+import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
+import com.example.client_self_employed.presentation.model.ClientAppointment;
+import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class AppointmentsViewModel extends ViewModel {
                     mIsLoading.postValue(false);
                 }
             } else {
-                mRowTypes.add(new ClientNoAppoinmentItem());
+                mRowTypes.add(new ClientNoAppointmentItem());
                 mLiveData.postValue(mRowTypes);
                 mIsLoading.postValue(false);
             }
@@ -59,11 +59,11 @@ public class AppointmentsViewModel extends ViewModel {
 
         @Override
         public void clientsExpertsIsLoaded(List<Expert> expertList) {
-            List<ClientSelectedExportItem> list = new ArrayList<>();
+            List<ClientSelectedExpert> list = new ArrayList<>();
 
             if (expertList.size() != 0) {
                 for (Expert expert : expertList) {
-                    list.add(new ClientSelectedExportItem(expert.getId(), expert.getAbbreviatedFullName(), null));
+                    list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), null));
                 }
                 ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
                 mRowTypes.add(0, item);
@@ -141,7 +141,7 @@ public class AppointmentsViewModel extends ViewModel {
             }
         }
         for (int i = 0; i < appointments.size(); i++) {
-            data.add(new ClientAppointmentItem(
+            data.add(new ClientAppointment(
                     appointments.get(i).getId(),
                     expertsProfession.get(i),
                     expertsName.get(i),

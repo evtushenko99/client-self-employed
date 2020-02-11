@@ -21,7 +21,7 @@ import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientExpertSchedule;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointmentClickListners;
+import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
@@ -81,7 +81,7 @@ public class FragmentExpertSchedule extends Fragment {
             mExpertNameTitle.setText(expertName);
         });
         mScheduleViewModel.getExpertSchedule().observe(this, expertSchedule -> {
-            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointmentClickListners() {
+            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointment() {
                 @Override
                 public void onExpertScheduleDetailedAppointmentClickListners(Appointment appointment, long clientId) {
                     FragmentExpertScheduleDetailedAppointment.newInstance(appointment, clientId).show(getActivity().getSupportFragmentManager(), null);

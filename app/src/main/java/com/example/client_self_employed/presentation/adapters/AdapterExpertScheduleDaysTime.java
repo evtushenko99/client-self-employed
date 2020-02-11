@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Appointment;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointmentClickListners;
+import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterExpertScheduleDaysTime.ScheduleDaysTimeHolder> {
     private final List<Appointment> mExpertDayTimes;
-    private ExpertScheduleDetailedAppointmentClickListners mClickListners;
+    private ExpertScheduleDetailedAppointment mClickListners;
 
-    public AdapterExpertScheduleDaysTime(@NonNull List<Appointment> expertDayTimes, ExpertScheduleDetailedAppointmentClickListners clickListeners) {
+    public AdapterExpertScheduleDaysTime(@NonNull List<Appointment> expertDayTimes, ExpertScheduleDetailedAppointment clickListeners) {
         mExpertDayTimes = new ArrayList<>(expertDayTimes);
         mClickListners = clickListeners;
     }
@@ -46,9 +46,9 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
     public static class ScheduleDaysTimeHolder extends RecyclerView.ViewHolder {
 
         private TextView mTime;
-        private ExpertScheduleDetailedAppointmentClickListners mClickListners;
+        private ExpertScheduleDetailedAppointment mClickListners;
 
-        public ScheduleDaysTimeHolder(@NonNull View itemView, ExpertScheduleDetailedAppointmentClickListners clickListners) {
+        public ScheduleDaysTimeHolder(@NonNull View itemView, ExpertScheduleDetailedAppointment clickListners) {
             super(itemView);
             mTime = itemView.findViewById(R.id.item_schedule_time);
 

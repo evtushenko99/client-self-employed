@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointmentClickListners;
+import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,14 +43,14 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
     private List<Appointment> mExpertSchedule;
     private IResourceWrapper mResourceWrapper;
 
-    private ExpertScheduleDetailedAppointmentClickListners mClickListeners;
+    private ExpertScheduleDetailedAppointment mClickListeners;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper, ExpertScheduleDetailedAppointmentClickListners expertScheduleDetailedAppointmentClickListners) {
+    public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper, ExpertScheduleDetailedAppointment expertScheduleDetailedAppointment) {
         mExpertSchedule = expertSchedule;
         mResourceWrapper = resourceWrapper;
-        mClickListeners = expertScheduleDetailedAppointmentClickListners;
+        mClickListeners = expertScheduleDetailedAppointment;
         groupAppointmentByDate(mExpertSchedule);
 
     }

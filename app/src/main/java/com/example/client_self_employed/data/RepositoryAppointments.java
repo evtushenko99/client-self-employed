@@ -1,5 +1,6 @@
 package com.example.client_self_employed.data;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,11 +13,15 @@ import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.domain.model.Review;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +32,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class RepositoryAppointments implements IAppointmentsRepository {
     private DatabaseReference mDatabaseReferenceAppointment;
     private DatabaseReference mDatabaseReferenceExpert;
+    private FirebaseStorage mStorage;
+    private StorageReference mPathReference;
     private List<Appointment> mAppointments;
     private List<Expert> mExperts;
     private List<Long> mExpertIds;
@@ -38,6 +45,11 @@ public class RepositoryAppointments implements IAppointmentsRepository {
         mAppointments = new ArrayList<>();
         mExperts = new ArrayList<>();
         mExpertIds = new ArrayList<>();
+        mStorage = FirebaseStorage.getInstance();
+        StorageReference storageRef = mStorage.getReference();
+
+        //mPathReference = storageRef.child("/stars.jpg");
+
     }
 
 
@@ -141,6 +153,8 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                     experts.add(expert);
                 }
                 status.clientsExpertsIsLoaded(experts);
+                //   loadExpertsPhoto(experts, status);
+
             }
 
             @Override
@@ -150,6 +164,21 @@ public class RepositoryAppointments implements IAppointmentsRepository {
         });
     }
 
+    private void loadExpertsPhoto(List<Expert> experts, IAppointmentStatus status) {
+        List<Expert> expertsWithUri = new ArrayList<>();
+        for (Expert expert : experts) {
+            mPathReference.child("expert_" + expert.getId() + ".jpg").getDownloadUrl()
+                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            expert.setExpertPhotoUri(task.getResult());
+
+                        }
+                    });
+        }
+        status.clientsExpertsIsLoaded(experts);
+
+    }
     @Override
     public void uploadAppointment(Appointment appointment) {
         mDatabaseReferenceAppointment.child(String.valueOf((appointment.getId()))).setValue(appointment);

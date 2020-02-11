@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">client-self-employed</string>
-    <string name="caption_for_expert_selection">Выбрать эксперта</string>
+    <string name="caption_for_expert_selection">Поиск эксперта</string>
     <string name="new_appointment">Новая запись</string>
     <string name="caption_list_of_active_appointments">Список активных записей</string>
     <string name="confirm_selection_button">Подтвердить выбор</string>
@@ -19,4 +19,13 @@
     <string name="expert_detailed_appointment_duration">Продолжительность услуги</string>
     <string name="expert_detailed_appointment_cost">Стоимость</string>
     <string name="expert_detailed_appointment_additional_information">Дополнитльная информация</string>
+    <string name="fragment_search_new_appointment">Записаться к эксперту</string>
+    <string name="find_expert_filters">Фильтры</string>
+
+    <string-array name="professions">
+        <item>Тренер по фигурному катанию</item>
+        <item>Инструктор по зумбе</item>
+        <item>Инструктор по йоге</item>
+        <item>Интрусктор по вождению</item>
+    </string-array>
 </resources>

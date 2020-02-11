@@ -4,33 +4,39 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertsItemClickListener;
-import com.example.client_self_employed.presentation.adapters.items.ClientSelectedExportItem;
+import com.example.client_self_employed.presentation.clicklisteners.BestExpertItem;
+import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class AdapterClientExperts extends RecyclerView.Adapter<AdapterClientExperts.SelectedExpertHolder> {
-    private List<ClientSelectedExportItem> mExpertList;
-    private ExpertsItemClickListener mExpertsItemClickListener;
+    private List<ClientSelectedExpert> mExpertList;
+    private BestExpertItem mBestExpertItem;
     private int index = -1;
 
-    public AdapterClientExperts(@NonNull List<ClientSelectedExportItem> expertList, ExpertsItemClickListener expertsItemClickListener) {
+    public AdapterClientExperts(@NonNull List<ClientSelectedExpert> expertList, BestExpertItem bestExpertItem) {
         mExpertList = expertList;
-        mExpertsItemClickListener = expertsItemClickListener;
+        mBestExpertItem = bestExpertItem;
     }
 
     @NonNull
     @Override
     public AdapterClientExperts.SelectedExpertHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expert_photo, parent, false);
-        return new AdapterClientExperts.SelectedExpertHolder(view, mExpertsItemClickListener);
+        return new AdapterClientExperts.SelectedExpertHolder(view, mBestExpertItem);
     }
 
     @Override
@@ -51,23 +57,38 @@ public class AdapterClientExperts extends RecyclerView.Adapter<AdapterClientExpe
 
     public class SelectedExpertHolder extends RecyclerView.ViewHolder {
         private TextView mExpertName;
-        private ExpertsItemClickListener mExpertsItemClickListener;
+        private ImageView mExpertPhoto;
+        private BestExpertItem mBestExpertItem;
         private MaterialCardView mCardView;
 
-        public SelectedExpertHolder(@NonNull View itemView, ExpertsItemClickListener expertsItemClickListener) {
+        public SelectedExpertHolder(@NonNull View itemView, BestExpertItem bestExpertItem) {
             super(itemView);
             mExpertName = itemView.findViewById(R.id.item_selected_expert_name);
-            mExpertsItemClickListener = expertsItemClickListener;
+            mExpertPhoto = itemView.findViewById(R.id.item_selected_expert_photo);
+            mBestExpertItem = bestExpertItem;
             mCardView = itemView.findViewById(R.id.material_expert_card);
+
 
         }
 
-        void bindView(ClientSelectedExportItem clientSelectedExportItem, int adapterPosition) {
-            mExpertName.setText(clientSelectedExportItem.getExpertName());
+        void bindView(ClientSelectedExpert clientSelectedExpert, int adapterPosition) {
+            mExpertName.setText(clientSelectedExpert.getExpertName());
+            DrawableCrossFadeFactory factory =
+                    new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
+            Glide
+                    .with(itemView.getContext())
+                    .load(clientSelectedExpert.getURL())
+                    .apply(new RequestOptions()
+                            .override(96, 96)
+                            .centerCrop()
+                            .placeholder(R.mipmap.no_photo_available_or_missing)
+                            .error(R.mipmap.no_photo_available_or_missing))
+                    .transition(withCrossFade(factory))
+                    .into(mExpertPhoto);
             mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mExpertsItemClickListener.onExpertItemClickListener(clientSelectedExportItem.getExpertId());
+                    mBestExpertItem.onExpertItemClickListener(clientSelectedExpert.getExpertId());
                     index = adapterPosition;
                     notifyDataSetChanged();
                 }

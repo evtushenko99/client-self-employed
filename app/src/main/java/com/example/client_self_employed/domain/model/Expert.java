@@ -1,5 +1,7 @@
 package com.example.client_self_employed.domain.model;
 
+import android.net.Uri;
+
 public class Expert {
 
     private long mId;
@@ -11,6 +13,16 @@ public class Expert {
     private String mPhoneNumber;
     private String mProfession;
     private int mWorkExperience;
+
+    public Uri getExpertPhotoUri() {
+        return mExpertPhotoUri;
+    }
+
+    public void setExpertPhotoUri(Uri expertPhotoUri) {
+        mExpertPhotoUri = expertPhotoUri;
+    }
+
+    private Uri mExpertPhotoUri;
 
 
     public Expert() {

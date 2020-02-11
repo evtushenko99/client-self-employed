@@ -9,4 +9,8 @@
 
     </style>
 
+    <style name="MyButton" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">#FFF</item>
+        <item name="android:background">@drawable/corners_for_buttons</item>
+    </style>
 </resources>

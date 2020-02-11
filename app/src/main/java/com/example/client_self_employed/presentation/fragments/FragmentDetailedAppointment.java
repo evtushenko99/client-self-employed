@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
-import com.example.client_self_employed.presentation.adapters.items.ClientAppointmentItem;
+import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 
@@ -42,7 +42,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
     private ImageButton mPhoneCall;
 
     private AppointmentsViewModel mViewModel;
-    private ClientAppointmentItem mAppointment;
+    private ClientAppointment mAppointment;
     private int mPosition;
 
     public static FragmentDetailedAppointment newInstance() {
@@ -58,7 +58,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (this.getArguments() != null) {
-            mAppointment = (ClientAppointmentItem) this.getArguments().getSerializable(SAVED_APPOINTMENT);
+            mAppointment = (ClientAppointment) this.getArguments().getSerializable(SAVED_APPOINTMENT);
             mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
 
         }

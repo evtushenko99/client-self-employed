@@ -1,17 +1,15 @@
-package com.example.client_self_employed.presentation.adapters.items;
+package com.example.client_self_employed.presentation.model;
+
+import com.example.client_self_employed.presentation.adapters.items.RowType;
 
 import java.net.URL;
 
-public class ClientSelectedExportItem implements RowType {
+public class ClientSelectedExpert implements RowType {
     private long mExpertId;
     private String mExpertName;
     private URL mURL;
 
-    public ClientSelectedExportItem(long expertId) {
-        mExpertId = expertId;
-    }
-
-    public ClientSelectedExportItem(long expertId, String expertName, URL URL) {
+    public ClientSelectedExpert(long expertId, String expertName, URL URL) {
         mExpertId = expertId;
         mExpertName = expertName;
         mURL = URL;
