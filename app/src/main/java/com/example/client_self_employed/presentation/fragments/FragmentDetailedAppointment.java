@@ -59,7 +59,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (this.getArguments() != null) {
             mAppointment = (ClientAppointment) this.getArguments().getSerializable(SAVED_APPOINTMENT);
-            mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
+            // mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
 
         }
         return inflater.inflate(R.layout.fragment_detailed_appointment, container, false);
@@ -105,7 +105,7 @@ public class FragmentDetailedAppointment extends Fragment implements View.OnClic
 
                         mViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
                                 .get(AppointmentsViewModel.class);
-                        mViewModel.deleteClientAppointment(mAppointment.getId(), mPosition);
+                        mViewModel.deleteClientAppointment(mAppointment.getId());
 
                         ((ActivityActiveAppointments) getActivity()).deleteAppointmentFromRecycler(mPosition);
                         //Intent intent = new Intent(getActivity(), ActivityActiveAppointments.class);

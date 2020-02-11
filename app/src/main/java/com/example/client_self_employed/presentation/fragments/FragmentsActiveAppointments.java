@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,8 +23,6 @@ import com.example.client_self_employed.presentation.clicklisteners.NewRecordToB
 import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
-
-import java.util.Objects;
 
 
 public class FragmentsActiveAppointments extends Fragment {
@@ -51,7 +48,7 @@ public class FragmentsActiveAppointments extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (this.getArguments() != null) {
-            mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
+            //     mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
         }
         setRetainInstance(true);
     }
@@ -59,7 +56,7 @@ public class FragmentsActiveAppointments extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_appointments_with_experts_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_active_appointments, container, false);
     }
 
     @Override
@@ -69,20 +66,19 @@ public class FragmentsActiveAppointments extends Fragment {
         mRecyclerView = view.findViewById(R.id.list_of_active_appointments_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL);
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        // DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL);
+        // mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(new AdapterClientsAppointments(null,
                 new ActiveAppointment() {
                     @Override
-                    public void onAppointmentsItemClickListener(ClientAppointment appointment, int holderPosition) {
+                    public void onAppointmentsItemClickListener(ClientAppointment appointment) {
                         FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(SAVED_APPOINTMENT, appointment);
-                        bundle.putInt(SAVED_HOLDER_POSITION, holderPosition);
+                        //  bundle.putInt(SAVED_HOLDER_POSITION, holderPosition);
                         fragmentDetailedAppointment.setArguments(bundle);
 
                         getActivity().getSupportFragmentManager().beginTransaction()
-
                                 .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
                                 .addToBackStack("active_appointments")
                                 .commit();
@@ -109,7 +105,7 @@ public class FragmentsActiveAppointments extends Fragment {
                 new BestExpertItem() {
                     @Override
                     public void onExpertItemClickListener(long expertId) {
-
+                        mExpertId = expertId;
                     }
                 },
                 new FindExpertButton() {

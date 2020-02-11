@@ -55,7 +55,7 @@ public class ActivityActiveAppointments extends AppCompatActivity implements IUp
     @Override
     public void deleteAppointmentFromRecycler(int position) {
         Bundle bundle = new Bundle();
-        bundle.putInt(SAVED_HOLDER_POSITION, position);
+        // bundle.putInt(SAVED_HOLDER_POSITION, position);
         Fragment fragment = new FragmentsActiveAppointments();
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()

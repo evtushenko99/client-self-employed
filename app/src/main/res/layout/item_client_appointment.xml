@@ -1,78 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginStart="@dimen/margin_medium"
+    android:layout_marginTop="@dimen/margin_medium"
+    android:layout_marginEnd="@dimen/margin_medium"
+    android:layout_marginBottom="@dimen/margin_medium"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/elevation_medium">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.MaterialComponents.CardView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:layout_marginBottom="@dimen/margin_medium"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="@dimen/elevation_medium">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/item_expert_profession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/margin_medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="Тренер по фигурному катанию" />
 
-            <TextView
-                android:id="@+id/item_expert_profession"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_margin="@dimen/margin_medium"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="Тренер по фигурному катанию" />
+        <TextView
+            android:id="@+id/item_expert_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_expert_profession"
+            android:layout_alignStart="@+id/item_expert_profession"
 
-            <TextView
-                android:id="@+id/item_expert_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_expert_profession"
-                android:layout_alignStart="@+id/item_expert_profession"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="@string/expert_name_example" />
 
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="@string/expert_name_example" />
+        <TextView
+            android:id="@+id/item_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_expert_name"
+            android:layout_alignStart="@+id/item_expert_name"
+            android:layout_margin="@dimen/margin_medium"
 
-            <TextView
-                android:id="@+id/item_start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_expert_name"
-                android:layout_alignStart="@+id/item_expert_name"
-                android:layout_margin="@dimen/margin_medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="11:15" />
 
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                tools:text="11:15" />
+        <TextView
+            android:id="@+id/item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_expert_name"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_toEndOf="@+id/item_start_time"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="11 декабря 2020" />
 
-            <TextView
-                android:id="@+id/item_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_expert_name"
-                android:layout_margin="@dimen/margin_medium"
-                android:layout_toEndOf="@+id/item_start_time"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                tools:text="11 декабря 2020" />
+        <TextView
+            android:id="@+id/item_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_expert_name"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/margin_medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="1500 рублей" />
 
-            <TextView
-                android:id="@+id/item_cost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_expert_name"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="@dimen/margin_medium"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                tools:text="1500 рублей" />
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>
 
-        </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-</RelativeLayout>

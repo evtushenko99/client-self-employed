@@ -11,7 +11,7 @@ import com.example.client_self_employed.domain.AppointmentsIteractor;
 import com.example.client_self_employed.domain.IAppointmentStatus;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
-import com.example.client_self_employed.presentation.adapters.items.ClientButtonItem;
+import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
@@ -32,19 +32,18 @@ public class AppointmentsViewModel extends ViewModel {
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private final MutableLiveData<String> mErrors = new MutableLiveData<>();
     private MutableLiveData<List<RowType>> mLiveData = new MutableLiveData<>();
-    private List<Appointment> mAppointmentList = new ArrayList<>();
-    private List<Expert> mExpertList = new ArrayList<>();
+
     private List<RowType> mRowTypes = new ArrayList<>();
 
     private IAppointmentStatus mAppointmentStatus = new IAppointmentStatus() {
         @Override
         public void clientsAppointmentsIsLoaded(@NonNull List<Appointment> appointmentList, @NonNull List<Expert> expertList) {
-            mRowTypes = new ArrayList<>(mRowTypes.subList(0, 2));
+            mRowTypes = new ArrayList<>(mRowTypes.subList(0, 1));
             if (appointmentList.size() != 0 && expertList.size() != 0) {
-                List<RowType> activeAppointments = convertAppointmentToRowType(appointmentList, expertList);
+                List<ClientAppointment> activeAppointments = convertAppointmentToRowType(appointmentList, expertList);
                 if (activeAppointments != null) {
-
-                    mRowTypes.addAll(activeAppointments);
+                    ClientActiveAppointmentsItem clientActiveAppointmentsItem = new ClientActiveAppointmentsItem(activeAppointments);
+                    mRowTypes.add(clientActiveAppointmentsItem);
                     mLiveData.postValue(mRowTypes);
                     mIsLoading.postValue(false);
                 }
@@ -96,7 +95,6 @@ public class AppointmentsViewModel extends ViewModel {
             mAppointmentsIteractor.loadClientsExperts(mAppointmentStatus);
         });
 
-        mRowTypes.add(new ClientButtonItem());
         mLiveData.postValue(mRowTypes);
 
 
@@ -112,11 +110,11 @@ public class AppointmentsViewModel extends ViewModel {
         return mLiveData;
     }
 
-    public void deleteClientAppointment(long appointmentId, int position) {
+    public void deleteClientAppointment(long appointmentId) {
         mExecutor.execute(() -> {
             mAppointmentsIteractor.deleteClientAppointment(appointmentId, mAppointmentStatus);
         });
-        mRowTypes.remove(position);
+        // mRowTypes.remove(position);
         mLiveData.postValue(mRowTypes);
     }
 
@@ -124,9 +122,9 @@ public class AppointmentsViewModel extends ViewModel {
         return mIsLoading;
     }
 
-    private List<RowType> convertAppointmentToRowType(@NonNull List<Appointment> appointments, @NonNull List<Expert> experts) {
+    private List<ClientAppointment> convertAppointmentToRowType(@NonNull List<Appointment> appointments, @NonNull List<Expert> experts) {
         //if (appointments.size() != 0 && experts.size() != 0) {
-        List<RowType> data = new ArrayList<>();
+        List<ClientAppointment> data = new ArrayList<>();
         Map<Integer, String> expertsName = new HashMap<>();
         Map<Integer, String> expertsProfession = new HashMap<>();
         Map<Integer, String> expertsNumber = new HashMap<>();
