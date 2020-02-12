@@ -21,6 +21,10 @@
     <string name="expert_detailed_appointment_additional_information">Дополнитльная информация</string>
     <string name="fragment_search_new_appointment">Записаться к эксперту</string>
     <string name="find_expert_filters">Фильтры</string>
+    <string name="menu_find_expert">Find Expert</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_fragment_active_appointments">Ваше расписание</string>
+    <string name="title_find_expert">Поиск эксперта</string>
 
     <string-array name="professions">
         <item>Тренер по фигурному катанию</item>

@@ -18,6 +18,7 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     private long mClientId;
 
     public Appointment() {
+
     }
 
     public Appointment(long id, String serviceName, String sessionDuration, int cost, String location, int year, int month, int dayOfMonth,
@@ -104,6 +105,7 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         dest.writeLong(mExpertId);
         dest.writeLong(mClientId);
     }
+
     @Override
     public int compareTo(Appointment o) {
         if (this.getDayOfMonth() < o.getDayOfMonth()) {
@@ -120,88 +122,44 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         return mId;
     }
 
-    public void setId(long id) {
-        mId = id;
-    }
-
     public String getServiceName() {
         return mServiceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        mServiceName = serviceName;
     }
 
     public String getSessionDuration() {
         return mSessionDuration;
     }
 
-    public void setSessionDuration(String sessionDuration) {
-        mSessionDuration = sessionDuration;
-    }
-
     public int getCost() {
         return mCost;
-    }
-
-    public void setCost(int cost) {
-        mCost = cost;
     }
 
     public String getLocation() {
         return mLocation;
     }
 
-    public void setLocation(String location) {
-        mLocation = location;
-    }
-
     public int getYear() {
         return mYear;
-    }
-
-    public void setYear(int year) {
-        mYear = year;
     }
 
     public int getMonth() {
         return mMonth;
     }
 
-    public void setMonth(int month) {
-        mMonth = month;
-    }
-
     public int getDayOfMonth() {
         return mDayOfMonth;
-    }
-
-    public void setDayOfMonth(int dayOfMonth) {
-        mDayOfMonth = dayOfMonth;
     }
 
     public int getStartHourOfDay() {
         return mStartHourOfDay;
     }
 
-    public void setStartHourOfDay(int startHourOfDay) {
-        mStartHourOfDay = startHourOfDay;
-    }
-
     public int getStartMinute() {
         return mStartMinute;
     }
 
-    public void setStartMinute(int startMinute) {
-        mStartMinute = startMinute;
-    }
-
     public long getExpertId() {
         return mExpertId;
-    }
-
-    public void setExpertId(long expertId) {
-        mExpertId = expertId;
     }
 
     public long getClientId() {
@@ -211,5 +169,51 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     public void setClientId(long clientId) {
         mClientId = clientId;
     }
+
+
+    public void setId(long id) {
+        mId = id;
+    }
+
+    public void setServiceName(String serviceName) {
+        mServiceName = serviceName;
+    }
+
+    public void setSessionDuration(String sessionDuration) {
+        mSessionDuration = sessionDuration;
+    }
+
+    public void setCost(int cost) {
+        mCost = cost;
+    }
+
+    public void setLocation(String location) {
+        mLocation = location;
+    }
+
+    public void setYear(int year) {
+        mYear = year;
+    }
+
+    public void setMonth(int month) {
+        mMonth = month;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        mDayOfMonth = dayOfMonth;
+    }
+
+    public void setStartHourOfDay(int startHourOfDay) {
+        mStartHourOfDay = startHourOfDay;
+    }
+
+    public void setStartMinute(int startMinute) {
+        mStartMinute = startMinute;
+    }
+
+    public void setExpertId(long expertId) {
+        mExpertId = expertId;
+    }
+
 
 }

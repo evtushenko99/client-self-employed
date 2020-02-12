@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/margin_medium"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/elevation_medium">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_expert_holder_constraint_layout"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/item_expert_holder_image"
+            android:layout_width="@dimen/image_width_small"
+            android:layout_height="@dimen/image_height_small"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/item_expert_holder_full_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toTopOf="@+id/item_expert_holder_profession"
+            app:layout_constraintStart_toEndOf="@+id/item_expert_holder_image"
+            app:layout_constraintTop_toTopOf="@+id/item_expert_holder_image"
+            tools:text="Евтушенко Максим Евгеньевич" />
+
+        <TextView
+            android:id="@+id/item_expert_holder_profession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintBottom_toBottomOf="@+id/item_expert_holder_image"
+            app:layout_constraintStart_toStartOf="@+id/item_expert_holder_full_name"
+            app:layout_constraintTop_toBottomOf="@+id/item_expert_holder_full_name"
+            tools:text="Тренер по фигурному катанию" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

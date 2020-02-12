@@ -3,9 +3,11 @@ package com.example.client_self_employed.presentation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.client_self_employed.R;
@@ -14,16 +16,33 @@ import com.example.client_self_employed.presentation.fragments.FragmentsActiveAp
 public class ActivityActiveAppointments extends AppCompatActivity implements IUpdateRecyclerListener {
     private static final String SAVED_HOLDER_POSITION = "POSITION";
     private static final String TAG = "TAG";
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_host_appointments_with_experts, FragmentsActiveAppointments.newInstance())
-                    .commit();
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        Log.d(TAG, "onCreate: ");
 
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_host_appointments_with_experts, FragmentsActiveAppointments.newInstance())
+                .commit();
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        return true;
     }
 
     @Override
@@ -45,7 +64,7 @@ public class ActivityActiveAppointments extends AppCompatActivity implements IUp
         super.onStop();
         Log.d(TAG, "onStop: Main ");
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

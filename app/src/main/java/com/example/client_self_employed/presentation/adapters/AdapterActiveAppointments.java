@@ -46,7 +46,7 @@ public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiv
         private TextView mExpertNameTextView;
         private TextView mCostTextView;
         private TextView mDateTextView;
-        private TextView mProfessionTextView;
+        private TextView mServiceNameTextView;
 
         private ActiveAppointment mItemClickListener;
 
@@ -56,7 +56,7 @@ public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiv
             mTimeTextView = itemView.findViewById(R.id.item_start_time);
             mExpertNameTextView = itemView.findViewById(R.id.item_expert_name);
             mCostTextView = itemView.findViewById(R.id.item_cost);
-            mProfessionTextView = itemView.findViewById(R.id.item_expert_profession);
+            mServiceNameTextView = itemView.findViewById(R.id.item_service_name);
             mDateTextView = itemView.findViewById(R.id.item_date);
         }
 
@@ -65,7 +65,7 @@ public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiv
             mCostTextView.setText(appointment.getCost() + " р");
             mExpertNameTextView.setText(appointment.getExpertName());
             mDateTextView.setText(appointment.getDate());
-            mProfessionTextView.setText(appointment.getExpertProfession());
+            mServiceNameTextView.setText(appointment.getServiceName());
             itemView.setOnClickListener(v -> mItemClickListener.onAppointmentsItemClickListener(appointment));
         }
     }

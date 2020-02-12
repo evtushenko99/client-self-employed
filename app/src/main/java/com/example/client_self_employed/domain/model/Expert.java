@@ -13,19 +13,10 @@ public class Expert {
     private String mPhoneNumber;
     private String mProfession;
     private int mWorkExperience;
-
-    public Uri getExpertPhotoUri() {
-        return mExpertPhotoUri;
-    }
-
-    public void setExpertPhotoUri(Uri expertPhotoUri) {
-        mExpertPhotoUri = expertPhotoUri;
-    }
-
     private Uri mExpertPhotoUri;
 
-
     public Expert() {
+
     }
 
     public Expert(long id, String lastName, String firstName, String patronymic, int age, String email, String phoneNumber, String profession, int workExperience) {
@@ -49,72 +40,80 @@ public class Expert {
 
     }
 
-    public String getLastName() {
-        return mLastName;
-    }
-
-    public void setLastName(String lastName) {
-        mLastName = lastName;
-    }
-
-    public String getPatronymic() {
-        return mPatronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        mPatronymic = patronymic;
-    }
-
     public long getId() {
         return mId;
     }
 
-    public void setId(long id) {
-        mId = id;
+    public String getLastName() {
+        return mLastName;
     }
 
     public String getFirstName() {
         return mFirstName;
     }
 
-    public void setFirstName(String firstName) {
-        mFirstName = firstName;
+    public String getPatronymic() {
+        return mPatronymic;
     }
 
     public int getAge() {
         return mAge;
     }
 
-    public void setAge(int age) {
-        mAge = age;
-    }
-
     public String getEmail() {
         return mEmail;
-    }
-
-    public void setEmail(String email) {
-        mEmail = email;
     }
 
     public String getPhoneNumber() {
         return mPhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        mPhoneNumber = phoneNumber;
-    }
-
     public String getProfession() {
         return mProfession;
     }
 
-    public void setProfession(String profession) {
-        mProfession = profession;
-    }
-
     public int getWorkExperience() {
         return mWorkExperience;
+    }
+
+    public Uri getExpertPhotoUri() {
+        return mExpertPhotoUri;
+    }
+
+    public void setExpertPhotoUri(Uri expertPhotoUri) {
+        mExpertPhotoUri = expertPhotoUri;
+    }
+
+    public void setId(long id) {
+        mId = id;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        mFirstName = firstName;
+    }
+
+    public void setPatronymic(String patronymic) {
+        mPatronymic = patronymic;
+    }
+
+    public void setAge(int age) {
+        mAge = age;
+    }
+
+    public void setEmail(String email) {
+        mEmail = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        mPhoneNumber = phoneNumber;
+    }
+
+    public void setProfession(String profession) {
+        mProfession = profession;
     }
 
     public void setWorkExperience(int workExperience) {

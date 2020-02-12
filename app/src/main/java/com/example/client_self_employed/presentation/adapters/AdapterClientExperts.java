@@ -1,6 +1,6 @@
 package com.example.client_self_employed.presentation.adapters;
 
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +25,13 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 public class AdapterClientExperts extends RecyclerView.Adapter<AdapterClientExperts.SelectedExpertHolder> {
     private List<ClientSelectedExpert> mExpertList;
     private BestExpertItem mBestExpertItem;
+    private Resources mResources;
     private int index = -1;
 
-    public AdapterClientExperts(@NonNull List<ClientSelectedExpert> expertList, BestExpertItem bestExpertItem) {
+    public AdapterClientExperts(@NonNull List<ClientSelectedExpert> expertList, BestExpertItem bestExpertItem, @NonNull Resources resources) {
         mExpertList = expertList;
         mBestExpertItem = bestExpertItem;
+        mResources = resources;
     }
 
     @NonNull
@@ -42,12 +44,9 @@ public class AdapterClientExperts extends RecyclerView.Adapter<AdapterClientExpe
     @Override
     public void onBindViewHolder(@NonNull AdapterClientExperts.SelectedExpertHolder holder, int position) {
         holder.bindView(mExpertList.get(position), holder.getAdapterPosition());
+        int color = index == position ? R.color.primaryLightColor : R.color.white;
 
-        if (index == position) {
-            holder.mCardView.setBackgroundColor(Color.parseColor("#ffab91"));
-        } else {
-            holder.mCardView.setBackgroundColor(Color.parseColor("#ffffff"));
-        }
+        holder.mCardView.setBackgroundColor(mResources.getColor(color));
     }
 
     @Override

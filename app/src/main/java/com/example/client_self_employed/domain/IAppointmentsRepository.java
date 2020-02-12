@@ -1,26 +1,28 @@
 package com.example.client_self_employed.domain;
 
+import androidx.annotation.NonNull;
+
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.domain.model.Review;
 
-import java.util.List;
-
+/**
+ * Интерфейс для работы загрузки активных записей клиента
+ * и всех экспертов
+ */
 public interface IAppointmentsRepository {
-    void updateAppointment(long id,int clientId);
-    void deleteClientsAppointment(long id,IAppointmentStatus status);
+    void updateAppointment(long id, int clientId);
 
+    void deleteClientsAppointment(@NonNull long id, IAppointmentCallback status);
 
-    // void loadExpertAppointments(long expertId, IAppointmentStatus dataStatus);
+    void loadClientsAppointments(@NonNull long clientId, IAppointmentCallback status);
 
-    void loadClientsAppointments(long clientId, IAppointmentStatus status);
-
-    void loadExperts( IAppointmentStatus status);
-
-    void uploadAppointment(Appointment appointment);
+    void loadExperts(IAppointmentCallback status);
 
     void uploadExpert(Expert expert);
+
+    void uploadAppointment(Appointment appointment);
 
     void uploadClient(Client client);
 

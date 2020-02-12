@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.client_self_employed.domain.AppointmentsIteractor;
-import com.example.client_self_employed.domain.IAppointmentStatus;
+import com.example.client_self_employed.domain.IAppointmentCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
@@ -32,10 +32,9 @@ public class AppointmentsViewModel extends ViewModel {
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private final MutableLiveData<String> mErrors = new MutableLiveData<>();
     private MutableLiveData<List<RowType>> mLiveData = new MutableLiveData<>();
-
     private List<RowType> mRowTypes = new ArrayList<>();
 
-    private IAppointmentStatus mAppointmentStatus = new IAppointmentStatus() {
+    private IAppointmentCallback mAppointmentStatus = new IAppointmentCallback() {
         @Override
         public void clientsAppointmentsIsLoaded(@NonNull List<Appointment> appointmentList, @NonNull List<Expert> expertList) {
             mRowTypes = new ArrayList<>(mRowTypes.subList(0, 1));
@@ -92,7 +91,7 @@ public class AppointmentsViewModel extends ViewModel {
         mIsLoading.setValue(true);
 
         mExecutor.execute(() -> {
-            mAppointmentsIteractor.loadClientsExperts(mAppointmentStatus);
+            mAppointmentsIteractor.loadExperts(mAppointmentStatus);
         });
 
         mLiveData.postValue(mRowTypes);
@@ -139,20 +138,20 @@ public class AppointmentsViewModel extends ViewModel {
             }
         }
         for (int i = 0; i < appointments.size(); i++) {
+            Appointment appointment = appointments.get(i);
             data.add(new ClientAppointment(
-                    appointments.get(i).getId(),
+                    appointment.getId(),
                     expertsProfession.get(i),
                     expertsName.get(i),
                     expertsNumber.get(i),
-                    appointments.get(i).getServiceName(),
-                    appointments.get(i).getStringTime(),
-                    appointments.get(i).getSessionDuration(),
-                    appointments.get(i).getCost(),
-                    appointments.get(i).getLocation(),
-                    appointments.get(i).getStringDate()));
+                    appointment.getServiceName(),
+                    appointment.getStringTime(),
+                    appointment.getSessionDuration(),
+                    appointment.getCost(),
+                    appointment.getLocation(),
+                    appointment.getStringDate()));
         }
         return data;
-
     }
 }
 

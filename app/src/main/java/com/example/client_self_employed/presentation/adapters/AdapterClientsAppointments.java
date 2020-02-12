@@ -1,5 +1,6 @@
 package com.example.client_self_employed.presentation.adapters;
 
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
     private NewRecordToBestExpertButtonItem mNewRecordToBestExpertButtonItem;
     private BestExpertItem mBestExpertItem;
     private FindExpertButton mFindExpertButton;
+    private Resources mResources;
     private List<RowType> mDataSet = new ArrayList<>();
 
     public AdapterClientsAppointments(
@@ -35,7 +37,7 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
             ActiveAppointment itemClickListener,
             NewRecordToBestExpertButtonItem newRecordToBestExpertButtonItem,
             BestExpertItem bestExpertItem,
-            FindExpertButton findExpertListener) {
+            FindExpertButton findExpertListener, @NonNull Resources resources) {
         if (rowTypes != null) {
             mDataSet.addAll(rowTypes);
         }
@@ -43,6 +45,7 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
         mNewRecordToBestExpertButtonItem = newRecordToBestExpertButtonItem;
         mBestExpertItem = bestExpertItem;
         mFindExpertButton = findExpertListener;
+        mResources = resources;
     }
 
     @Override
@@ -87,7 +90,7 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
             ((AppointmentViewHolder) holder).mRecycler.setAdapter(new AdapterActiveAppointments(((ClientActiveAppointmentsItem) mDataSet.get(position)).getClientSelectedExperts(), mItemClickListener));
         } else if (holder instanceof BestExpertHolder) {
             String expertName = ((ClientExpertItem) mDataSet.get(position)).getTitle();
-            ((BestExpertHolder) holder).mRecycler.setAdapter(new AdapterClientExperts(((ClientExpertItem) mDataSet.get(position)).getClientSelectedExperts(), mBestExpertItem));
+            ((BestExpertHolder) holder).mRecycler.setAdapter(new AdapterClientExperts(((ClientExpertItem) mDataSet.get(position)).getClientSelectedExperts(), mBestExpertItem, mResources));
             ((BestExpertHolder) holder).bindView(expertName, mNewRecordToBestExpertButtonItem);
         }
     }

@@ -69,27 +69,27 @@ public class AppointmentsIteractor {
         mAppointmentsRepository.uploadAppointment(appointment8);
         mAppointmentsRepository.uploadAppointment(appointment9);
         mAppointmentsRepository.uploadAppointment(appointment10);
-        mAppointmentsRepository.uploadAppointment(appointment11);*/
+        mAppointmentsRepository.uploadAppointment(appointment11);
         mAppointmentsRepository.uploadExpert(expert1);
         mAppointmentsRepository.uploadExpert(expert2);
-        mAppointmentsRepository.uploadExpert(expert3);
+        mAppointmentsRepository.uploadExpert(expert3);*/
 
 
     }
 
-    public void loadClientsAppointments(long clientId, IAppointmentStatus appointmentStatus) {
+    public void loadClientsAppointments(long clientId, IAppointmentCallback appointmentStatus) {
         mAppointmentsRepository.loadClientsAppointments(clientId, appointmentStatus);
     }
 
-    public void loadClientsExperts(IAppointmentStatus status) {
+    public void loadExperts(IAppointmentCallback status) {
         mAppointmentsRepository.loadExperts(status);
     }
 
-    public void loadExpert(long expertId, IAppointmentStatus status) {
+    public void loadExpert(long expertId, IAppointmentCallback status) {
         // mAppointmentsRepository.loadExpertAppointments(expertId, status);
     }
 
-    public void deleteClientAppointment(long appoinmentId, IAppointmentStatus status) {
+    public void deleteClientAppointment(long appoinmentId, IAppointmentCallback status) {
         mAppointmentsRepository.deleteClientsAppointment(appoinmentId, status);
     }
 

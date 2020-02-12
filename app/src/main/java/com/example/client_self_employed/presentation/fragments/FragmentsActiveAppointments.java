@@ -2,6 +2,9 @@ package com.example.client_self_employed.presentation.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,26 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
-import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointment;
-import com.example.client_self_employed.presentation.clicklisteners.BestExpertItem;
-import com.example.client_self_employed.presentation.clicklisteners.FindExpertButton;
-import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItem;
-import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 
 
 public class FragmentsActiveAppointments extends Fragment {
-    private static final long MOVE_DEFAULT_TIME = 1000;
-    private static final long FADE_DEFAULT_TIME = 300;
-
     private static final String SAVED_APPOINTMENT = "APPOINTMENT";
-    private static final String SAVED_HOLDER_POSITION = "POSITION";
 
     private RecyclerView mRecyclerView;
     private AppointmentsViewModel mViewModel;
     private long mExpertId;
-    private int mPosition;
 
     public static FragmentsActiveAppointments newInstance() {
         Bundle args = new Bundle();
@@ -46,79 +39,77 @@ public class FragmentsActiveAppointments extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (this.getArguments() != null) {
-            //     mPosition = this.getArguments().getInt(SAVED_HOLDER_POSITION);
-        }
+        setHasOptionsMenu(true);
         setRetainInstance(true);
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_active_appointments, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getActivity().setTitle(R.string.title_fragment_active_appointments);
         mRecyclerView = view.findViewById(R.id.list_of_active_appointments_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        // DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL);
-        // mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(new AdapterClientsAppointments(null,
-                new ActiveAppointment() {
-                    @Override
-                    public void onAppointmentsItemClickListener(ClientAppointment appointment) {
-                        FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
+                appointment -> {
+                    FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(SAVED_APPOINTMENT, appointment);
+                    fragmentDetailedAppointment.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
+                            .addToBackStack("active_appointments")
+                            .commit();
+                },
+                () -> {
+                    if (mExpertId != 0) {
+                        FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(SAVED_APPOINTMENT, appointment);
-                        //  bundle.putInt(SAVED_HOLDER_POSITION, holderPosition);
-                        fragmentDetailedAppointment.setArguments(bundle);
-
+                        bundle.putLong(Arguments.EXPERT_ID, mExpertId);
+                        fragmentExpertSchedule.setArguments(bundle);
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
+                                .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
                                 .addToBackStack("active_appointments")
                                 .commit();
-
+                    } else {
+                        Toast.makeText(getActivity(), "Выберите желаемого эксперта", Toast.LENGTH_LONG).show();
                     }
                 },
-                new NewRecordToBestExpertButtonItem() {
-                    @Override
-                    public void onButtonItemClickListener() {
-                        if (mExpertId != 0) {
-                            FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
-                            Bundle bundle = new Bundle();
-                            bundle.putLong(Arguments.EXPERT_ID, mExpertId);
-                            fragmentExpertSchedule.setArguments(bundle);
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
-                                    .addToBackStack("active_appointments")
-                                    .commit();
-                        } else {
-                            Toast.makeText(getActivity(), "Выберите желаемого эксперта", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new BestExpertItem() {
-                    @Override
-                    public void onExpertItemClickListener(long expertId) {
-                        mExpertId = expertId;
-                    }
-                },
-                new FindExpertButton() {
-                    @Override
-                    public void onFindExpertButton() {
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
-                                .addToBackStack("active_appointments")
-                                .commit();
-                    }
-                }
+                expertId -> mExpertId = expertId,
+                () -> getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
+                        .addToBackStack("active_appointments")
+                        .commit(),
+                getResources()
         ));
         setupMvvm();
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.find_expert_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_find_expert: {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
+                        .addToBackStack("active_appointments")
+                        .commit();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupMvvm() {

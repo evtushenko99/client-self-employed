@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.data.model.FirebaseExpert;
-import com.example.client_self_employed.domain.IExpertRepository;
-import com.example.client_self_employed.domain.IExpertScheduleStatus;
+import com.example.client_self_employed.domain.IExpertScheduleCallback;
+import com.example.client_self_employed.domain.IExpertScheduleRepository;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.google.firebase.database.DataSnapshot;
@@ -22,21 +22,20 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class RepositoryExpertSchedule implements IExpertRepository {
-    private DatabaseReference mDatabaseReferenceAppointment;
-    private DatabaseReference mDatabaseReferenceExpert;
-    private List<Appointment> mAppointments;
+public class RepositoryExpertSchedule implements IExpertScheduleRepository {
+    private DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mDatabaseReferenceAppointment = mReference.child("appointments");
+    private DatabaseReference mDatabaseReferenceExpert = mReference.child("experts");
+    private List<Appointment> mAppointments = new ArrayList<>();
 
     public RepositoryExpertSchedule() {
-        mDatabaseReferenceAppointment = FirebaseDatabase.getInstance().getReference().child("appointments");
-        mDatabaseReferenceExpert = FirebaseDatabase.getInstance().getReference().child("experts");
-        mAppointments = new ArrayList<>();
+
     }
 
+    private void loadExpertName(long expertId, IExpertScheduleCallback expertScheduleStatus) {
 
-    private void loadExpertName(long expertId, IExpertScheduleStatus expertScheduleStatus) {
-
-        mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID).equalTo(expertId)
+        mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)
+                .equalTo(expertId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -56,8 +55,9 @@ public class RepositoryExpertSchedule implements IExpertRepository {
     }
 
     @Override
-    public void loadExpertSchedule(long expertId, IExpertScheduleStatus expertScheduleStatus) {
-        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID).equalTo(expertId)
+    public void loadExpertSchedule(long expertId, IExpertScheduleCallback expertScheduleCallback) {
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID)
+                .equalTo(expertId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,7 +69,7 @@ public class RepositoryExpertSchedule implements IExpertRepository {
                         }
                         Collections.sort(mAppointments);
 
-                        loadExpertName(expertId, expertScheduleStatus);
+                        loadExpertName(expertId, expertScheduleCallback);
                     }
 
                     // dataStatus.clientsAppointmentsIsLoaded(mAppointments, mExperts);
@@ -81,16 +81,21 @@ public class RepositoryExpertSchedule implements IExpertRepository {
     }
 
     @Override
-    public void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleStatus expertScheduleStatus) {
-        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID).equalTo(appointmentId)
+    public void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleCallback expertScheduleCallback) {
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID)
+                .equalTo(appointmentId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                             Appointment appointment = keyExpert.getValue(Appointment.class);
-                            appointment.setClientId(clientId);
-                            mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment)
-                                    .addOnCompleteListener(task -> expertScheduleStatus.newAppointment(true));
+                            if (appointment != null) {
+                                appointment.setClientId(clientId);
+                                String appointmentId = String.valueOf(appointment.getId());
+                                mDatabaseReferenceAppointment.child(appointmentId)
+                                        .setValue(appointment)
+                                        .addOnCompleteListener(task -> expertScheduleCallback.newAppointment(true));
+                            }
                         }
                     }
 

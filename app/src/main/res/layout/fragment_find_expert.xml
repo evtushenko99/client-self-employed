@@ -8,97 +8,33 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="@string/caption_for_expert_selection"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/find_expert_search_view"
+        android:id="@+id/find_expert_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:queryHint="Фамилия эксперта"
-        android:layout_marginTop="8dp"
-        android:alwaysDrawnWithCache="true"
-        android:elevation="@dimen/elevation_medium"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/find_expert_filters"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <ImageView
-        android:id="@+id/find_expert_filters"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@mipmap/icon_filter"
-        android:text="@string/find_expert_filters"
-        app:layout_constraintBottom_toBottomOf="@+id/find_expert_search_view"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/find_expert_search_view"
-        app:layout_constraintTop_toTopOf="@+id/find_expert_search_view" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/find_expert_filters_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/find_expert_filters"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/find_expert_search_view">
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/find_expert_spinner_profession"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:entries="@array/professions"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatSeekBar
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-
-            android:layout_marginBottom="8dp"
-            android:max="10"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/find_expert_spinner_profession"
-            app:layout_constraintStart_toStartOf="@+id/find_expert_spinner_profession"
-            app:layout_constraintTop_toBottomOf="@+id/find_expert_spinner_profession" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="Фамилия,Имя эксперта" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/find_expert_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/margin_medium"
-
         android:layout_marginTop="16dp"
-
+        app:layout_constraintBottom_toTopOf="@+id/fragment_new_appointment_to_expert_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/find_expert_search_view"
-        app:layout_constraintTop_toBottomOf="@+id/find_expert_search_view" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/find_expert_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/find_expert_edit_text"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/find_expert_button"
+        android:id="@+id/fragment_new_appointment_to_expert_button"
         style="@style/MyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
