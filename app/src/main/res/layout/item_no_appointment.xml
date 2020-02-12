@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_medium"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_no_appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:gravity="center"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/no_appointments"
+            android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
+            android:textSize="24sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/item_search_for_expert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:background="@drawable/corners_for_buttons"
+            android:elevation="@dimen/elevation_medium"
+            android:text="@string/item_search_expert"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

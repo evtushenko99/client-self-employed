@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "614109382606",
+    "firebase_url": "https://self-employed-ad418.firebaseio.com",
+    "project_id": "self-employed-ad418",
+    "storage_bucket": "self-employed-ad418.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614109382606:android:3bcec902df86ee75980d9f",
+        "android_client_info": {
+          "package_name": "com.example.client_self_employed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "614109382606-070cp5epq2bgbhp9999ckrjdab95s8cs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.client_self_employed",
+            "certificate_hash": "f24849fe1d20b73b966da2cdb50bc4aff5d4520e"
+          }
+        },
+        {
+          "client_id": "614109382606-ob2jsttuo3g7fp733hgosnhh70fk4n51.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG7xcmeDZ8o7HV0LxRKFLTCk61UnP_Sis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "614109382606-ob2jsttuo3g7fp733hgosnhh70fk4n51.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
