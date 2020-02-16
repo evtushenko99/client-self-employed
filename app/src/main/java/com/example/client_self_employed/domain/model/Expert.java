@@ -7,7 +7,7 @@ public class Expert {
     private long mId;
     private String mLastName;
     private String mFirstName;
-    private String mPatronymic;//Отчество
+    private String mSecondName;//Отчество
     private int mAge;
     private String mEmail;
     private String mPhoneNumber;
@@ -19,11 +19,11 @@ public class Expert {
 
     }
 
-    public Expert(long id, String lastName, String firstName, String patronymic, int age, String email, String phoneNumber, String profession, int workExperience) {
+    public Expert(long id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience) {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
-        mPatronymic = patronymic;
+        mSecondName = secondName;
         mAge = age;
         mEmail = email;
         mPhoneNumber = phoneNumber;
@@ -32,11 +32,11 @@ public class Expert {
     }
 
     public String getFullName() {
-        return mLastName + " " + mFirstName + " " + mPatronymic;
+        return mLastName + " " + mFirstName + " " + mSecondName;
     }
 
     public String getAbbreviatedFullName() {
-        return mLastName + " " + mFirstName.substring(0, 1) + " " + mPatronymic.substring(0, 1);
+        return mLastName + "." + mFirstName.substring(0, 1) + "." + mSecondName.substring(0, 1);
 
     }
 
@@ -52,8 +52,8 @@ public class Expert {
         return mFirstName;
     }
 
-    public String getPatronymic() {
-        return mPatronymic;
+    public String getSecondName() {
+        return mSecondName;
     }
 
     public int getAge() {
@@ -96,8 +96,8 @@ public class Expert {
         mFirstName = firstName;
     }
 
-    public void setPatronymic(String patronymic) {
-        mPatronymic = patronymic;
+    public void setSecondName(String secondName) {
+        mSecondName = secondName;
     }
 
     public void setAge(int age) {

@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.client_self_employed.data.IExpertScheduleRepository;
 import com.example.client_self_employed.data.RepositoryExpertSchedule;
 import com.example.client_self_employed.domain.ExpertScheduleInteractor;
-import com.example.client_self_employed.domain.IExpertScheduleRepository;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 
 import java.util.concurrent.Executor;

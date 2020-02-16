@@ -7,7 +7,7 @@
 
     android:orientation="vertical">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/material_expert_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,8 +29,8 @@
                 android:layout_height="96dp"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin_medium"
-
                 tools:ignore="ContentDescription" />
+
 
             <TextView
                 android:id="@+id/item_selected_expert_name"
@@ -42,5 +42,5 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 tools:text="Евтушенко Максим Евгеньевич" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

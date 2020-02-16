@@ -4,10 +4,8 @@
     <item
         android:id="@+id/menu_find_expert"
         android:icon="@drawable/ic_search_black_24dp"
-        app:actionViewClass="android.widget.SearchView"
-
-        app:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/menu_find_expert" />
+        android:title="@string/menu_find_expert"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_settings"
         android:icon="@drawable/ic_more_vert_24dp"

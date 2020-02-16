@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,7 +17,6 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.clicklisteners.BestExpertItem;
 import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class AdapterClientExperts extends RecyclerView.Adapter<AdapterClientExpe
         private TextView mExpertName;
         private ImageView mExpertPhoto;
         private BestExpertItem mBestExpertItem;
-        private MaterialCardView mCardView;
+        private CardView mCardView;
 
         public SelectedExpertHolder(@NonNull View itemView, BestExpertItem bestExpertItem) {
             super(itemView);
@@ -76,10 +76,9 @@ public class AdapterClientExperts extends RecyclerView.Adapter<AdapterClientExpe
                     new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
             Glide
                     .with(itemView.getContext())
-                    .load(clientSelectedExpert.getURL())
+                    .load(clientSelectedExpert.getUri())
                     .apply(new RequestOptions()
-                            .override(96, 96)
-                            .centerCrop()
+                            .circleCrop()
                             .placeholder(R.mipmap.no_photo_available_or_missing)
                             .error(R.mipmap.no_photo_available_or_missing))
                     .transition(withCrossFade(factory))

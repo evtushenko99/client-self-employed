@@ -1,13 +1,21 @@
 package com.example.client_self_employed.domain;
 
+import com.example.client_self_employed.data.IAppointmentsRepository;
+import com.example.client_self_employed.data.IExpertsRepository;
 import com.example.client_self_employed.domain.model.Appointment;
+import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
 
-public class AppointmentsIteractor {
-    private final IAppointmentsRepository mAppointmentsRepository;
+import java.util.List;
 
-    public AppointmentsIteractor(IAppointmentsRepository appointmentsRepository) {
+public class AppointmentsInteractor {
+    private final IAppointmentsRepository mAppointmentsRepository;
+    private final IExpertsRepository mExpertsRepository;
+
+
+    public AppointmentsInteractor(IAppointmentsRepository appointmentsRepository, IExpertsRepository expertsRepository) {
         mAppointmentsRepository = appointmentsRepository;
+        mExpertsRepository = expertsRepository;
         Appointment appointment1 = new Appointment(1, "Подкатка", "90 минут", 2000,
                 "Европейский", 2020, 2, 1, 10, 30,
                 1,
@@ -59,7 +67,8 @@ public class AppointmentsIteractor {
         Expert expert2 = new Expert(2, "Юрина", "Марина", "Игоревна", 23, "marina_yri@mail.ru", "+7-915-133-97-43", "Инструктор по зумбе", 2);
         Expert expert3 = new Expert(3, "Литвиненко", "Сергей", "Владиславович", 23, "lotvinenko@mail.ru", "+7-915-133-97-43", "Тренер по йоге", 10);
 
-        /*mAppointmentsRepository.uploadAppointment(appointment1);
+        Client client = new Client(2, "Юрин", "Максим", "Евгеньевич", 21, 22, 2, 1999, "evtushenko99@mail.ru", "+7-906-087-11-00", "Мужской", null);
+        /* mAppointmentsRepository.uploadAppointment(appointment1);
         mAppointmentsRepository.uploadAppointment(appointment2);
         mAppointmentsRepository.uploadAppointment(appointment3);
         mAppointmentsRepository.uploadAppointment(appointment4);
@@ -70,29 +79,24 @@ public class AppointmentsIteractor {
         mAppointmentsRepository.uploadAppointment(appointment9);
         mAppointmentsRepository.uploadAppointment(appointment10);
         mAppointmentsRepository.uploadAppointment(appointment11);
-        mAppointmentsRepository.uploadExpert(expert1);
+       mAppointmentsRepository.uploadExpert(expert1);
         mAppointmentsRepository.uploadExpert(expert2);
-        mAppointmentsRepository.uploadExpert(expert3);*/
-
+        mAppointmentsRepository.uploadExpert(expert3);mAppointmentsRepository.uploadClient(client);
+        */
 
     }
 
-    public void loadClientsAppointments(long clientId, IAppointmentCallback appointmentStatus) {
-        mAppointmentsRepository.loadClientsAppointments(clientId, appointmentStatus);
+
+    public void loadClientsAppointments(long clientId, IClientAppointmentCallback appointmentStatus) {
+        mAppointmentsRepository.loadClientsAppointments(clientId, new IAppointmentsCallback() {
+            @Override
+            public void onAppointmentCallback(List<Appointment> appointments, List<Long> expertsId) {
+                mExpertsRepository.loadExpertsNameForActiveAppointments(appointments, expertsId, appointmentStatus);
+            }
+        });
     }
 
-    public void loadExperts(IAppointmentCallback status) {
-        mAppointmentsRepository.loadExperts(status);
-    }
-
-    public void loadExpert(long expertId, IAppointmentCallback status) {
-        // mAppointmentsRepository.loadExpertAppointments(expertId, status);
-    }
-
-    public void deleteClientAppointment(long appoinmentId, IAppointmentCallback status) {
+    public void deleteClientAppointment(long appoinmentId, IClientAppointmentCallback status) {
         mAppointmentsRepository.deleteClientsAppointment(appoinmentId, status);
-    }
-
-    public void uploadAppoinments() {
     }
 }

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:layout_margin="@dimen/margin_medium"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/elevation_medium">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_expert_holder_constraint_layout"
 
+        android:id="@+id/item_expert_holder_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -23,18 +22,17 @@
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_expert_holder_full_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            app:layout_constraintBottom_toTopOf="@+id/item_expert_holder_profession"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_expert_holder_image"
             app:layout_constraintTop_toTopOf="@+id/item_expert_holder_image"
             tools:text="Евтушенко Максим Евгеньевич" />
@@ -43,12 +41,130 @@
             android:id="@+id/item_expert_holder_profession"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintBottom_toBottomOf="@+id/item_expert_holder_image"
             app:layout_constraintStart_toStartOf="@+id/item_expert_holder_full_name"
             app:layout_constraintTop_toBottomOf="@+id/item_expert_holder_full_name"
             tools:text="Тренер по фигурному катанию" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_expert_holder_expandable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="@dimen/padding_medium"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider">
+
+            <TextView
+                android:id="@+id/text_view_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_expert_holder_email"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/item_expert_holder_expandable_expert_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_email"
+                app:layout_constraintStart_toEndOf="@+id/text_view_work_experience"
+                app:layout_constraintTop_toTopOf="@+id/text_view_email"
+                tools:text="evtushenko99@mail.ru" />
+
+            <TextView
+                android:id="@+id/text_view_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/item_expert_holder_age"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="@+id/text_view_email"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_email" />
+
+
+            <TextView
+                android:id="@+id/item_expert_holder_expandable_expert_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_age"
+                app:layout_constraintStart_toStartOf="@+id/item_expert_holder_expandable_expert_email"
+                app:layout_constraintTop_toTopOf="@+id/text_view_age"
+                tools:text="23 года" />
+
+            <TextView
+                android:id="@+id/text_view_work_experience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/item_expert_holder_work_experience"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="@+id/text_view_age"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_age" />
+
+            <TextView
+                android:id="@+id/item_expert_holder_expandable_expert_work_experience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience"
+                app:layout_constraintStart_toStartOf="@+id/item_expert_holder_expandable_expert_age"
+                app:layout_constraintTop_toTopOf="@+id/text_view_work_experience"
+                tools:text="5 лет" />
+
+            <TextView
+                android:id="@+id/text_view_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/item_expert_holder_phone_number"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="@+id/text_view_work_experience"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_work_experience" />
+
+            <TextView
+                android:id="@+id/item_expert_holder_expandable_expert_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_phone_number"
+                app:layout_constraintStart_toStartOf="@+id/item_expert_holder_expandable_expert_work_experience"
+                app:layout_constraintTop_toTopOf="@+id/text_view_phone_number"
+                tools:text="8-906-087-11-00" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_expert_holder_image" />
+
+        <ImageButton
+            android:id="@+id/item_expert_holder_expend_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_arrow_down_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

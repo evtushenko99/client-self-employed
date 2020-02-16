@@ -1,4 +1,6 @@
-package com.example.client_self_employed.domain;
+package com.example.client_self_employed.data;
+
+import com.example.client_self_employed.domain.IExpertScheduleCallback;
 
 /**
  * Интерфейс для работы с расписанием определенного эксперта

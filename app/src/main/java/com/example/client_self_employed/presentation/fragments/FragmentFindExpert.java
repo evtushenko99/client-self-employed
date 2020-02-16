@@ -45,7 +45,8 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_find_expert);
-        mSearchView = view.findViewById(R.id.find_expert_edit_text);
+        mSearchView = view.findViewById(R.id.find_expert_search_view);
+
 
         mFindRecycler = view.findViewById(R.id.find_expert_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -70,8 +71,21 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
         mFindExpertViewModel = ViewModelProviders.of(getActivity(), new FindExpertViewModelFactory(getActivity()))
                 .get(FindExpertViewModel.class);
         mFindExpertViewModel.loadAllEcperts();
-        mFindExpertViewModel.getLiveData().observe(this, experts -> {
+        mFindExpertViewModel.getLiveData().observe(getViewLifecycleOwner(), experts -> {
             ((AdapterFindExperts) mFindRecycler.getAdapter()).setExperts(experts);
+        });
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mFindExpertViewModel.setSearchQuery(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mFindExpertViewModel.setSearchQuery(newText);
+                return false;
+            }
         });
     }
 

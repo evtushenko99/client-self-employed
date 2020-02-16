@@ -1,14 +1,15 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.client_self_employed.domain.AppointmentsIteractor;
-import com.example.client_self_employed.domain.IAppointmentCallback;
+import com.example.client_self_employed.domain.AppointmentsInteractor;
+import com.example.client_self_employed.domain.ExpertsIteractor;
+import com.example.client_self_employed.domain.IClientAppointmentCallback;
+import com.example.client_self_employed.domain.IExpertCallBack;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
@@ -24,84 +25,83 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import static android.content.ContentValues.TAG;
-
 public class AppointmentsViewModel extends ViewModel {
-    private final AppointmentsIteractor mAppointmentsIteractor;
+    private final AppointmentsInteractor mAppointmentsInteractor;
+    private final ExpertsIteractor mExpertsIteractor;
     private final Executor mExecutor;
-    private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mIsBestExpertLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mIsActiveAppointmentLoading = new MutableLiveData<>();
     private final MutableLiveData<String> mErrors = new MutableLiveData<>();
     private MutableLiveData<List<RowType>> mLiveData = new MutableLiveData<>();
     private List<RowType> mRowTypes = new ArrayList<>();
 
-    private IAppointmentCallback mAppointmentStatus = new IAppointmentCallback() {
+    @VisibleForTesting
+    IExpertCallBack getExpertsCallBack() {
+        return mExpertsCallBack;
+    }
+
+    private IExpertCallBack mExpertsCallBack = new IExpertCallBack() {
         @Override
-        public void clientsAppointmentsIsLoaded(@NonNull List<Appointment> appointmentList, @NonNull List<Expert> expertList) {
+        public void expertsIsLoaded(@NonNull List<Expert> expertList) {
+            List<ClientSelectedExpert> list = new ArrayList<>();
+            if (expertList.size() != 0) {
+                for (Expert expert : expertList) {
+                    list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), expert.getExpertPhotoUri()));
+                }
+                ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
+                mRowTypes.add(0, item);
+                mLiveData.postValue(mRowTypes);
+                mIsBestExpertLoading.postValue(false);
+                loadActiveAppointments();
+            }
+        }
+    };
+
+    private IClientAppointmentCallback mAppointmentStatus = new IClientAppointmentCallback() {
+        @Override
+        public void clientsAppointmentsIsLoaded(List<Appointment> appointmentList, List<Expert> expertList) {
             mRowTypes = new ArrayList<>(mRowTypes.subList(0, 1));
+            mIsActiveAppointmentLoading.postValue(false);
             if (appointmentList.size() != 0 && expertList.size() != 0) {
                 List<ClientAppointment> activeAppointments = convertAppointmentToRowType(appointmentList, expertList);
                 if (activeAppointments != null) {
                     ClientActiveAppointmentsItem clientActiveAppointmentsItem = new ClientActiveAppointmentsItem(activeAppointments);
                     mRowTypes.add(clientActiveAppointmentsItem);
-                    mLiveData.postValue(mRowTypes);
-                    mIsLoading.postValue(false);
                 }
             } else {
                 mRowTypes.add(new ClientNoAppointmentItem());
-                mLiveData.postValue(mRowTypes);
-                mIsLoading.postValue(false);
             }
+            mLiveData.postValue(mRowTypes);
 
-
-        }
-
-        @Override
-        public void clientsExpertsIsLoaded(List<Expert> expertList) {
-            List<ClientSelectedExpert> list = new ArrayList<>();
-
-            if (expertList.size() != 0) {
-                for (Expert expert : expertList) {
-                    list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), null));
-                }
-                ClientExpertItem item = new ClientExpertItem("Лучшие эксперты", list);
-                mRowTypes.add(0, item);
-                mLiveData.postValue(mRowTypes);
-                loadActiveAppointments();
-            }
         }
 
         @Override
         public void clientAppointmentIsDeleted(Boolean isDeleted) {
             if (isDeleted) {
-                Log.d(TAG, "clientAppointmentIsDeleted: true");
                 loadActiveAppointments();
-                //mIsLoading.setValue(true);
             }
         }
     };
 
     public AppointmentsViewModel(
-            @NonNull AppointmentsIteractor iteractor,
-            @NonNull Executor executor) {
-        mAppointmentsIteractor = iteractor;
+            @NonNull AppointmentsInteractor iteractor,
+            @NonNull ExpertsIteractor expertsIteractor, @NonNull Executor executor) {
+        mAppointmentsInteractor = iteractor;
+        mExpertsIteractor = expertsIteractor;
         mExecutor = executor;
     }
 
     public void loadClientExperts() {
-        mIsLoading.setValue(true);
-
+        mIsBestExpertLoading.setValue(true);
         mExecutor.execute(() -> {
-            mAppointmentsIteractor.loadExperts(mAppointmentStatus);
+            mExpertsIteractor.loadAllExperts(mExpertsCallBack);
         });
-
-        mLiveData.postValue(mRowTypes);
-
-
     }
 
     public void loadActiveAppointments() {
+        mIsActiveAppointmentLoading.setValue(true);
         mExecutor.execute(() -> {
-            mAppointmentsIteractor.loadClientsAppointments(2, mAppointmentStatus);
+            mAppointmentsInteractor.loadClientsAppointments(2, mAppointmentStatus);
         });
     }
 
@@ -111,15 +111,18 @@ public class AppointmentsViewModel extends ViewModel {
 
     public void deleteClientAppointment(long appointmentId) {
         mExecutor.execute(() -> {
-            mAppointmentsIteractor.deleteClientAppointment(appointmentId, mAppointmentStatus);
+            mAppointmentsInteractor.deleteClientAppointment(appointmentId, mAppointmentStatus);
         });
-        // mRowTypes.remove(position);
-        mLiveData.postValue(mRowTypes);
     }
 
-    public LiveData<Boolean> getIsLoading() {
-        return mIsLoading;
+    public LiveData<Boolean> getIsBestExpertLoading() {
+        return mIsBestExpertLoading;
     }
+
+    public LiveData<Boolean> getIsActiveAppointmentLoading() {
+        return mIsActiveAppointmentLoading;
+    }
+
 
     private List<ClientAppointment> convertAppointmentToRowType(@NonNull List<Appointment> appointments, @NonNull List<Expert> experts) {
         //if (appointments.size() != 0 && experts.size() != 0) {
@@ -151,6 +154,7 @@ public class AppointmentsViewModel extends ViewModel {
                     appointment.getLocation(),
                     appointment.getStringDate()));
         }
+
         return data;
     }
 }

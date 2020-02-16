@@ -1,7 +1,9 @@
-package com.example.client_self_employed.domain;
+package com.example.client_self_employed.data;
 
 import androidx.annotation.NonNull;
 
+import com.example.client_self_employed.domain.IAppointmentsCallback;
+import com.example.client_self_employed.domain.IClientAppointmentCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
@@ -12,13 +14,10 @@ import com.example.client_self_employed.domain.model.Review;
  * и всех экспертов
  */
 public interface IAppointmentsRepository {
-    void updateAppointment(long id, int clientId);
 
-    void deleteClientsAppointment(@NonNull long id, IAppointmentCallback status);
+    void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback status);
 
-    void loadClientsAppointments(@NonNull long clientId, IAppointmentCallback status);
-
-    void loadExperts(IAppointmentCallback status);
+    void loadClientsAppointments(@NonNull Long clientId, IAppointmentsCallback callback);
 
     void uploadExpert(Expert expert);
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/preferences_title_notification">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/preferences_enable_notifications_switch_key"
+            android:title="@string/preferences_enable_notifications_title" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

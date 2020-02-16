@@ -2,6 +2,7 @@ package com.example.client_self_employed.domain;
 
 import androidx.annotation.NonNull;
 
+import com.example.client_self_employed.data.IExpertScheduleRepository;
 import com.example.client_self_employed.domain.model.Appointment;
 
 import java.util.ArrayList;

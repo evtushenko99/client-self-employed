@@ -1,18 +1,18 @@
 package com.example.client_self_employed.presentation.model;
 
-import com.example.client_self_employed.presentation.adapters.items.RowType;
+import android.net.Uri;
 
-import java.net.URL;
+import com.example.client_self_employed.presentation.adapters.items.RowType;
 
 public class ClientSelectedExpert implements RowType {
     private long mExpertId;
     private String mExpertName;
-    private URL mURL;
+    private Uri mUri;
 
-    public ClientSelectedExpert(long expertId, String expertName, URL URL) {
+    public ClientSelectedExpert(long expertId, String expertName, Uri uri) {
         mExpertId = expertId;
         mExpertName = expertName;
-        mURL = URL;
+        mUri = uri;
     }
 
     public long getExpertId() {
@@ -23,7 +23,7 @@ public class ClientSelectedExpert implements RowType {
         return mExpertName;
     }
 
-    public URL getURL() {
-        return mURL;
+    public Uri getUri() {
+        return mUri;
     }
 }

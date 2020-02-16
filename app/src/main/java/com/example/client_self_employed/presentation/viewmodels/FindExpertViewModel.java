@@ -1,6 +1,10 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
+import android.os.Build;
+
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -21,6 +25,7 @@ public class FindExpertViewModel extends ViewModel {
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private final MutableLiveData<String> mErrors = new MutableLiveData<>();
     private List<Expert> mExperts = new ArrayList<>();
+    private MutableLiveData<String> mSearchQuery = new MutableLiveData<>();
     private MutableLiveData<List<Expert>> mLiveData = new MutableLiveData<>();
     private IExpertCallBack mExpertCallBack = new IExpertCallBack() {
         @Override
@@ -46,15 +51,33 @@ public class FindExpertViewModel extends ViewModel {
         });
     }
 
-    public MutableLiveData<Boolean> getIsLoading() {
+    public MutableLiveData<String> getSearchQuery() {
+        return mSearchQuery;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setSearchQuery(String searchQuery) {
+        if (!searchQuery.equals("")) {
+            mExecutor.execute(() -> {
+                List<Expert> newExpets = mExpertsIteractor.findExpert(mExperts, searchQuery);
+                mLiveData.postValue(newExpets);
+
+            });
+        } else {
+            mLiveData.postValue(mExperts);
+        }
+    }
+
+
+    public LiveData<Boolean> getIsLoading() {
         return mIsLoading;
     }
 
-    public MutableLiveData<String> getErrors() {
+    public LiveData<String> getErrors() {
         return mErrors;
     }
 
-    public MutableLiveData<List<Expert>> getLiveData() {
+    public LiveData<List<Expert>> getLiveData() {
         return mLiveData;
     }
 

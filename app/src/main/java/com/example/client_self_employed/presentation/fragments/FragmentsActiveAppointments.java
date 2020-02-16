@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,8 @@ public class FragmentsActiveAppointments extends Fragment {
 
     private RecyclerView mRecyclerView;
     private AppointmentsViewModel mViewModel;
+    private ProgressBar mBestExpertProgressBar;
+    private ProgressBar mActiveAppointmentProgressBar;
     private long mExpertId;
 
     public static FragmentsActiveAppointments newInstance() {
@@ -55,6 +58,9 @@ public class FragmentsActiveAppointments extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.title_fragment_active_appointments);
+        mBestExpertProgressBar = view.findViewById(R.id.progress_bar_load_recommendation_experts);
+        mActiveAppointmentProgressBar = view.findViewById(R.id.progress_bar_load_active_appointments);
+
         mRecyclerView = view.findViewById(R.id.list_of_active_appointments_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -108,6 +114,12 @@ public class FragmentsActiveAppointments extends Fragment {
                         .addToBackStack("active_appointments")
                         .commit();
             }
+            case R.id.menu_settings: {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_host_appointments_with_experts, FragmentAccountSettings.newInstance())
+                        .addToBackStack("active_appointments")
+                        .commit();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -119,8 +131,21 @@ public class FragmentsActiveAppointments extends Fragment {
         if (!mViewModel.getLiveData().hasObservers()) {
             mViewModel.loadClientExperts();
         }
-
-        mViewModel.getLiveData().observe(this, rowTypes -> {
+        mViewModel.getIsBestExpertLoading().observe(getViewLifecycleOwner(), isBestExpertLoading -> {
+            if (isBestExpertLoading) {
+                mBestExpertProgressBar.setVisibility(View.VISIBLE);
+            } else {
+                mBestExpertProgressBar.setVisibility(View.GONE);
+            }
+        });
+        mViewModel.getIsActiveAppointmentLoading().observe(getViewLifecycleOwner(), isActiveAppointmentLoading -> {
+            if (isActiveAppointmentLoading) {
+                mActiveAppointmentProgressBar.setVisibility(View.VISIBLE);
+            } else {
+                mActiveAppointmentProgressBar.setVisibility(View.GONE);
+            }
+        });
+        mViewModel.getLiveData().observe(getViewLifecycleOwner(), rowTypes -> {
             ((AdapterClientsAppointments) mRecyclerView.getAdapter()).setRowTypes(rowTypes);
         });
 

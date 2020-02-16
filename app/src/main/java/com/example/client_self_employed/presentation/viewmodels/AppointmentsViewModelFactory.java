@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.client_self_employed.data.IAppointmentsRepository;
+import com.example.client_self_employed.data.IExpertsRepository;
 import com.example.client_self_employed.data.RepositoryAppointments;
-import com.example.client_self_employed.domain.AppointmentsIteractor;
-import com.example.client_self_employed.domain.IAppointmentsRepository;
+import com.example.client_self_employed.data.RepositoryExperts;
+import com.example.client_self_employed.domain.AppointmentsInteractor;
+import com.example.client_self_employed.domain.ExpertsIteractor;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -25,9 +28,11 @@ public class AppointmentsViewModelFactory extends ViewModelProvider.NewInstanceF
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (AppointmentsViewModel.class.equals(modelClass)) {
             IAppointmentsRepository appointmentsRepository = new RepositoryAppointments();
-            AppointmentsIteractor iteractor = new AppointmentsIteractor(appointmentsRepository);
+            IExpertsRepository expertsRepository = new RepositoryExperts();
+            AppointmentsInteractor iteractor = new AppointmentsInteractor(appointmentsRepository, expertsRepository);
+            ExpertsIteractor expertsIteractor = new ExpertsIteractor(expertsRepository);
             Executor executor = Executors.newFixedThreadPool(10);
-            return (T) new AppointmentsViewModel(iteractor, executor);
+            return (T) new AppointmentsViewModel(iteractor, expertsIteractor, executor);
         } else {
             return super.create(modelClass);
         }

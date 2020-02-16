@@ -11,7 +11,7 @@ import java.util.List;
  * Интерфейс для возвращаемых сущностей для AppointmentsViewModel
  * от репозитория RepositoryAppointments
  */
-public interface IAppointmentCallback {
+public interface IClientAppointmentCallback {
     /**
      * Колбек для возврата активных записей клиента
      *
@@ -19,12 +19,6 @@ public interface IAppointmentCallback {
      * @param expertList      - лист экспертов, относящихся к автивным записям клиента
      */
     void clientsAppointmentsIsLoaded(@Nullable List<Appointment> appointmentList, @Nullable List<Expert> expertList);
-
-    /**
-     * @param expertList все эксперты
-     */
-    void clientsExpertsIsLoaded(@Nullable List<Expert> expertList);
-
     /**
      * Колбек - успешно ли произошло удаление активной записи
      */

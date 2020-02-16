@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.data.model.FirebaseExpert;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
-import com.example.client_self_employed.domain.IExpertScheduleRepository;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.google.firebase.database.DataSnapshot;

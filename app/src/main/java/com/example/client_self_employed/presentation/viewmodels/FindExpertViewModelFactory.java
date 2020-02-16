@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.client_self_employed.data.IExpertsRepository;
 import com.example.client_self_employed.data.RepositoryExperts;
 import com.example.client_self_employed.domain.ExpertsIteractor;
-import com.example.client_self_employed.domain.IExpertsRepository;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 
 import java.util.concurrent.Executor;
