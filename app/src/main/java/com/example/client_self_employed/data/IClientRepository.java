@@ -10,4 +10,6 @@ public interface IClientRepository {
     void updateClientBirthday(@NonNull long clientId, int dayOfBirth, int monthOfBirth, int yearOfBirth, IClientCallback callback);
 
     void loadNewClientPhoto(@NonNull long clientId, String newClientPhoto, IClientCallback callback);
+
+    void updateFullName(long clientId, String lastName, String name, String secondName, IClientCallback callback);
 }

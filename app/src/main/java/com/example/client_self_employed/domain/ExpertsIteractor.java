@@ -5,6 +5,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.example.client_self_employed.data.IExpertsRepository;
+import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 
 import java.util.List;
@@ -31,5 +32,17 @@ public class ExpertsIteractor {
                         || ((Expert) expert).getLastName().toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
 
         return experts;
+    }
+
+    public void loadExpertSchedule(long expertId, IExpertScheduleCallback iExpertScheduleCallback) {
+        mRepositoryExperts.loadExpertSchedule(expertId, iExpertScheduleCallback);
+    }
+
+    public void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleCallback iExpertScheduleCallback) {
+        mRepositoryExperts.updateExpertAppointment(appointmentId, clientId, iExpertScheduleCallback);
+    }
+
+    public void loadExperNameForActiveAppointment(List<Appointment> activeAppointment, List<Long> expertsId, IClientAppointmentCallback dataStatus) {
+        mRepositoryExperts.loadExpertsNameForActiveAppointments(activeAppointment, expertsId, dataStatus);
     }
 }

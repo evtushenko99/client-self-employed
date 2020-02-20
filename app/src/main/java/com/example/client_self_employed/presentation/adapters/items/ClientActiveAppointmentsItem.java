@@ -6,13 +6,13 @@ import java.util.List;
 
 public class ClientActiveAppointmentsItem implements RowType {
 
-    private List<ClientAppointment> mClientSelectedExperts;
+    private List<ClientAppointment> mClientAppointmentList;
 
-    public ClientActiveAppointmentsItem(List<ClientAppointment> clientSelectedExperts) {
-        mClientSelectedExperts = clientSelectedExperts;
+    public ClientActiveAppointmentsItem(List<ClientAppointment> clientAppointmentList) {
+        mClientAppointmentList = clientAppointmentList;
     }
 
-    public List<ClientAppointment> getClientSelectedExperts() {
-        return mClientSelectedExperts;
+    public List<ClientAppointment> getClientAppointmentList() {
+        return mClientAppointmentList;
     }
 }

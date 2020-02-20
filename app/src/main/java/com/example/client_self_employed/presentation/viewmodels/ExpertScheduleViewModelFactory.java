@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.client_self_employed.data.IExpertScheduleRepository;
-import com.example.client_self_employed.data.RepositoryExpertSchedule;
-import com.example.client_self_employed.domain.ExpertScheduleInteractor;
+import com.example.client_self_employed.data.IExpertsRepository;
+import com.example.client_self_employed.data.RepositoryExperts;
+import com.example.client_self_employed.domain.ExpertsIteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 
 import java.util.concurrent.Executor;
@@ -27,8 +27,8 @@ public class ExpertScheduleViewModelFactory extends ViewModelProvider.NewInstanc
         if (ExpertScheduleViewModel.class.equals(modelClass)) {
             Executor executor = Executors.newFixedThreadPool(10);
             ResourceWrapper resourceWrapper = new ResourceWrapper(mApplicationContext.getResources());
-            IExpertScheduleRepository expertRepository = new RepositoryExpertSchedule();
-            ExpertScheduleInteractor expertScheduleInteractor = new ExpertScheduleInteractor(expertRepository);
+            IExpertsRepository expertRepository = new RepositoryExperts();
+            ExpertsIteractor expertScheduleInteractor = new ExpertsIteractor(expertRepository);
             return (T) new ExpertScheduleViewModel(
                     expertScheduleInteractor,
                     executor,

@@ -6,13 +6,15 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryLightColor</item>
+        <item name="colorControlNormal">#FFF</item>
 
+        <item name="colorControlActivated">@color/primaryLightColor</item>
 
     </style>
 
     <style name="MyButton" parent="TextAppearance.MaterialComponents.Button">
-        <item name="android:textColor">#FFF</item>
-        <item name="android:background">@drawable/corners_for_buttons</item>
+        <item name="android:textColor">@color/primaryLightColor</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="MyEditText" parent="Widget.AppCompat.EditText">

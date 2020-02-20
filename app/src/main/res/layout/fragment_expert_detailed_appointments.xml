@@ -1,210 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_medium"
-    android:padding="@dimen/padding_medium"
-    android:layout_gravity="center">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
+    <data class="ExpertScheduleDetailedAppointmentBinding">
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="ViewModel"
+            type="com.example.client_self_employed.presentation.viewmodels.ExpertSheduleDetailedAppointmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="@dimen/margin_medium"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="@dimen/padding_medium">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_service_name"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_service_name"
-            tools:text="Подкатка" />
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_service_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_duration"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="@string/expert_detailed_appointment_service_name"
+                android:text="@{ViewModel.appointmentServiceName}"
+                tools:text="Подкатка"
+                tools:targetApi="o" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_duration"
-            tools:text="90 минут" />
+            android:layout_margin="@dimen/margin_medium"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout8"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout8"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_cost"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="@string/expert_detailed_appointment_duration"
+                android:text="@{ViewModel.appointmentDuration}"
+                tools:text="90 минут" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_cost"
-            tools:text="1500 рублей" />
+            android:layout_margin="@dimen/margin_medium"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout8"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout8"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout7"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout7"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="@string/expert_detailed_appointment_cost"
+                android:text="@{String.valueOf( ViewModel.appointmentCost)}"
+                tools:text="1500 рублей" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_location"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_location"
-            tools:text="ТЦ Европейский" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_margin="@dimen/margin_medium"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        android:layout_marginTop="9dp"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_location"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout_location"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_location">
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout7"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout7"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout7">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_date"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="@string/expert_detailed_appointment_location"
+                android:text="@{ViewModel.appointmentLocation}"
+                tools:text="ТЦ Европейский" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_date"
-            tools:text="11 марта 2020" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginTop="9dp"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        android:layout_marginTop="8dp"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_date"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout_date"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_date">
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout_location"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout_location"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_location">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_time"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="@string/expert_detailed_appointment_date"
+                android:text="@{ViewModel.appointmentDate}"
+                tools:text="11 марта 2020" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_time"
-            tools:text="11:30" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginTop="8dp"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout_additional_information"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        android:layout_marginTop="8dp"
-        app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
-        app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout_date"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout_date"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_date">
 
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="@string/expert_detailed_appointment_time"
+                android:text="@{ViewModel.appointmentStartTime}"
+                tools:text="11:30" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/expert_schedule_detailed_additional_information"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_additional_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginTop="8dp"
             android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:visibility="gone"
-            android:focusableInTouchMode="false"
-            android:hint="@string/expert_detailed_appointment_additional_information"
-            tools:text="Дополнительная информация" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:boxCollapsedPaddingTop="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusBottomEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopEnd="@dimen/card_corner_radius_small"
+            app:boxCornerRadiusTopStart="@dimen/card_corner_radius_small"
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_expert_detailed_appointment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="@dimen/padding_medium"
-        android:layout_margin="@dimen/margin_medium"
-        android:background="@drawable/corners_for_buttons"
-        android:text="@string/button_expert_detailed_appointment"
-        android:textColor="#FFF"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_additional_information"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout_additional_information"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_additional_information" />
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/expert_schedule_detailed_additional_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+
+                android:hint="@string/expert_detailed_appointment_additional_information"
+                android:visibility="gone"
+                tools:text="Дополнительная информация" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_expert_detailed_appointment"
+            style="@style/MyButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/margin_medium"
+            android:onClick="@{ViewModel.onNewAppointmentClickListener}"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/button_expert_detailed_appointment"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout_additional_information"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout_additional_information"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_additional_information" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

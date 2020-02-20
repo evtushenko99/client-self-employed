@@ -20,20 +20,12 @@ public class AccountViewModel extends ViewModel {
     private IClientCallback mCallback = new IClientCallback() {
         @Override
         public void clientIsLoaded(Client client) {
-
             mMutableClient.postValue(client);
         }
 
         @Override
-        public void clientBirthdayIsChanged(boolean isBirthdayChanged) {
-            if (isBirthdayChanged) {
-                loadInformationAboutClient();
-            }
-        }
-
-        @Override
-        public void clientNewPhotoIsLoaded(boolean isClientPhotoLoaded) {
-            if (isClientPhotoLoaded) {
+        public void clientsChanged(boolean isChanged) {
+            if (isChanged) {
                 loadInformationAboutClient();
             }
         }

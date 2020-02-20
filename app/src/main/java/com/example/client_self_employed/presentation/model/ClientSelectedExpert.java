@@ -1,15 +1,13 @@
 package com.example.client_self_employed.presentation.model;
 
-import android.net.Uri;
-
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 
 public class ClientSelectedExpert implements RowType {
     private long mExpertId;
     private String mExpertName;
-    private Uri mUri;
+    private String mUri;
 
-    public ClientSelectedExpert(long expertId, String expertName, Uri uri) {
+    public ClientSelectedExpert(long expertId, String expertName, String uri) {
         mExpertId = expertId;
         mExpertName = expertName;
         mUri = uri;
@@ -23,7 +21,7 @@ public class ClientSelectedExpert implements RowType {
         return mExpertName;
     }
 
-    public Uri getUri() {
+    public String getUri() {
         return mUri;
     }
 }

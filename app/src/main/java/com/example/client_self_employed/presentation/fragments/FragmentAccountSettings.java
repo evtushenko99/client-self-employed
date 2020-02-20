@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -156,12 +155,7 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext());
         datePickerDialog.updateDate(year, month, day);
         datePickerDialog.show();
-        datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                mViewModel.updateClientBirthday(dayOfMonth, month, year);
-            }
-        });
+        datePickerDialog.setOnDateSetListener((view, year1, month1, dayOfMonth) -> mViewModel.updateClientBirthday(dayOfMonth, month1, year1));
     }
 
     @Override
@@ -178,7 +172,6 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
     }
 
     private void callCameraApp() {
-
         Intent cameraAppIntent = new Intent();
         cameraAppIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraAppIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

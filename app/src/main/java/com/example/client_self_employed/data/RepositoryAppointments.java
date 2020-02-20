@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
+import com.example.client_self_employed.domain.ILoadOneAppointmentCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
@@ -57,7 +58,8 @@ public class RepositoryAppointments implements IAppointmentsRepository {
     @Override
     public void loadClientsAppointments(@NonNull Long clientId, IAppointmentsCallback callback) {
 
-        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.CLIENT_ID).equalTo(clientId)
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.CLIENT_ID)
+                .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -79,6 +81,29 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         callback.onAppointmentCallback(null, null);
                         Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                    }
+                });
+
+    }
+
+    @Override
+    public void loadOneAppointment(@NonNull Long appointmentId, ILoadOneAppointmentCallback callback) {
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID)
+                .equalTo(appointmentId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot appoinmentSnapshot : dataSnapshot.getChildren()) {
+                            Appointment appointment = appoinmentSnapshot.getValue(Appointment.class);
+                            if (appointment != null) {
+                                callback.oneAppointmentIsLoaded(appointment);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
 

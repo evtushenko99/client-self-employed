@@ -131,7 +131,6 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
         switch (getItemViewType(position)) {
             case ITEM_VIEW_TYPE_TIME:
                 List<Appointment> appointments1 = new ArrayList<>((List<Appointment>) item);
-                // ((ScheduleHolder) holder).bindView((Appointment) item);
                 ((ScheduleHolder) holder).mRecycler.setAdapter(new AdapterExpertScheduleDaysTime(appointments1, mClickListeners));
                 break;
             case ITEM_VIEW_TYPE_DATE:

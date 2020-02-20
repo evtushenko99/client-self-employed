@@ -8,14 +8,11 @@ public class ClientExpertItem implements RowType {
     private String mTitle;
     private List<ClientSelectedExpert> mClientSelectedExperts;
 
-    public ClientExpertItem(String title, List<ClientSelectedExpert> clientSelectedExpertItems) {
-        mTitle = title;
+    public ClientExpertItem(List<ClientSelectedExpert> clientSelectedExpertItems) {
+
         mClientSelectedExperts = clientSelectedExpertItems;
     }
 
-    public String getTitle() {
-        return mTitle;
-    }
 
     public List<ClientSelectedExpert> getClientSelectedExperts() {
         return mClientSelectedExperts;

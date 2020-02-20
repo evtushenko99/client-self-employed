@@ -17,7 +17,11 @@ public class ClientInteractor {
         mClientRepository.updateClientBirthday(clientId, dayOfBirth, monthOfBirth, yearOfBirth, callback);
     }
 
-    public void loadNewClientPhoto(long clientId, String newClientPhoto, IClientCallback callback) {
-        mClientRepository.loadNewClientPhoto(clientId, newClientPhoto, callback);
+    public void updateFullName(long clientId, String lastName, String name, String secondName, IClientCallback callback) {
+        mClientRepository.updateFullName(clientId, lastName, name, secondName, callback);
+    }
+
+    public void loadNewClientPhoto(long clientId, String newClientPhotoUri, IClientCallback callback) {
+        mClientRepository.loadNewClientPhoto(clientId, newClientPhotoUri, callback);
     }
 }

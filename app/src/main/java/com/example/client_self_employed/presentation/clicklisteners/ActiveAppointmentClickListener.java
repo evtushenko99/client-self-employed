@@ -2,6 +2,6 @@ package com.example.client_self_employed.presentation.clicklisteners;
 
 import com.example.client_self_employed.presentation.model.ClientAppointment;
 
-public interface ActiveAppointment {
-    void onAppointmentsItemClickListener(ClientAppointment appointment);
+public interface ActiveAppointmentClickListener {
+    void onAppointmentsItemClickListener(ClientAppointment appointment, int position);
 }

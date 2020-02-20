@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,24 +17,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.databinding.ActiveAppointmentsBinding;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 
 
-public class FragmentsActiveAppointments extends Fragment {
-    private static final String SAVED_APPOINTMENT = "APPOINTMENT";
+public class FragmentActiveAppointments extends Fragment {
 
     private RecyclerView mRecyclerView;
     private AppointmentsViewModel mViewModel;
-    private ProgressBar mBestExpertProgressBar;
-    private ProgressBar mActiveAppointmentProgressBar;
+
     private long mExpertId;
 
-    public static FragmentsActiveAppointments newInstance() {
+    public static FragmentActiveAppointments newInstance() {
         Bundle args = new Bundle();
-        FragmentsActiveAppointments fragment = new FragmentsActiveAppointments();
+        FragmentActiveAppointments fragment = new FragmentActiveAppointments();
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,28 +48,27 @@ public class FragmentsActiveAppointments extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_active_appointments, container, false);
+        ActiveAppointmentsBinding binding = ActiveAppointmentsBinding.inflate(inflater, container, false);
+        mViewModel = ViewModelProviders.of(requireActivity(), new AppointmentsViewModelFactory(requireActivity()))
+                .get(AppointmentsViewModel.class);
+        mViewModel.loadClientExperts();
+        binding.setActiveAppointmentViewModel(mViewModel);
+        return binding.getRoot();
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(R.string.title_fragment_active_appointments);
-        mBestExpertProgressBar = view.findViewById(R.id.progress_bar_load_recommendation_experts);
-        mActiveAppointmentProgressBar = view.findViewById(R.id.progress_bar_load_active_appointments);
+        requireActivity().setTitle(R.string.title_fragment_active_appointments);
 
         mRecyclerView = view.findViewById(R.id.list_of_active_appointments_recycler);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(new AdapterClientsAppointments(null,
-                appointment -> {
-                    FragmentDetailedAppointment fragmentDetailedAppointment = new FragmentDetailedAppointment();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(SAVED_APPOINTMENT, appointment);
-                    fragmentDetailedAppointment.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)
+                (appointment, position) -> {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_host_appointments_with_experts, FragmentDetailedAppointment.newInstance(appointment.getId(), appointment.getExpertId(), position))
                             .addToBackStack("active_appointments")
                             .commit();
                 },
@@ -81,7 +78,7 @@ public class FragmentsActiveAppointments extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putLong(Arguments.EXPERT_ID, mExpertId);
                         fragmentExpertSchedule.setArguments(bundle);
-                        getActivity().getSupportFragmentManager().beginTransaction()
+                        requireActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
                                 .addToBackStack("active_appointments")
                                 .commit();
@@ -90,13 +87,13 @@ public class FragmentsActiveAppointments extends Fragment {
                     }
                 },
                 expertId -> mExpertId = expertId,
-                () -> getActivity().getSupportFragmentManager().beginTransaction()
+                () -> requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
                         .addToBackStack("active_appointments")
                         .commit(),
                 getResources()
         ));
-        setupMvvm();
+
     }
 
 
@@ -109,46 +106,20 @@ public class FragmentsActiveAppointments extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_find_expert: {
-                getActivity().getSupportFragmentManager().beginTransaction()
+                requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
                         .addToBackStack("active_appointments")
                         .commit();
             }
+            break;
             case R.id.menu_settings: {
-                getActivity().getSupportFragmentManager().beginTransaction()
+                requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_host_appointments_with_experts, FragmentAccountSettings.newInstance())
                         .addToBackStack("active_appointments")
                         .commit();
             }
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void setupMvvm() {
-        mViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
-                .get(AppointmentsViewModel.class);
-
-        if (!mViewModel.getLiveData().hasObservers()) {
-            mViewModel.loadClientExperts();
-        }
-        mViewModel.getIsBestExpertLoading().observe(getViewLifecycleOwner(), isBestExpertLoading -> {
-            if (isBestExpertLoading) {
-                mBestExpertProgressBar.setVisibility(View.VISIBLE);
-            } else {
-                mBestExpertProgressBar.setVisibility(View.GONE);
-            }
-        });
-        mViewModel.getIsActiveAppointmentLoading().observe(getViewLifecycleOwner(), isActiveAppointmentLoading -> {
-            if (isActiveAppointmentLoading) {
-                mActiveAppointmentProgressBar.setVisibility(View.VISIBLE);
-            } else {
-                mActiveAppointmentProgressBar.setVisibility(View.GONE);
-            }
-        });
-        mViewModel.getLiveData().observe(getViewLifecycleOwner(), rowTypes -> {
-            ((AdapterClientsAppointments) mRecyclerView.getAdapter()).setRowTypes(rowTypes);
-        });
-
-    }
-
 }

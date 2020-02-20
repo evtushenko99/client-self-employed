@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
+import com.example.client_self_employed.domain.ILoadOneAppointmentCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
@@ -18,6 +19,12 @@ public interface IAppointmentsRepository {
     void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback status);
 
     void loadClientsAppointments(@NonNull Long clientId, IAppointmentsCallback callback);
+
+    /**
+     * Загрузка информации об одной записи клиента
+     */
+
+    void loadOneAppointment(@NonNull Long appoinmentId, ILoadOneAppointmentCallback callback);
 
     void uploadExpert(Expert expert);
 

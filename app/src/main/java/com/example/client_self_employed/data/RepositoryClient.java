@@ -68,7 +68,7 @@ public class RepositoryClient implements IClientRepository {
                                 String clientId = String.valueOf(client.getId());
                                 mDatabaseReferenceClient.child(clientId)
                                         .setValue(client)
-                                        .addOnCompleteListener(task -> callback.clientBirthdayIsChanged(true));
+                                        .addOnCompleteListener(task -> callback.clientsChanged(true));
                             }
                         }
                     }
@@ -95,10 +95,7 @@ public class RepositoryClient implements IClientRepository {
                                 result.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        Uri downloadUrl = uri;
-                                        updateClientPhotoUrl(clientId, downloadUrl.toString(), callback);
-
-                                        //createNewPost(imageUrl);
+                                        updateClientPhotoUrl(clientId, uri.toString(), callback);
                                     }
                                 });
                             }
@@ -109,7 +106,35 @@ public class RepositoryClient implements IClientRepository {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        callback.clientNewPhotoIsLoaded(false);
+                        callback.clientsChanged(false);
+                    }
+                });
+    }
+
+    @Override
+    public void updateFullName(long clientId, String lastName, String name, String secondName, IClientCallback callback) {
+        mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
+                .equalTo(clientId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyClient : dataSnapshot.getChildren()) {
+                            Client client = keyClient.getValue(Client.class);
+                            if (client != null) {
+                                client.setLastName(lastName);
+                                client.setFirstName(name);
+                                client.setSecondName(secondName);
+                                String clientId = String.valueOf(client.getId());
+                                mDatabaseReferenceClient.child(clientId)
+                                        .setValue(client)
+                                        .addOnCompleteListener(task -> callback.clientsChanged(true));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
                     }
                 });
     }
@@ -131,7 +156,7 @@ public class RepositoryClient implements IClientRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        callback.clientNewPhotoIsLoaded(false);
+                        callback.clientsChanged(false);
                     }
                 });
     }
@@ -142,7 +167,7 @@ public class RepositoryClient implements IClientRepository {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        callback.clientNewPhotoIsLoaded(true);
+                        callback.clientsChanged(true);
                     }
                 });
     }

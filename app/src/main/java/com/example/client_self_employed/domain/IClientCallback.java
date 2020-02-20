@@ -9,7 +9,6 @@ import com.example.client_self_employed.domain.model.Client;
 public interface IClientCallback {
     void clientIsLoaded(Client client);
 
-    void clientBirthdayIsChanged(boolean isBirthdayChanged);
+    void clientsChanged(boolean isChanged);
 
-    void clientNewPhotoIsLoaded(boolean isClientPhotoLoaded);
 }

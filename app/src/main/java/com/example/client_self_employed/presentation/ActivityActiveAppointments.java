@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.presentation.fragments.FragmentsActiveAppointments;
+import com.example.client_self_employed.presentation.fragments.FragmentActiveAppointments;
 
 public class ActivityActiveAppointments extends AppCompatActivity implements IUpdateRecyclerListener {
     private static final String SAVED_HOLDER_POSITION = "POSITION";
@@ -26,7 +26,7 @@ public class ActivityActiveAppointments extends AppCompatActivity implements IUp
         Log.d(TAG, "onCreate: ");
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_host_appointments_with_experts, FragmentsActiveAppointments.newInstance())
+                .add(R.id.fragment_host_appointments_with_experts, FragmentActiveAppointments.newInstance())
                 .commit();
 
     }
@@ -62,8 +62,8 @@ public class ActivityActiveAppointments extends AppCompatActivity implements IUp
     @Override
     public void deleteAppointmentFromRecycler(int position) {
         Bundle bundle = new Bundle();
-        // bundle.putInt(SAVED_HOLDER_POSITION, position);
-        Fragment fragment = new FragmentsActiveAppointments();
+        bundle.putInt(SAVED_HOLDER_POSITION, position);
+        Fragment fragment = new FragmentActiveAppointments();
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_host_appointments_with_experts, fragment)

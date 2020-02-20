@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.client_self_employed.domain.ExpertScheduleInteractor;
+import com.example.client_self_employed.domain.ExpertsIteractor;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
@@ -17,11 +17,10 @@ import java.util.concurrent.Executor;
 public class ExpertScheduleViewModel extends ViewModel {
     private final Executor mExecutor;
     private long mExpertId;
-    private final ExpertScheduleInteractor mExpertScheduleInteractor;
+    private final ExpertsIteractor mExpertScheduleInteractor;
     private final IResourceWrapper mResourceWrapper;
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private MutableLiveData<String> mExpertName = new MutableLiveData<>();
-
 
 
     private MutableLiveData<Boolean> mIsChanged = new MutableLiveData<>();
@@ -33,7 +32,6 @@ public class ExpertScheduleViewModel extends ViewModel {
             mExpertSchedule.postValue(expertSchedule);
             mExpertName.postValue(expertName);
             mIsLoading.postValue(false);
-
         }
 
         @Override
@@ -46,7 +44,7 @@ public class ExpertScheduleViewModel extends ViewModel {
     };
 
     public ExpertScheduleViewModel(
-            @NonNull ExpertScheduleInteractor expertScheduleInteractor,
+            @NonNull ExpertsIteractor expertScheduleInteractor,
             @NonNull Executor executor,
             @NonNull IResourceWrapper resourceWrapper) {
         mExecutor = executor;
@@ -59,6 +57,7 @@ public class ExpertScheduleViewModel extends ViewModel {
     public LiveData<Boolean> getIsChanged() {
         return mIsChanged;
     }
+
     /***
      * Загружает расписание эксперта
      * @param id id эксперта

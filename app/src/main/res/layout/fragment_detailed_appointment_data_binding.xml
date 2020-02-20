@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="FragmentDetailedAppointmentBinding">
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="ViewModel"
+            type="com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
+
+            <androidx.cardview.widget.CardView
+
+                android:id="@+id/cardView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/expert_profession_detailed_appointment"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_medium"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@{ViewModel.expertProfession}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Тренер по фигурному катанию" />
+
+
+                    <TextView
+                        android:id="@+id/expert_name_detailed_appointment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.expertFullName}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/expert_profession_detailed_appointment"
+                        app:layout_constraintTop_toBottomOf="@+id/expert_profession_detailed_appointment"
+                        tools:text="@string/expert_name_example" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/expert_additional_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_medium"
+                        android:visibility="@{ViewModel.additionalInformationAboutExpert == true? View.VISIBLE: View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/expert_name_detailed_appointment">
+
+                        <TextView
+                            android:id="@+id/text_view_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/item_expert_holder_email"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/fragment_detailed_appoinment_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="@{ViewModel.expertEmail}"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_view_email"
+                            app:layout_constraintStart_toEndOf="@+id/text_view_work_experience"
+                            app:layout_constraintTop_toTopOf="@+id/text_view_email"
+                            tools:text="evtushenko99@mail.ru" />
+
+                        <TextView
+                            android:id="@+id/text_view_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+
+                            android:text="@string/item_expert_holder_age"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            app:layout_constraintStart_toStartOf="@+id/text_view_email"
+                            app:layout_constraintTop_toBottomOf="@+id/text_view_email" />
+
+
+                        <TextView
+                            android:id="@+id/fragment_detailed_appoinment_expert_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(ViewModel.expertAge)}"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_view_age"
+                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_appoinment_email"
+                            app:layout_constraintTop_toTopOf="@+id/text_view_age"
+                            tools:text="23 года" />
+
+                        <TextView
+                            android:id="@+id/text_view_work_experience"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/item_expert_holder_work_experience"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            app:layout_constraintStart_toStartOf="@+id/text_view_age"
+                            app:layout_constraintTop_toBottomOf="@+id/text_view_age" />
+
+                        <TextView
+                            android:id="@+id/text_view_work_experience2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Телефон:"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            app:layout_constraintStart_toStartOf="@+id/text_view_work_experience"
+                            app:layout_constraintTop_toBottomOf="@+id/text_view_work_experience" />
+
+                        <TextView
+                            android:id="@+id/fragment_detailed_appoinment_work_experience"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf( ViewModel.expertWorkExperience)}"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience"
+                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_appoinment_expert_age"
+                            app:layout_constraintTop_toTopOf="@+id/text_view_work_experience"
+                            tools:text="5 лет" />
+
+                        <TextView
+                            android:id="@+id/fragment_detailed_appoinment_phone_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{ViewModel.expertPhoneNumber}"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience2"
+                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_appoinment_work_experience"
+                            app:layout_constraintTop_toTopOf="@+id/text_view_work_experience2"
+                            tools:text="+7-906-087-11-00" />
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Связаться с помощью:"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            app:layout_constraintStart_toStartOf="@+id/text_view_work_experience"
+                            app:layout_constraintTop_toBottomOf="@+id/text_view_work_experience2" />
+
+                        <ImageButton
+                            android:id="@+id/fragment_detailed_appointment_whatsapp"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="16dp"
+
+                            android:onClick="@{ViewModel.whatsAppClickListener}"
+                            app:layout_constraintBottom_toBottomOf="@+id/fragment_detailed_appoinment_call_phone"
+                            app:layout_constraintStart_toEndOf="@+id/fragment_detailed_appoinment_call_phone"
+                            app:layout_constraintTop_toTopOf="@+id/fragment_detailed_appoinment_call_phone"
+                            app:srcCompat="@drawable/whatsapp_icon" />
+
+                        <ImageButton
+                            android:id="@+id/fragment_detailed_appointment_viber"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="16dp"
+
+                            android:onClick="@{ViewModel.viberClickListener}"
+                            app:layout_constraintBottom_toBottomOf="@+id/fragment_detailed_appointment_whatsapp"
+                            app:layout_constraintStart_toEndOf="@+id/fragment_detailed_appointment_whatsapp"
+                            app:layout_constraintTop_toTopOf="@+id/fragment_detailed_appointment_whatsapp"
+                            app:layout_constraintVertical_bias="0.0"
+                            app:srcCompat="@mipmap/viber_icon" />
+
+                        <ImageButton
+                            android:id="@+id/fragment_detailed_appointment_telegram"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="16dp"
+
+                            android:onClick="@{ViewModel.telegrammClickListener}"
+                            app:layout_constraintBottom_toBottomOf="@+id/fragment_detailed_appointment_viber"
+                            app:layout_constraintStart_toEndOf="@+id/fragment_detailed_appointment_viber"
+                            app:layout_constraintTop_toTopOf="@+id/fragment_detailed_appointment_viber"
+                            app:layout_constraintVertical_bias="1.0"
+                            app:srcCompat="@mipmap/telegram_icon" />
+
+                        <ImageButton
+                            android:id="@+id/fragment_detailed_appoinment_call_phone"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#FFF"
+                            android:onClick="@{ViewModel.callPhoneClickListener}"
+                            app:layout_constraintStart_toStartOf="@+id/textView"
+                            app:layout_constraintTop_toBottomOf="@+id/textView"
+                            app:srcCompat="@drawable/ic_phone_black_24dp" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/fragment_detailed_expert_more_information"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="#FFF"
+                        android:onClick="@{ViewModel.moreInformationClickListener}"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.moreInformationTextView}"
+                        android:textColor="@color/primaryLightColor"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/expert_profession_detailed_appointment" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+
+                android:id="@+id/cardView_appointment_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="@id/cardView2"
+                app:layout_constraintStart_toStartOf="@id/cardView2"
+                app:layout_constraintTop_toBottomOf="@id/cardView2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/time_detailed_appointment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.appointmentStartTime}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_appointment_time"
+                        app:layout_constraintStart_toStartOf="@+id/date_detailed_appointment"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_appointment_time"
+                        tools:text="11:15" />
+
+                    <TextView
+                        android:id="@+id/date_detailed_appointment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.appointmentDate}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_appointment_date"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_appointment_date"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_appointment_date"
+                        tools:text="11 декабря 2020" />
+
+                    <TextView
+                        android:id="@+id/cost_detailed_appointment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{String.valueOf(ViewModel.appointmentCost)}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_appointment_cost"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_appointment_cost"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_appointment_cost"
+                        tools:text="1500 рублей" />
+
+                    <TextView
+                        android:id="@+id/location_detailed_appointment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.appointmentLocation}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_appointment_location"
+                        app:layout_constraintStart_toEndOf="@+id/text_view_appointment_location"
+                        app:layout_constraintTop_toTopOf="@+id/text_view_appointment_location"
+                        tools:text="ТЦ Европейский" />
+
+                    <TextView
+                        android:id="@+id/additional_information_detailed_appointment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_medium"
+                        android:padding="@dimen/padding_small"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/text_view_appointment_information"
+                        app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_information"
+                        tools:text="На катке очень холодно, нужно утеплиться" />
+
+
+                    <TextView
+                        android:id="@+id/text_view_appointment_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Дата:"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/text_view_appointment_location"
+                        app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_location" />
+
+                    <TextView
+                        android:id="@+id/text_view_appointment_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Место:"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/textView_service_name"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_service_name" />
+
+                    <TextView
+                        android:id="@+id/text_view_appointment_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Время:"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/text_view_appointment_date"
+                        app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_date" />
+
+                    <TextView
+                        android:id="@+id/text_view_appointment_cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Стоимость"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/text_view_appointment_time"
+                        app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_time" />
+
+                    <TextView
+                        android:id="@+id/text_view_appointment_information"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Дополнительная информация:"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintStart_toStartOf="@+id/text_view_appointment_cost"
+                        app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_cost" />
+
+                    <TextView
+                        android:id="@+id/textView_service_name"
+                        style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Наименование услуги:"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/fragment_detailed_appointment_service_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.appointmentServiceName}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView_service_name"
+                        app:layout_constraintStart_toEndOf="@+id/textView_service_name"
+                        app:layout_constraintTop_toTopOf="@+id/textView_service_name"
+                        tools:text="Тренировка" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_appointment"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:onClick="@{ViewModel.cancelAppointmentClickListener}"
+                android:padding="@dimen/padding_high"
+                android:text="@string/cancel_appointment"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_detailed_appointment_notification" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_detailed_appointment_notification"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="@{ViewModel.addNotificationClickListener}"
+                android:padding="@dimen/padding_small"
+
+                android:text="Добавить уведовление"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/cardView_appointment_information"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_appointment_information" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

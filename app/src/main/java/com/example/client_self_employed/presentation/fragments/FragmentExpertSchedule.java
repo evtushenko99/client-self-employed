@@ -46,8 +46,7 @@ public class FragmentExpertSchedule extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_expert_schedule, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_expert_schedule, container, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -77,10 +76,10 @@ public class FragmentExpertSchedule extends Fragment {
         mAppointmentsViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
                 .get(AppointmentsViewModel.class);
         mScheduleViewModel.loadExpertSchedule(this.getArguments().getLong(Arguments.EXPERT_ID));
-        mScheduleViewModel.getExpertName().observe(this, expertName -> {
+        mScheduleViewModel.getExpertName().observe(getViewLifecycleOwner(), expertName -> {
             mExpertNameTitle.setText(expertName);
         });
-        mScheduleViewModel.getExpertSchedule().observe(this, expertSchedule -> {
+        mScheduleViewModel.getExpertSchedule().observe(getViewLifecycleOwner(), expertSchedule -> {
             mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointment() {
                 @Override
                 public void onExpertScheduleDetailedAppointmentClickListners(Appointment appointment, long clientId) {
@@ -88,7 +87,7 @@ public class FragmentExpertSchedule extends Fragment {
                 }
             }));
         });
-        mScheduleViewModel.getIsChanged().observe(this, isChanged -> {
+        mScheduleViewModel.getIsChanged().observe(getViewLifecycleOwner(), isChanged -> {
             if (isChanged) {
                 mAppointmentsViewModel.loadActiveAppointments();
             }
