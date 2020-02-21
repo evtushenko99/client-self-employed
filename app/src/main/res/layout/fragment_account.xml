@@ -1,247 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data class="AccountViewModelBinding">
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="ViewModel"
+            type="com.example.client_self_employed.presentation.viewmodels.AccountViewModel" />
+    </data>
+
+    <ScrollView xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
 
-        android:orientation="vertical">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="@dimen/margin_high"
-            app:cardCornerRadius="@dimen/card_corner_radius_small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_high">
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="@dimen/margin_high"
+                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/fragment_account_client_photo"
-                    android:layout_width="@dimen/image_width"
-                    android:layout_height="@dimen/image_height"
-                    android:layout_marginEnd="8dp"
-                    android:background="#FFF"
-                    app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_second_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textInputLayout_last_name"
-                    tools:ignore="ContentDescription" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_last_name"
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:layout_marginEnd="32dp"
+                    android:padding="@dimen/padding_high">
 
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    app:layout_constraintEnd_toStartOf="@+id/fragment_account_client_photo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    <ImageView
+                        android:id="@+id/fragment_account_client_photo"
+                        android:layout_width="@dimen/image_width"
+                        android:layout_height="@dimen/image_height"
+                        android:layout_marginEnd="8dp"
+                        android:background="#FFF"
+                        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_second_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textInputLayout_last_name"
+                        tools:ignore="ContentDescription" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fragment_account_client_last_name"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_last_name"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:layout_marginEnd="32dp"
+                        android:clickable="false"
 
-                        android:focusable="false"
-                        android:hint="@string/fragment_account_last_name"
-                        tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                        tools:text="Евтушенко" />
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        app:layout_constraintEnd_toStartOf="@+id/fragment_account_client_photo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_account_client_last_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:hint="@string/fragment_account_last_name"
+                            android:text="@{ViewModel.lastName}"
+                            tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                            tools:text="Евтушенко" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout_last_name"
-                    app:layout_constraintStart_toStartOf="@+id/textInputLayout_last_name"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout_last_name">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fragment_account_client_name"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_name"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
+                        android:clickable="false"
 
-                        android:focusable="false"
-                        android:hint="@string/fragment_account_name"
-                        tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                        tools:text="Максим" />
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_last_name"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_last_name"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_last_name">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_account_client_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:hint="@string/fragment_account_name"
+                            android:text="@{ViewModel.name}"
+                            tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                            tools:text="Максим" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_second_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout_name"
-                    app:layout_constraintStart_toStartOf="@+id/textInputLayout_name"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout_name">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fragment_account_client_second_name"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_second_name"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="false"
-                        android:hint="@string/fragment_account_second_name"
-                        tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                        tools:text="Евгеньевич" />
+                        android:clickable="false"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_name"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_name"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_name">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_account_client_second_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:hint="@string/fragment_account_second_name"
+                            android:text="@{ViewModel.secondName}"
+                            tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                            tools:text="Евгеньевич" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="0dp"
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/MyButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="8dp"
+                        android:text="@string/fragment_account_change_button"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_second_name" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:background="#FFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_account_client_email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:focusable="false"
+                    android:hint="@string/fragment_account_email_hint"
+                    android:text="@{ViewModel.email}"
+                    tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                    tools:text="evtushenko99@maill.ru" />
 
-                    android:text="@string/fragment_account_change_button"
-                    style="@style/MyButton"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout_second_name" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:background="#FFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_account_client_email"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:focusable="false"
-                android:hint="@string/fragment_account_email_hint"
-                tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                tools:text="evtushenko99@maill.ru" />
+                android:background="#FFF"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_account_client_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:focusable="false"
+                    android:hint="@string/fragment_account_phone_hint"
+                    android:text="@{ViewModel.phoneNumber}"
+                    tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                    tools:text="+7-906-087-11-00" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_account_client_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:focusable="false"
-                android:hint="@string/fragment_account_phone_hint"
-                tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                tools:text="+7-906-087-11-00" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#FFF"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_account_client_date_of_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:focusable="false"
+                    android:hint="@string/fragment_account_date_hint"
+                    android:text="@{ViewModel.birthDay}"
+                    tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                    tools:text="22.02.1999" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_account_client_date_of_birth"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#FFF"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_account_client_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:focusable="false"
+                    android:hint="Пол"
+                    android:text="@{ViewModel.gender}"
+                    tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                    tools:text="Мужской" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_account_notifications"
+                style="@style/MyButton"
+                android:layout_width="0dp"
+
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+
+                android:text="@string/fragment_account_notifications"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_account_log_out"
+                style="@style/MyButton"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:focusable="false"
-                android:hint="@string/fragment_account_date_hint"
-                tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                tools:text="22.02.1999" />
+                android:elevation="@dimen/elevation_medium"
 
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/fragment_account_log_out"
+                app:layout_constraintEnd_toEndOf="@+id/fragment_account_notifications"
+                app:layout_constraintStart_toStartOf="@+id/fragment_account_notifications"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_account_notifications" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fragment_account_client_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:focusable="false"
-                android:hint="Пол"
-                tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
-                tools:text="Мужской" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/fragment_account_notifications"
-            style="@style/MyButton"
-            android:layout_width="0dp"
-
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-
-            android:text="@string/fragment_account_notifications"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/fragment_account_log_out"
-            style="@style/MyButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            android:elevation="@dimen/elevation_medium"
-
-            android:text="@string/fragment_account_log_out"
-            app:layout_constraintEnd_toEndOf="@+id/fragment_account_notifications"
-            app:layout_constraintStart_toStartOf="@+id/fragment_account_notifications"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_account_notifications" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

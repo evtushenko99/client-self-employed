@@ -27,6 +27,9 @@ import java.util.List;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+/**
+ * Адаптер для отображения найденных экспертов на страничке поиска экспертом
+ */
 public class AdapterFindExperts extends RecyclerView.Adapter<AdapterFindExperts.FindExpertsHolder> {
 
     private List<Expert> mExperts = new ArrayList<>();

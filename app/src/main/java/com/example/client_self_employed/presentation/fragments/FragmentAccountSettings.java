@@ -19,7 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -30,6 +29,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.databinding.AccountViewModelBinding;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
@@ -48,13 +48,8 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
 
 
     private ImageView mClientPhotoImageView;
-    private AppCompatEditText mClientLastNameEditText;
-    private AppCompatEditText mClientNameEditText;
-    private AppCompatEditText mClientSecondNamehEditText;
-    private TextInputEditText mClientEmailEditText;
-    private TextInputEditText mClientPhoneNumberEditText;
     private TextInputEditText mDateOfBirthEditText;
-    private TextInputEditText mClietGenderEditText;
+
     private AccountViewModel mViewModel;
     private Client mClient;
 
@@ -66,7 +61,11 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
+        mViewModel = ViewModelProviders.of(requireActivity(), new AccountViewModelFactory(requireContext()))
+                .get(AccountViewModel.class);
+        binding.setViewModel(mViewModel);
+        return binding.getRoot();
     }
 
     @Override
@@ -74,13 +73,8 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         mClientPhotoImageView = view.findViewById(R.id.fragment_account_client_photo);
         mClientPhotoImageView.setOnClickListener(this);
-        mClientLastNameEditText = view.findViewById(R.id.fragment_account_client_last_name);
-        mClientNameEditText = view.findViewById(R.id.fragment_account_client_name);
-        mClientSecondNamehEditText = view.findViewById(R.id.fragment_account_client_second_name);
-        mClientEmailEditText = view.findViewById(R.id.fragment_account_client_email);
-        mClientPhoneNumberEditText = view.findViewById(R.id.fragment_account_client_phone_number);
-        mDateOfBirthEditText = view.findViewById(R.id.fragment_account_client_date_of_birth);
-        mClietGenderEditText = view.findViewById(R.id.fragment_account_client_gender);
+
+
         mDateOfBirthEditText = view.findViewById(R.id.fragment_account_client_date_of_birth);
         mDateOfBirthEditText.setOnClickListener(this);
         view.findViewById(R.id.fragment_account_notifications).setOnClickListener(this);
@@ -88,22 +82,14 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
     }
 
     private void setupMVVM() {
-        mViewModel = ViewModelProviders.of(requireActivity(), new AccountViewModelFactory(requireContext()))
-                .get(AccountViewModel.class);
+
         mViewModel.loadInformationAboutClient();
         mViewModel.getMutableClient().observe(getViewLifecycleOwner(), client -> {
             mClient = client;
             if (mClient != null) {
-                mClientLastNameEditText.setText(client.getLastName());
-                mClientNameEditText.setText(client.getFirstName());
-                mClientSecondNamehEditText.setText(client.getSecondName());
-                mClientEmailEditText.setText(client.getEmail());
-                mClientPhoneNumberEditText.setText(client.getPhoneNumber());
-                mDateOfBirthEditText.setText(client.getStringDate());
-                mClietGenderEditText.setText(client.getGender());
+
                 DrawableCrossFadeFactory factory =
                         new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
-                //  mClientPhotoImageView.setImageURI(uri);
                 Glide
                         .with(requireContext())
                         .load(mClient.getClientPhotoUri())

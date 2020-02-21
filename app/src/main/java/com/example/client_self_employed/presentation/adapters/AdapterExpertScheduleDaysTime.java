@@ -16,6 +16,9 @@ import com.example.client_self_employed.presentation.clicklisteners.ExpertSchedu
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Адаптер для отображения списка записей эксперта, относящихся к конкретному дню
+ */
 public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterExpertScheduleDaysTime.ScheduleDaysTimeHolder> {
     private final List<Appointment> mExpertDayTimes;
     private ExpertScheduleDetailedAppointment mClickListners;

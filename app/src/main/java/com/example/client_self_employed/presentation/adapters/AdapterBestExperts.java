@@ -15,6 +15,9 @@ import com.example.client_self_employed.presentation.model.ClientSelectedExpertB
 
 import java.util.List;
 
+/**
+ * Адаптер для отображения активных лучших экспертов
+ */
 public class AdapterBestExperts extends RecyclerView.Adapter<AdapterBestExperts.SelectedExpertHolder> {
     private List<ClientSelectedExpert> mExpertList;
     private BestExpertItemClickListener mBestExpertItemClickListener;

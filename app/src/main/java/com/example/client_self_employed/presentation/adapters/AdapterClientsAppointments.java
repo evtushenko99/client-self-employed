@@ -18,7 +18,7 @@ import com.example.client_self_employed.presentation.adapters.items.ClientNoAppo
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.BestExpertItemClickListener;
-import com.example.client_self_employed.presentation.clicklisteners.FindExpertButton;
+import com.example.client_self_employed.presentation.clicklisteners.FindExpertButtonClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItemClickListener;
 import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.model.ClientBestExpertsBinding;
@@ -28,11 +28,14 @@ import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Адаптер для  для главного ресайклера , в котором размещаются лучшие эксперты и активные записи
+ */
 public class AdapterClientsAppointments extends RecyclerView.Adapter {
     private ActiveAppointmentClickListener mItemClickListener;
     private NewRecordToBestExpertButtonItemClickListener mNewRecordToBestExpertButtonItemClickListener;
     private BestExpertItemClickListener mBestExpertItemClickListener;
-    private FindExpertButton mFindExpertButton;
+    private FindExpertButtonClickListener mFindExpertButtonClickListener;
     private Resources mResources;
     private List<RowType> mDataSet = new ArrayList<>();
 
@@ -41,14 +44,14 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
             ActiveAppointmentClickListener itemClickListener,
             NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener,
             BestExpertItemClickListener bestExpertItemClickListener,
-            FindExpertButton findExpertListener, @NonNull Resources resources) {
+            FindExpertButtonClickListener findExpertListener, @NonNull Resources resources) {
         if (rowTypes != null) {
             mDataSet.addAll(rowTypes);
         }
         mItemClickListener = itemClickListener;
         mNewRecordToBestExpertButtonItemClickListener = newRecordToBestExpertButtonItemClickListener;
         mBestExpertItemClickListener = bestExpertItemClickListener;
-        mFindExpertButton = findExpertListener;
+        mFindExpertButtonClickListener = findExpertListener;
         mResources = resources;
     }
 
@@ -83,7 +86,7 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
             }
             case RowType.NO_APPOINTMENT_ROW_TYPE: {
                 View viewNoAppoinment = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_no_appointment, parent, false);
-                return new NoAppointmentViewHolder(viewNoAppoinment, mFindExpertButton);
+                return new NoAppointmentViewHolder(viewNoAppoinment, mFindExpertButtonClickListener);
             }
             default:
                 throw new IllegalArgumentException("ViewType " + viewType + " is not supported");
@@ -162,10 +165,10 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
 
     public static class NoAppointmentViewHolder extends RecyclerView.ViewHolder {
 
-        public NoAppointmentViewHolder(@NonNull View itemView, FindExpertButton findExpertButton) {
+        public NoAppointmentViewHolder(@NonNull View itemView, FindExpertButtonClickListener findExpertButtonClickListener) {
             super(itemView);
             itemView.findViewById(R.id.item_search_for_expert)
-                    .setOnClickListener(v -> findExpertButton.onFindExpertButton());
+                    .setOnClickListener(v -> findExpertButtonClickListener.onFindExpertButton());
         }
     }
 

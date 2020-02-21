@@ -15,6 +15,9 @@ import com.example.client_self_employed.presentation.model.ClientAppointmentBind
 
 import java.util.List;
 
+/**
+ * Адаптер для отображения активных записей клиента
+ */
 public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiveAppointments.ActiveAppointmentViewHolder> {
     private List<ClientAppointment> mAppointments;
     private ActiveAppointmentClickListener mItemClickListener;
