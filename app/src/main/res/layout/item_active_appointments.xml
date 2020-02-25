@@ -32,7 +32,7 @@
             android:id="@+id/item_active_appointments_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:loadAppointments="@{RecyclerAppointment.appointments}"
+            app:activeAppointments="@{RecyclerAppointment.appointments}"
             app:onAppointmentClick="@{RecyclerAppointment.appointmentClickListener}" />
 
     </LinearLayout>

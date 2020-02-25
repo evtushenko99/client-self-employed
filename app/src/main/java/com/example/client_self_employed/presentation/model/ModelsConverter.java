@@ -18,9 +18,10 @@ public class ModelsConverter {
 
         for (int i = 0; i < appointments.size(); i++) {
             for (int j = 0; j < experts.size(); j++) {
-                if (appointments.get(i).getExpertId() == experts.get(j).getId()) {
-                    expertsName.put(i, experts.get(j).getFullName());
-                    expertsId.put(i, experts.get(j).getId());
+                Expert expert = experts.get(j);
+                if (appointments.get(i).getExpertId() == expert.getId()) {
+                    expertsName.put(i, expert.getFullName());
+                    expertsId.put(i, expert.getId());
                 }
             }
         }

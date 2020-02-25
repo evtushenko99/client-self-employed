@@ -23,4 +23,12 @@ public interface IExpertScheduleCallback {
      * Колбек для записи клиента на определенное время
      */
     void newAppointment(Boolean isCreate);
+
+    /**
+     * Колбек для вывода ошибки при загрузке расписания эксперта или
+     * добавления нового клиента на определенное время
+     *
+     * @param errorOnWorkWithExpertSchedule
+     */
+    void errorOnWorkWithExpertSchedule(String errorOnWorkWithExpertSchedule);
 }

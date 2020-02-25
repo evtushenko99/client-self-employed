@@ -7,7 +7,7 @@ import androidx.databinding.ObservableInt;
 
 import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
 
-public class ClientAppointmentBinding {
+public class ClientActiveAppointmentBinding {
     private ClientAppointment mClientAppointment;
     private ObservableField<String> mExpertName = new ObservableField<>();
     private ObservableField<String> mServiceName = new ObservableField<>();// Название услуги
@@ -17,7 +17,7 @@ public class ClientAppointmentBinding {
     private ObservableField<String> mDate = new ObservableField<>();
     private View.OnClickListener mOnItemClickListener;
 
-    public ClientAppointmentBinding(ClientAppointment clientAppointment) {
+    public ClientActiveAppointmentBinding(ClientAppointment clientAppointment) {
         mClientAppointment = clientAppointment;
         mExpertName.set(clientAppointment.getExpertName());
         mServiceName.set(clientAppointment.getServiceName());

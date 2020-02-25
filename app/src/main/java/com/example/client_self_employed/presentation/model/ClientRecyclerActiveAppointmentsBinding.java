@@ -18,7 +18,7 @@ public class ClientRecyclerActiveAppointmentsBinding {
         mAppointments.set(appointments);
     }
 
-    @BindingAdapter({"loadAppointments", "onAppointmentClick"})
+    @BindingAdapter({"activeAppointments", "onAppointmentClick"})
     public static void setRecycler(RecyclerView recycler, List<ClientAppointment> appointments, ActiveAppointmentClickListener itemClickListener1) {
         if (appointments != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(recycler.getContext(), LinearLayoutManager.VERTICAL, false);

@@ -11,7 +11,7 @@
 
         <variable
             name="ClientAppointment"
-            type="com.example.client_self_employed.presentation.model.ClientAppointmentBinding" />
+            type="com.example.client_self_employed.presentation.model.ClientActiveAppointmentBinding" />
     </data>
 
     <androidx.cardview.widget.CardView

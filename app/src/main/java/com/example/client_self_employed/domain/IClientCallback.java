@@ -11,4 +11,5 @@ public interface IClientCallback {
 
     void clientsChanged(boolean isChanged);
 
+    void errorWorkOnClient(String error);
 }

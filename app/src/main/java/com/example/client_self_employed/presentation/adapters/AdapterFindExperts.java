@@ -113,15 +113,14 @@ public class AdapterFindExperts extends RecyclerView.Adapter<AdapterFindExperts.
                 @Override
                 public void onClick(View v) {
                     if (mExpandConstraintLayout.getVisibility() == View.GONE) {
-                        TransitionManager.beginDelayedTransition(mConstraintLayout, new AutoTransition());
-                        mExpandConstraintLayout.setVisibility(View.VISIBLE);
 
+                        mExpandConstraintLayout.setVisibility(View.VISIBLE);
                         mExpandButton.setBackgroundResource(R.drawable.ic_arrow_up_black_24dp);
                     } else {
-                        TransitionManager.beginDelayedTransition(mConstraintLayout, new AutoTransition());
                         mExpandConstraintLayout.setVisibility(View.GONE);
                         mExpandButton.setBackgroundResource(R.drawable.ic_arrow_down_black_24dp);
                     }
+                    TransitionManager.beginDelayedTransition(mConstraintLayout, new AutoTransition());
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {

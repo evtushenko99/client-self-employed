@@ -10,7 +10,7 @@
 
         <variable
             name="ActiveAppointmentViewModel"
-            type="com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel" />
+            type="com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel" />
     </data>
 
     <FrameLayout
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="128dp"
-            android:visibility="@{ActiveAppointmentViewModel.isActiveAppointmentLoading == true? View.VISIBLE: View.GONE}" />
+            android:visibility="@{ActiveAppointmentViewModel.isBestExpertLoading == true? View.VISIBLE: View.GONE}" />
 
         <ProgressBar
             android:id="@+id/progress_bar_load_active_appointments"
@@ -43,6 +43,6 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="128dp"
             android:longClickable="false"
-            android:visibility="@{ActiveAppointmentViewModel.isBestExpertLoading == true? View.VISIBLE: View.GONE}" />
+            android:visibility="@{ActiveAppointmentViewModel.isActiveAppointmentLoading == true? View.VISIBLE: View.GONE}" />
     </FrameLayout>
 </layout>

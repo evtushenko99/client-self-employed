@@ -5,11 +5,13 @@ import com.example.client_self_employed.domain.model.Expert;
 import java.util.List;
 
 /**
- * Интерфейс для работы с поиском экспертов в отдельном фрагменте
+ * Интерфейс - колбек для загрузки всех существубщих жкспертов
  */
-public interface IExpertCallBack {
+public interface IExpertsCallBack {
     /**
      * @param expertList все существующие эксперты
      */
     void expertsIsLoaded(List<Expert> expertList);
+
+    void errorLoadingExperts(String errorLoadingExperts);
 }

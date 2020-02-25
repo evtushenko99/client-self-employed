@@ -42,6 +42,11 @@ public class AccountViewModel extends ViewModel {
                 loadInformationAboutClient();
             }
         }
+
+        @Override
+        public void errorWorkOnClient(String error) {
+
+        }
     };
 
     private void setClientViews(Client client) {

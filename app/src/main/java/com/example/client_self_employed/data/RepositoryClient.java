@@ -47,6 +47,9 @@ public class RepositoryClient implements IClientRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                        String error = "onCancelled loadClient: " + databaseError.getMessage();
+                        callback.errorWorkOnClient(error);
+                        Log.d(TAG, error);
 
                     }
                 });
@@ -75,7 +78,9 @@ public class RepositoryClient implements IClientRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled updateClientBirthday: " + databaseError.getMessage();
+                        callback.errorWorkOnClient(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
@@ -92,23 +97,13 @@ public class RepositoryClient implements IClientRepository {
                         if (taskSnapshot.getMetadata() != null) {
                             if (taskSnapshot.getMetadata().getReference() != null) {
                                 Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
-                                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        updateClientPhotoUrl(clientId, uri.toString(), callback);
-                                    }
-                                });
+                                result.addOnSuccessListener(uri -> updateClientPhotoUrl(clientId, uri.toString(), callback));
                             }
                         }
 
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.clientsChanged(false);
-                    }
-                });
+                .addOnFailureListener(e -> callback.clientsChanged(false));
     }
 
     @Override
@@ -134,7 +129,9 @@ public class RepositoryClient implements IClientRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled updateFullName = [" + databaseError.getMessage() + "]";
+                        callback.errorWorkOnClient(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
@@ -168,6 +165,12 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         callback.clientsChanged(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.clientsChanged(false);
                     }
                 });
     }

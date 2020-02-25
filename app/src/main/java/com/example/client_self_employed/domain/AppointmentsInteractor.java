@@ -87,7 +87,7 @@ public class AppointmentsInteractor {
 
 
     public void loadClientsAppointments(long clientId, IAppointmentsCallback appointmentsCallback) {
-        mAppointmentsRepository.loadClientsAppointments(clientId, appointmentsCallback);
+        mAppointmentsRepository.loadClientActiveAppointments(clientId, appointmentsCallback);
     }
 
     public void deleteClientAppointment(long appoinmentId, IClientAppointmentCallback status) {

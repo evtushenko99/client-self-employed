@@ -1,15 +1,12 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
-import android.os.Build;
-
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.client_self_employed.domain.ExpertsIteractor;
-import com.example.client_self_employed.domain.IExpertCallBack;
+import com.example.client_self_employed.domain.IExpertsCallBack;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
@@ -27,12 +24,17 @@ public class FindExpertViewModel extends ViewModel {
     private List<Expert> mExperts = new ArrayList<>();
     private MutableLiveData<String> mSearchQuery = new MutableLiveData<>();
     private MutableLiveData<List<Expert>> mLiveData = new MutableLiveData<>();
-    private IExpertCallBack mExpertCallBack = new IExpertCallBack() {
+    private IExpertsCallBack mExpertCallBack = new IExpertsCallBack() {
         @Override
         public void expertsIsLoaded(@Nullable List<Expert> expertList) {
             mExperts = expertList;
             mLiveData.postValue(mExperts);
             mIsLoading.postValue(false);
+        }
+
+        @Override
+        public void errorLoadingExperts(String errorLoadingExperts) {
+
         }
     };
 
@@ -55,7 +57,7 @@ public class FindExpertViewModel extends ViewModel {
         return mSearchQuery;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public void setSearchQuery(String searchQuery) {
         if (!searchQuery.equals("")) {
             mExecutor.execute(() -> {

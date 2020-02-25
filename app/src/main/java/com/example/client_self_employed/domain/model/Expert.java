@@ -1,5 +1,8 @@
 package com.example.client_self_employed.domain.model;
 
+/**
+ * Сущность эксперта, содержащая освновные его характеристики
+ */
 public class Expert {
 
     private long mId;

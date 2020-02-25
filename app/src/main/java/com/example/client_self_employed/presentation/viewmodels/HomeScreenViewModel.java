@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,10 +13,10 @@ import com.example.client_self_employed.domain.AppointmentsInteractor;
 import com.example.client_self_employed.domain.ExpertsIteractor;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
-import com.example.client_self_employed.domain.IExpertCallBack;
+import com.example.client_self_employed.domain.IExpertsCallBack;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
-import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
+import com.example.client_self_employed.presentation.adapters.AdapterHomeScreen;
 import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class AppointmentsViewModel extends ViewModel {
+public class HomeScreenViewModel extends ViewModel {
     private final AppointmentsInteractor mAppointmentsInteractor;
     private final ExpertsIteractor mExpertsInteractor;
     private final Executor mExecutor;
@@ -39,11 +40,11 @@ public class AppointmentsViewModel extends ViewModel {
     private List<RowType> mRowTypes = new ArrayList<>();
 
     @VisibleForTesting
-    IExpertCallBack getExpertsCallBack() {
+    IExpertsCallBack getExpertsCallBack() {
         return mExpertsCallBack;
     }
 
-    private IExpertCallBack mExpertsCallBack = new IExpertCallBack() {
+    private IExpertsCallBack mExpertsCallBack = new IExpertsCallBack() {
         @Override
         public void expertsIsLoaded(@NonNull List<Expert> expertList) {
 
@@ -57,9 +58,15 @@ public class AppointmentsViewModel extends ViewModel {
                     mRowTypes.add(0, item);
                     mLiveData.set(mRowTypes);
                 }
-                mIsBestExpertLoading.set(false);
+
                 loadActiveAppointments();
             }
+            mIsBestExpertLoading.set(false);
+        }
+
+        @Override
+        public void errorLoadingExperts(String errorLoadingExperts) {
+            mErrors.postValue(errorLoadingExperts);
         }
     };
 
@@ -67,15 +74,12 @@ public class AppointmentsViewModel extends ViewModel {
         @Override
         public void clientsAppointmentsIsLoaded(List<Appointment> appointmentList, List<Expert> expertList) {
             mRowTypes = new ArrayList<>(mRowTypes.subList(0, 1));
-            mIsActiveAppointmentLoading.set(false);
+
             if (appointmentList.size() != 0 && expertList.size() != 0) {
                 List<ClientAppointment> activeAppointments = ModelsConverter.convertAppointmentToRowType(appointmentList, expertList);
                 if (activeAppointments != null) {
                     ClientActiveAppointmentsItem clientActiveAppointmentsItem = new ClientActiveAppointmentsItem(activeAppointments);
                     if (mRowTypes.size() == 1) {
-                        mRowTypes.add(clientActiveAppointmentsItem);
-                        mLiveData.set(mRowTypes);
-                    } else if (mRowTypes.get(1) != clientActiveAppointmentsItem) {
                         mRowTypes.add(clientActiveAppointmentsItem);
                         mLiveData.set(mRowTypes);
                     }
@@ -84,7 +88,7 @@ public class AppointmentsViewModel extends ViewModel {
                 mRowTypes.add(new ClientNoAppointmentItem());
                 mLiveData.set(mRowTypes);
             }
-
+            mIsActiveAppointmentLoading.set(false);
 
         }
 
@@ -94,15 +98,32 @@ public class AppointmentsViewModel extends ViewModel {
                 loadActiveAppointments();
             }
         }
+
+        @Override
+        public void errorOnLoadingClientExperts(String errorOnLoadingClientExperts) {
+            mErrors.postValue(errorOnLoadingClientExperts);
+        }
+
+        @Override
+        public void errorDeletingAppointment(String errorDeletingAppointment) {
+            mErrors.postValue(errorDeletingAppointment);
+        }
+
+
     };
     private IAppointmentsCallback mAppointmentsCallback = new IAppointmentsCallback() {
         @Override
         public void onAppointmentCallback(List<Appointment> appointments, List<Long> expertsId) {
             mExpertsInteractor.loadExperNameForActiveAppointment(appointments, expertsId, mClientAppointmentCallback);
         }
+
+        @Override
+        public void onErrorLoadingActiveAppointments(String errorLoadingActiveAppointments) {
+
+        }
     };
 
-    AppointmentsViewModel(
+    HomeScreenViewModel(
             @NonNull AppointmentsInteractor iteractor,
             @NonNull ExpertsIteractor expertsInteractor, @NonNull Executor executor) {
         mAppointmentsInteractor = iteractor;
@@ -113,7 +134,7 @@ public class AppointmentsViewModel extends ViewModel {
     @BindingAdapter("data")
     public static void setRecycler(RecyclerView recycler, List<RowType> data) {
         if (data != null) {
-            ((AdapterClientsAppointments) recycler.getAdapter()).setRowTypes(data);
+            ((AdapterHomeScreen) recycler.getAdapter()).setRowTypes(data);
         }
     }
 
@@ -142,6 +163,10 @@ public class AppointmentsViewModel extends ViewModel {
 
     public ObservableField<Boolean> getIsActiveAppointmentLoading() {
         return mIsActiveAppointmentLoading;
+    }
+
+    public LiveData<String> getErrors() {
+        return mErrors;
     }
 
 

@@ -3,6 +3,9 @@ package com.example.client_self_employed.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Сущность записи, содержащая освновные ее характеристики
+ */
 public class Appointment implements Comparable<Appointment>, Parcelable {
     private long mId;
     private String mServiceName;// Название услуги

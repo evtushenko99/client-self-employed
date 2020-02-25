@@ -25,10 +25,10 @@ import com.example.client_self_employed.databinding.FragmentDetailedAppointmentB
 import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
-import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
-import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
+import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
+import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -41,7 +41,7 @@ public class FragmentDetailedAppointment extends Fragment {
 
     private static final int REQUEST_CALL_PHONE = 0;
 
-    private AppointmentsViewModel mViewModel;
+    private HomeScreenViewModel mViewModel;
 
     private DetailedAppointmentViewModel mDetailedAppointmentViewModel;
     private long mExpertId;
@@ -100,8 +100,8 @@ public class FragmentDetailedAppointment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    mViewModel = ViewModelProviders.of(requireActivity(), new AppointmentsViewModelFactory(requireContext()))
-                            .get(AppointmentsViewModel.class);
+                    mViewModel = ViewModelProviders.of(requireActivity(), new HomeScreenModelFactory(requireContext()))
+                            .get(HomeScreenViewModel.class);
                     mViewModel.deleteClientAppointment(appointmentId);
                     ((ActivityActiveAppointments) requireActivity()).deleteAppointmentFromRecycler(mPosition);
                 }
@@ -112,13 +112,12 @@ public class FragmentDetailedAppointment extends Fragment {
         });
 
         mDetailedAppointmentViewModel.setCallPhoneClickListener(expertPhoneNumber -> {
-            if (!(ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE)
+            if ((ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE)
                     == PackageManager.PERMISSION_GRANTED)) {
-                this.requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE);
-
-            } else {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + expertPhoneNumber));
                 startActivity(intent);
+            } else {
+                this.requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE);
             }
         });
 
@@ -204,7 +203,7 @@ public class FragmentDetailedAppointment extends Fragment {
     }
 
 
-    public static boolean isAppAvailable(Context context, String appName) {
+    private static boolean isAppAvailable(Context context, String appName) {
         PackageManager pm = context.getPackageManager();
         try {
             pm.getPackageInfo(appName, PackageManager.GET_ACTIVITIES);

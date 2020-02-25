@@ -41,6 +41,11 @@ public class ExpertScheduleViewModel extends ViewModel {
                 mIsChanged.postValue(true);
             }
         }
+
+        @Override
+        public void errorOnWorkWithExpertSchedule(String errorOnWorkWithExpertSchedule) {
+
+        }
     };
 
     public ExpertScheduleViewModel(

@@ -22,17 +22,17 @@ import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientExpertSchedule;
 import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
-import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
-import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
+import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
+import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 public class FragmentExpertSchedule extends Fragment {
 
     private TextView mExpertNameTitle;
     private RecyclerView mScheduleRecycler;
     private ExpertScheduleViewModel mScheduleViewModel;
-    private AppointmentsViewModel mAppointmentsViewModel;
+    private HomeScreenViewModel mHomeScreenViewModel;
 
 
     public static FragmentExpertSchedule newInstance(long expertId) {
@@ -73,8 +73,8 @@ public class FragmentExpertSchedule extends Fragment {
     private void setupScheduleMVVM(long id) {
         mScheduleViewModel = ViewModelProviders.of(getActivity(), new ExpertScheduleViewModelFactory(getActivity()))
                 .get(ExpertScheduleViewModel.class);
-        mAppointmentsViewModel = ViewModelProviders.of(getActivity(), new AppointmentsViewModelFactory(getActivity()))
-                .get(AppointmentsViewModel.class);
+        mHomeScreenViewModel = ViewModelProviders.of(getActivity(), new HomeScreenModelFactory(getActivity()))
+                .get(HomeScreenViewModel.class);
         mScheduleViewModel.loadExpertSchedule(this.getArguments().getLong(Arguments.EXPERT_ID));
         mScheduleViewModel.getExpertName().observe(getViewLifecycleOwner(), expertName -> {
             mExpertNameTitle.setText(expertName);
@@ -89,7 +89,7 @@ public class FragmentExpertSchedule extends Fragment {
         });
         mScheduleViewModel.getIsChanged().observe(getViewLifecycleOwner(), isChanged -> {
             if (isChanged) {
-                mAppointmentsViewModel.loadActiveAppointments();
+                mHomeScreenViewModel.loadActiveAppointments();
             }
         });
 

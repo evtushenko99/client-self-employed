@@ -1,16 +1,11 @@
 package com.example.client_self_employed.domain;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.example.client_self_employed.data.IExpertsRepository;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ExpertsIteractor {
     private final IExpertsRepository mRepositoryExperts;
@@ -19,19 +14,21 @@ public class ExpertsIteractor {
         mRepositoryExperts = repositoryExperts;
     }
 
-    public void loadAllExperts(IExpertCallBack callBack) {
+    public void loadAllExperts(IExpertsCallBack callBack) {
         mRepositoryExperts.loadAllExperts(callBack);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<Expert> findExpert(List<Expert> expertList, String query) {
-        List<Expert> experts;
-        Stream stream = expertList.stream();
-        experts = (List<Expert>) stream.filter(expert ->
-                ((Expert) expert).getFirstName().toLowerCase().contains(query.toLowerCase())
-                        || ((Expert) expert).getLastName().toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
 
-        return experts;
+    public List<Expert> findExpert(List<Expert> expertList, String query) {
+        List<Expert> findedExperts = new ArrayList<>();
+        String queryLowerCase = query.toLowerCase();
+        for (Expert expert : expertList) {
+            if (expert.getFirstName().toLowerCase().contains(queryLowerCase) ||
+                    expert.getLastName().toLowerCase().contains(queryLowerCase)) {
+                findedExperts.add(expert);
+            }
+        }
+        return findedExperts;
     }
 
     public void loadExpertSchedule(long expertId, IExpertScheduleCallback iExpertScheduleCallback) {

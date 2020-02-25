@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.databinding.ItemActiveAppointmentBinding;
 import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
+import com.example.client_self_employed.presentation.model.ClientActiveAppointmentBinding;
 import com.example.client_self_employed.presentation.model.ClientAppointment;
-import com.example.client_self_employed.presentation.model.ClientAppointmentBinding;
 
 import java.util.List;
 
@@ -55,9 +55,9 @@ public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiv
         }
 
         void bindView(final ClientAppointment appointment, int position, ActiveAppointmentClickListener itemClickListener) {
-            ClientAppointmentBinding clientAppointmentBinding = new ClientAppointmentBinding(appointment);
-            clientAppointmentBinding.setOnItemClickListener(itemClickListener, position);
-            mBinding.setClientAppointment(clientAppointmentBinding);
+            ClientActiveAppointmentBinding clientActiveAppointmentBinding = new ClientActiveAppointmentBinding(appointment);
+            clientActiveAppointmentBinding.setOnItemClickListener(itemClickListener, position);
+            mBinding.setClientAppointment(clientActiveAppointmentBinding);
         }
     }
 }

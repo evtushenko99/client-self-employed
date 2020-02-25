@@ -19,21 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.databinding.ActiveAppointmentsBinding;
 import com.example.client_self_employed.presentation.Arguments;
-import com.example.client_self_employed.presentation.adapters.AdapterClientsAppointments;
-import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModel;
-import com.example.client_self_employed.presentation.viewmodels.AppointmentsViewModelFactory;
+import com.example.client_self_employed.presentation.adapters.AdapterHomeScreen;
+import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
+import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 
-public class FragmentActiveAppointments extends Fragment {
+public class FragmentHomeScreen extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private AppointmentsViewModel mViewModel;
+    private HomeScreenViewModel mViewModel;
 
     private long mExpertId;
 
-    public static FragmentActiveAppointments newInstance() {
+    public static FragmentHomeScreen newInstance() {
         Bundle args = new Bundle();
-        FragmentActiveAppointments fragment = new FragmentActiveAppointments();
+        FragmentHomeScreen fragment = new FragmentHomeScreen();
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,8 +49,8 @@ public class FragmentActiveAppointments extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ActiveAppointmentsBinding binding = ActiveAppointmentsBinding.inflate(inflater, container, false);
-        mViewModel = ViewModelProviders.of(requireActivity(), new AppointmentsViewModelFactory(requireActivity()))
-                .get(AppointmentsViewModel.class);
+        mViewModel = ViewModelProviders.of(requireActivity(), new HomeScreenModelFactory(requireActivity()))
+                .get(HomeScreenViewModel.class);
         mViewModel.loadClientExperts();
         binding.setActiveAppointmentViewModel(mViewModel);
         return binding.getRoot();
@@ -65,7 +65,7 @@ public class FragmentActiveAppointments extends Fragment {
         mRecyclerView = view.findViewById(R.id.list_of_active_appointments_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(new AdapterClientsAppointments(null,
+        mRecyclerView.setAdapter(new AdapterHomeScreen(null,
                 (appointment, position) -> {
                     requireActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_host_appointments_with_experts, FragmentDetailedAppointment.newInstance(appointment.getId(), appointment.getExpertId(), position))
@@ -93,7 +93,7 @@ public class FragmentActiveAppointments extends Fragment {
                         .commit(),
                 getResources()
         ));
-
+        mViewModel.getErrors().observe(getViewLifecycleOwner(), error -> Toast.makeText(requireActivity(), error, Toast.LENGTH_LONG).show());
     }
 
 

@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Сущность клиента, содержащая освновные его характеристики
+ */
 public class Client {
 
     private long mId;

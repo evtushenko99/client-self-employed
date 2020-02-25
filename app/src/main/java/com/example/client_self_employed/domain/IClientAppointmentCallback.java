@@ -19,9 +19,13 @@ public interface IClientAppointmentCallback {
      * @param expertList      - лист экспертов, относящихся к автивным записям клиента
      */
     void clientsAppointmentsIsLoaded(@Nullable List<Appointment> appointmentList, @Nullable List<Expert> expertList);
+
     /**
      * Колбек - успешно ли произошло удаление активной записи
      */
     void clientAppointmentIsDeleted(Boolean isDeleted);
 
+    void errorOnLoadingClientExperts(String errorOnLoadingClientExperts);
+
+    void errorDeletingAppointment(String errorDeletingAppointment);
 }

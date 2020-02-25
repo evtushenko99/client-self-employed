@@ -18,7 +18,7 @@ public interface IAppointmentsRepository {
 
     void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback status);
 
-    void loadClientsAppointments(@NonNull Long clientId, IAppointmentsCallback callback);
+    void loadClientActiveAppointments(@NonNull Long clientId, IAppointmentsCallback callback);
 
     /**
      * Загрузка информации об одной записи клиента

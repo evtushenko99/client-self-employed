@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.data.model.FirebaseExpert;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
-import com.example.client_self_employed.domain.IExpertCallBack;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
+import com.example.client_self_employed.domain.IExpertsCallBack;
 import com.example.client_self_employed.domain.ILoadExpertPhotoCallback;
 import com.example.client_self_employed.domain.ILoadOneExpertCallback;
 import com.example.client_self_employed.domain.model.Appointment;
@@ -38,10 +38,6 @@ public class RepositoryExperts implements IExpertsRepository {
     private DatabaseReference mDatabaseReferenceAppointment = mReference.child("appointments");
     private List<Appointment> mAppointments = new ArrayList<>();
 
-    public RepositoryExperts() {
-
-    }
-
     private void loadExpertName(long expertId, IExpertScheduleCallback expertScheduleStatus) {
         mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)
                 .equalTo(expertId)
@@ -58,13 +54,15 @@ public class RepositoryExperts implements IExpertsRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled loadExpertName = [" + databaseError.getMessage() + "]";
+                        expertScheduleStatus.errorOnWorkWithExpertSchedule(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
 
     @Override
-    public void loadAllExperts(IExpertCallBack callBack) {
+    public void loadAllExperts(IExpertsCallBack callBack) {
         List<Expert> experts = new ArrayList<>();
         mDatabaseReferenceExpert.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -78,7 +76,9 @@ public class RepositoryExperts implements IExpertsRepository {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                String error = "onCancelled loadAllExperts: " + databaseError.getMessage();
+                callBack.errorLoadingExperts(error);
+                Log.d(TAG, error);
             }
         });
     }
@@ -88,12 +88,12 @@ public class RepositoryExperts implements IExpertsRepository {
         if (expertsId.size() == 0) {
             dataStatus.clientsAppointmentsIsLoaded(activeAppointment, new ArrayList<>());
         } else {
+            List<Expert> experts = new ArrayList<>();
             for (Long expertId : expertsId) {
                 mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID).equalTo(expertId)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                List<Expert> experts = new ArrayList<>();
                                 for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                                     Expert expert = keyExpert.getValue(Expert.class);
                                     if (!experts.contains(expert)) {
@@ -102,12 +102,16 @@ public class RepositoryExperts implements IExpertsRepository {
                                 }
                                 if (experts.size() == expertsId.size()) {
                                     dataStatus.clientsAppointmentsIsLoaded(activeAppointment, experts);
+                                } else {
+                                    dataStatus.errorOnLoadingClientExperts("not enough experts loaded");
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                                String error = "onCancelled loadExpertsNameForActiveAppointments = [" + databaseError.getMessage() + "]";
+                                dataStatus.errorOnLoadingClientExperts(error);
+                                Log.d(TAG, error);
                             }
                         });
 
@@ -134,7 +138,9 @@ public class RepositoryExperts implements IExpertsRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled loadExpertSchedule = [" + databaseError.getMessage() + "]";
+                        expertScheduleCallback.errorOnWorkWithExpertSchedule(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
@@ -163,7 +169,9 @@ public class RepositoryExperts implements IExpertsRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled updateExpertAppointment = [" + databaseError.getMessage() + "]";
+                        expertScheduleCallback.errorOnWorkWithExpertSchedule(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
@@ -185,7 +193,9 @@ public class RepositoryExperts implements IExpertsRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        String error = "onCancelled loadOneExpert: " + databaseError.getMessage();
+                        callback.errorLoadOneExpert(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
@@ -195,7 +205,7 @@ public class RepositoryExperts implements IExpertsRepository {
 
     }
 
-    private void loadExpertsPhoto(List<Expert> experts, IExpertCallBack callBack) {
+    private void loadExpertsPhoto(List<Expert> experts, IExpertsCallBack callBack) {
         mStorageReference.child("expert_" + experts.get(0).getId() + ".jpg").getDownloadUrl()
                 .addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override

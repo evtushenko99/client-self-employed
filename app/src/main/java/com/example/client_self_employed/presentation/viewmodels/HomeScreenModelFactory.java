@@ -16,23 +16,23 @@ import com.example.client_self_employed.domain.ExpertsIteractor;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class AppointmentsViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class HomeScreenModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final Context mApplicationContext;
 
-    public AppointmentsViewModelFactory(@NonNull Context applicationContext) {
+    public HomeScreenModelFactory(@NonNull Context applicationContext) {
         mApplicationContext = applicationContext.getApplicationContext();
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (AppointmentsViewModel.class.equals(modelClass)) {
+        if (HomeScreenViewModel.class.equals(modelClass)) {
             IAppointmentsRepository appointmentsRepository = new RepositoryAppointments();
             IExpertsRepository expertsRepository = new RepositoryExperts();
             AppointmentsInteractor iteractor = new AppointmentsInteractor(appointmentsRepository, expertsRepository);
             ExpertsIteractor expertsIteractor = new ExpertsIteractor(expertsRepository);
             Executor executor = Executors.newFixedThreadPool(10);
-            return (T) new AppointmentsViewModel(iteractor, expertsIteractor, executor);
+            return (T) new HomeScreenViewModel(iteractor, expertsIteractor, executor);
         } else {
             return super.create(modelClass);
         }

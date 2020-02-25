@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.presentation.fragments.FragmentActiveAppointments;
+import com.example.client_self_employed.presentation.fragments.FragmentHomeScreen;
 
 public class NotificationService extends Service {
 
@@ -63,7 +63,7 @@ public class NotificationService extends Service {
         mNotificationLayout.setTextViewText(R.id.notification_expert_name, mAppointmentName);
         mNotificationLayout.setTextViewText(R.id.notification_time, mAppointmentTime);
 
-        Intent intent = new Intent(this, FragmentActiveAppointments.class);
+        Intent intent = new Intent(this, FragmentHomeScreen.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         mNotificationLayout.setOnClickPendingIntent(mNotificationLayout.getLayoutId(), pendingIntent);
 

@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Адаптер для  для главного ресайклера , в котором размещаются лучшие эксперты и активные записи
  */
-public class AdapterClientsAppointments extends RecyclerView.Adapter {
+public class AdapterHomeScreen extends RecyclerView.Adapter {
     private ActiveAppointmentClickListener mItemClickListener;
     private NewRecordToBestExpertButtonItemClickListener mNewRecordToBestExpertButtonItemClickListener;
     private BestExpertItemClickListener mBestExpertItemClickListener;
@@ -39,7 +39,7 @@ public class AdapterClientsAppointments extends RecyclerView.Adapter {
     private Resources mResources;
     private List<RowType> mDataSet = new ArrayList<>();
 
-    public AdapterClientsAppointments(
+    public AdapterHomeScreen(
             List<RowType> rowTypes,
             ActiveAppointmentClickListener itemClickListener,
             NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener,

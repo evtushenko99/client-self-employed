@@ -34,7 +34,7 @@ public class RepositoryAppointments implements IAppointmentsRepository {
     }
 
     @Override
-    public void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback dataStatus) {
+    public void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback callback) {
 
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID).equalTo(id)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -44,19 +44,21 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                             Appointment appointment = keyExpert.getValue(Appointment.class);
                             appointment.setClientId(0);
                             mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment)
-                                    .addOnCompleteListener(task -> dataStatus.clientAppointmentIsDeleted(true));
+                                    .addOnCompleteListener(task -> callback.clientAppointmentIsDeleted(true));
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled() deleteClientsAppointment = [" + databaseError.getMessage() + "]";
+                        callback.errorDeletingAppointment(error);
+                        Log.d(TAG, error);
                     }
                 });
     }
 
     @Override
-    public void loadClientsAppointments(@NonNull Long clientId, IAppointmentsCallback callback) {
+    public void loadClientActiveAppointments(@NonNull Long clientId, IAppointmentsCallback callback) {
 
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.CLIENT_ID)
                 .equalTo(clientId)
@@ -79,8 +81,9 @@ public class RepositoryAppointments implements IAppointmentsRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        callback.onAppointmentCallback(null, null);
-                        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+                        String error = "onCancelled loadClientActiveAppointments: " + databaseError.getMessage();
+                        callback.onErrorLoadingActiveAppointments(error);
+                        Log.d(TAG, error);
                     }
                 });
 
@@ -103,7 +106,9 @@ public class RepositoryAppointments implements IAppointmentsRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        String error = "onCancelled loadOneAppointment = {" + databaseError.getMessage() + "]";
+                        callback.errorLoadOneAppointment(error);
+                        Log.d(TAG, error);
                     }
                 });
 

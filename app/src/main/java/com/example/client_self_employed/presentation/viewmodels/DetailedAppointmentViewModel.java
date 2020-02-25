@@ -28,7 +28,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
     private final ResourceWrapper mResourceWrapper;
 
     private MutableLiveData<Boolean> mIsLoadingExpert = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> mIsLoadindAppointment = new MutableLiveData<>(false);
+    private MutableLiveData<Boolean> mIsLoadingAppointment = new MutableLiveData<>(false);
     private ObservableField<String> mExpertProfession = new ObservableField<>();
     private ObservableField<String> mExpertFullName = new ObservableField<>();
     private ObservableField<String> mExpertPhoneNumber = new ObservableField<>();
@@ -68,15 +68,25 @@ public class DetailedAppointmentViewModel extends ViewModel {
                 bindExpertViews(expert);
             }
         }
+
+        @Override
+        public void errorLoadOneExpert(String errorLoadOneExpert) {
+
+        }
     };
     private ILoadOneAppointmentCallback mAppointmentCallback = new ILoadOneAppointmentCallback() {
         @Override
         public void oneAppointmentIsLoaded(Appointment appointment) {
-            mIsLoadindAppointment.postValue(false);
+            mIsLoadingAppointment.postValue(false);
             if (appointment != null) {
                 mAppointment = appointment;
                 bindAppointmentViews(appointment);
             }
+        }
+
+        @Override
+        public void errorLoadOneAppointment(String errorLoadOneAppointment) {
+
         }
     };
 
@@ -92,7 +102,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
     }
 
     public void loadDetailedInformation(@NonNull Long appointmentId, @NonNull Long expertId) {
-        mIsLoadindAppointment.setValue(true);
+        mIsLoadingAppointment.setValue(true);
         mIsLoadingExpert.setValue(true);
         mExecutor.execute(() ->
                 mInteractor.loadAppointment(appointmentId, mAppointmentCallback));
@@ -267,8 +277,8 @@ public class DetailedAppointmentViewModel extends ViewModel {
      *
      * @return
      */
-    public MutableLiveData<Boolean> getIsLoadindAppointment() {
-        return mIsLoadindAppointment;
+    public MutableLiveData<Boolean> getIsLoadingAppointment() {
+        return mIsLoadingAppointment;
     }
 
 
