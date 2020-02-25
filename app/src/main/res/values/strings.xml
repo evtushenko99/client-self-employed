@@ -49,11 +49,22 @@
     <string name="fragment_account_change_button">Изменить</string>
     <string name="fragment_detailed_information_expert_more_inf">Узнать больше</string>
     <string name="fragment_detailed_information_inf">Скрыть</string>
+    <string name="detailed_fragment_change_button">Изменить</string>
+    <string name="detailed_fragment_dismiss">Отмена</string>
+    <string name="dialog_fragment_change_email_title">Изменение email</string>
+    <string name="dialog_fragment_change_phone_number_title">Изменение номера телефона</string>
+    <string name="dialog_fragment_change_expert_gender">Изменения пола</string>
+    <string name="dialog_fragment_change_full_name_title">Изменение ФИО</string>
 
     <string-array name="professions">
         <item>Тренер по фигурному катанию</item>
         <item>Инструктор по зумбе</item>
         <item>Инструктор по йоге</item>
         <item>Интрусктор по вождению</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Мужской</item>
+        <item>Женский</item>
     </string-array>
 </resources>

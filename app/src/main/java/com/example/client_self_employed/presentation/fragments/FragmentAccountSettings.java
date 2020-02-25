@@ -24,10 +24,6 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.databinding.AccountViewModelBinding;
 import com.example.client_self_employed.domain.model.Client;
@@ -36,8 +32,6 @@ import com.example.client_self_employed.presentation.viewmodels.AccountViewModel
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class FragmentAccountSettings extends Fragment implements View.OnClickListener {
 
@@ -49,9 +43,8 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
 
     private ImageView mClientPhotoImageView;
     private TextInputEditText mDateOfBirthEditText;
-
-    private AccountViewModel mViewModel;
     private Client mClient;
+    private AccountViewModel mViewModel;
 
 
     public static FragmentAccountSettings newInstance() {
@@ -64,7 +57,9 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(requireActivity(), new AccountViewModelFactory(requireContext()))
                 .get(AccountViewModel.class);
+        mViewModel.loadInformationAboutClient();
         binding.setViewModel(mViewModel);
+        setClickListeners();
         return binding.getRoot();
     }
 
@@ -74,37 +69,32 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         mClientPhotoImageView = view.findViewById(R.id.fragment_account_client_photo);
         mClientPhotoImageView.setOnClickListener(this);
 
-
         mDateOfBirthEditText = view.findViewById(R.id.fragment_account_client_date_of_birth);
         mDateOfBirthEditText.setOnClickListener(this);
-        view.findViewById(R.id.fragment_account_notifications).setOnClickListener(this);
-        setupMVVM();
-    }
 
-    private void setupMVVM() {
-
-        mViewModel.loadInformationAboutClient();
         mViewModel.getMutableClient().observe(getViewLifecycleOwner(), client -> {
             mClient = client;
-            if (mClient != null) {
-
-                DrawableCrossFadeFactory factory =
-                        new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
-                Glide
-                        .with(requireContext())
-                        .load(mClient.getClientPhotoUri())
-                        .apply(new RequestOptions()
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .centerCrop()
-                                .circleCrop()
-                                .placeholder(R.mipmap.no_photo_available_or_missing)
-                                .error(R.mipmap.no_photo_available_or_missing))
-                        .transition(withCrossFade(factory))
-                        .into(mClientPhotoImageView);
-            }
         });
+        view.findViewById(R.id.fragment_account_notifications).setOnClickListener(this);
+
     }
 
+    private void setClickListeners() {
+        mViewModel.setOnChangeEmailClickListener(v ->
+                DialogFragmentChangeExpertEmail.newInstance(mViewModel.getEmail().get())
+                        .show(requireActivity().getSupportFragmentManager(), null));
+        mViewModel.setOnChangePhoneNumberClickListener(v ->
+                DialogFragmentChangeExpertPhoneNumber.newInstance(mViewModel.getPhoneNumber().get())
+                        .show(requireActivity().getSupportFragmentManager(), null));
+        mViewModel.setOnChangeFullNameClickListener(v -> {
+            DialogFragmentChangeExpertFullName.newInstance()
+                    .show(requireActivity().getSupportFragmentManager(), null);
+        });
+        mViewModel.setOnChangeGenderClickListener(v -> {
+            DialogFragmentChangeExpertGender.newInstance(mViewModel.getGender().get())
+                    .show(requireActivity().getSupportFragmentManager(), null);
+        });
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -116,8 +106,8 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
                         .replace(R.id.fragment_host_appointments_with_experts, FragmentPreferences.newInstance())
                         .commit();
                 break;
-
             case R.id.fragment_account_client_date_of_birth:
+
                 if (mClient != null) {
                     setDatePicker(mClient.getYearOfBirth(), mClient.getMonthOfBirth(), mClient.getDayOfBirth());
                 }
@@ -143,6 +133,7 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         datePickerDialog.show();
         datePickerDialog.setOnDateSetListener((view, year1, month1, dayOfMonth) -> mViewModel.updateClientBirthday(dayOfMonth, month1, year1));
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

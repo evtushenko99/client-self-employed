@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data class="AccountViewModelBinding">
@@ -13,7 +14,7 @@
             type="com.example.client_self_employed.presentation.viewmodels.AccountViewModel" />
     </data>
 
-    <ScrollView xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -47,6 +48,7 @@
                         android:layout_height="@dimen/image_height"
                         android:layout_marginEnd="8dp"
                         android:background="#FFF"
+                        app:clientPhotoUri="@{ViewModel.photoUri}"
                         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_second_name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/textInputLayout_last_name"
@@ -65,7 +67,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/fragment_account_client_last_name"
+                            android:id="@+id/dialog_fragment_change_full_name_client_last_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -89,7 +91,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout_last_name">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/fragment_account_client_name"
+                            android:id="@+id/dialog_fragment_change_full_name_client_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -112,7 +114,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout_name">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/fragment_account_client_second_name"
+                            android:id="@+id/dialog_fragment_change_full_name_client_second_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -128,8 +130,8 @@
                         style="@style/MyButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-
                         android:layout_marginTop="8dp"
+                        android:onClick="@{ViewModel.onChangeFullNameClickListener}"
                         android:text="@string/fragment_account_change_button"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +146,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="8dp"
-                android:background="#FFF"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView">
@@ -157,6 +159,7 @@
                     android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:focusable="false"
                     android:hint="@string/fragment_account_email_hint"
+                    android:onClick="@{ViewModel.onChangeEmailClickListener}"
                     android:text="@{ViewModel.email}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
                     tools:text="evtushenko99@maill.ru" />
@@ -180,6 +183,7 @@
                     android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:focusable="false"
                     android:hint="@string/fragment_account_phone_hint"
+                    android:onClick="@{ViewModel.onChangePhoneNumberClickListener}"
                     android:text="@{ViewModel.phoneNumber}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
                     tools:text="+7-906-087-11-00" />
@@ -227,6 +231,7 @@
                     android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:focusable="false"
                     android:hint="Пол"
+                    android:onClick="@{ViewModel.onChangeGenderClickListener}"
                     android:text="@{ViewModel.gender}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
                     tools:text="Мужской" />

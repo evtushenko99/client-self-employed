@@ -86,6 +86,90 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
+    public void updateClientEmail(@NonNull long clientId, String newEmail, IClientCallback callback) {
+        mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
+                .equalTo(clientId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyClient : dataSnapshot.getChildren()) {
+                            Client client = keyClient.getValue(Client.class);
+                            if (client != null) {
+                                client.setEmail(newEmail);
+                                String clientId = String.valueOf(client.getId());
+                                mDatabaseReferenceClient.child(clientId)
+                                        .setValue(client)
+                                        .addOnCompleteListener(task -> callback.clientsChanged(true));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        String error = "onCancelled updateClientEmail: " + databaseError.getMessage();
+                        callback.errorWorkOnClient(error);
+                        Log.d(TAG, error);
+                    }
+                });
+    }
+
+    @Override
+    public void updateClientGender(@NonNull long clientId, String newGender, IClientCallback callback) {
+        mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
+                .equalTo(clientId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyClient : dataSnapshot.getChildren()) {
+                            Client client = keyClient.getValue(Client.class);
+                            if (client != null) {
+                                client.setGender(newGender);
+                                String clientId = String.valueOf(client.getId());
+                                mDatabaseReferenceClient.child(clientId)
+                                        .setValue(client)
+                                        .addOnCompleteListener(task -> callback.clientsChanged(true));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        String error = "onCancelled updateClientGender: " + databaseError.getMessage();
+                        callback.errorWorkOnClient(error);
+                        Log.d(TAG, error);
+                    }
+                });
+    }
+
+    @Override
+    public void updateClientPhoneNumber(@NonNull long clientId, String newPhoneNumber, IClientCallback callback) {
+        mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
+                .equalTo(clientId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyClient : dataSnapshot.getChildren()) {
+                            Client client = keyClient.getValue(Client.class);
+                            if (client != null) {
+                                client.setPhoneNumber(newPhoneNumber);
+                                String clientId = String.valueOf(client.getId());
+                                mDatabaseReferenceClient.child(clientId)
+                                        .setValue(client)
+                                        .addOnCompleteListener(task -> callback.clientsChanged(true));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        String error = "onCancelled updateClientPhoneNumber: " + databaseError.getMessage();
+                        callback.errorWorkOnClient(error);
+                        Log.d(TAG, error);
+                    }
+                });
+    }
+
+    @Override
     public void loadNewClientPhoto(@NonNull long clientId, String newClientPhoto, IClientCallback callback) {
         File file = new File(String.valueOf((newClientPhoto)));
         String fileName = file.getName();

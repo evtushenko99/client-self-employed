@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/elevation_medium"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium">
+
+        <TextView
+            android:id="@+id/dialog_fragment_change_client_full_name_title"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/dialog_fragment_change_phone_number_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_fragment_change_client_full_name_title"
+            android:layout_alignEnd="@+id/dialog_fragment_change_client_full_name_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/detailed_fragment_account_client_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fragment_account_phone_hint"
+                tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
+                tools:text="+7-906-087-11-00" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/detailed_fragment_change_button"
+            style="@style/MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInputLayout"
+            android:layout_alignEnd="@+id/textInputLayout"
+
+            android:text="@string/detailed_fragment_change_button" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/detailed_fragment_dismiss_button"
+
+            style="@style/MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInputLayout"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_toStartOf="@+id/detailed_fragment_change_button"
+            android:text="@string/detailed_fragment_dismiss" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
