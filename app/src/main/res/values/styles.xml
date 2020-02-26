@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryLightColor</item>
-        <item name="colorControlNormal">#FFF</item>
+        <item name="colorControlNormal">@color/primaryLightColor</item>
 
         <item name="colorControlActivated">@color/primaryLightColor</item>
 

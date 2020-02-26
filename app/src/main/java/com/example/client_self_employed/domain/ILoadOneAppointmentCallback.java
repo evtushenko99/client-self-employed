@@ -10,4 +10,6 @@ public interface ILoadOneAppointmentCallback {
     void oneAppointmentIsLoaded(Appointment appointment);
 
     void errorLoadOneAppointment(String errorLoadOneAppointment);
+
+    void onUpdateCallback(boolean isRatingUpdate);
 }

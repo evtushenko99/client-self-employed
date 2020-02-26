@@ -1,6 +1,5 @@
 package com.example.client_self_employed.presentation.adapters;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,17 +61,12 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
 
         public void bindView(@NonNull Appointment appointment) {
             mTime.setText(appointment.getStringTime());
-
             if (appointment.getClientId() != 0) {
-                mTime.setBackgroundColor(Color.RED);
-
+                mTime.setBackgroundColor(itemView.getResources().getColor(R.color.primaryColor));
+                mTime.setTextColor(itemView.getResources().getColor(R.color.white));
+            } else {
+                itemView.setOnClickListener(v -> mClickListners.onExpertScheduleDetailedAppointmentClickListners(appointment, 2));
             }
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListners.onExpertScheduleDetailedAppointmentClickListners(appointment, 2);
-                }
-            });
         }
 
 

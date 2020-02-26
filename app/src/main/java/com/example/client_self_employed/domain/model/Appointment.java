@@ -19,13 +19,14 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     private int mStartMinute;
     private long mExpertId;
     private long mClientId;
+    private float mRating;
 
     public Appointment() {
 
     }
 
     public Appointment(long id, String serviceName, String sessionDuration, int cost, String location, int year, int month, int dayOfMonth,
-                       int startHourOfDay, int startMinute, long expertId, long clientId) {
+                       int startHourOfDay, int startMinute, long expertId, long clientId, float rating) {
         mId = id;
         mServiceName = serviceName;
         mSessionDuration = sessionDuration;
@@ -38,6 +39,7 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         mStartMinute = startMinute;
         mExpertId = expertId;
         mClientId = clientId;
+        mRating = rating;
     }
 
     protected Appointment(Parcel in) {
@@ -111,11 +113,15 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
 
     @Override
     public int compareTo(Appointment o) {
-        if (this.getDayOfMonth() < o.getDayOfMonth()) {
+        if (this.getMonth() < o.getMonth()) {
             return -1;
-        } else if (this.getDayOfMonth() > o.getDayOfMonth()) {
+        } else if (this.getMonth() > o.getMonth()) {
             return +1;
-        } else if (this.getDayOfMonth() == o.getDayOfMonth()
+        } else if (this.getMonth() == o.getMonth() && this.getDayOfMonth() < o.getDayOfMonth()) {
+            return -1;
+        } else if (this.getMonth() == o.getMonth() && this.getDayOfMonth() > o.getDayOfMonth()) {
+            return +1;
+        } else if (this.getMonth() == o.getMonth() && this.getDayOfMonth() == o.getDayOfMonth()
                 && this.getStartHourOfDay() < o.getStartHourOfDay()) {
             return -1;
         } else return +1;
@@ -216,6 +222,14 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
 
     public void setExpertId(long expertId) {
         mExpertId = expertId;
+    }
+
+    public float getRating() {
+        return mRating;
+    }
+
+    public void setRating(float rating) {
+        mRating = rating;
     }
 
 

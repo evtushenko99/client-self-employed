@@ -1,11 +1,14 @@
-package com.example.client_self_employed.presentation.model;
+package com.example.client_self_employed.presentation.Utils;
 
 import androidx.annotation.NonNull;
 
+import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
+import com.example.client_self_employed.presentation.model.ClientAppointment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,8 @@ public class ModelsConverter {
         }
         for (int i = 0; i < appointments.size(); i++) {
             Appointment appointment = appointments.get(i);
+            Calendar calendar = CheckedDateOfAppointmentsInteractor.makeCalendar(appointment);
+            // if (calendar.getTimeInMillis() > System.currentTimeMillis())
             data.add(new ClientAppointment(
                     appointment.getId(),
                     expertsId.get(i),
@@ -40,4 +45,6 @@ public class ModelsConverter {
 
         return data;
     }
+
+
 }

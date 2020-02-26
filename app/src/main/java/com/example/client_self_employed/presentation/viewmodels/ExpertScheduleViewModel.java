@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
 import com.example.client_self_employed.domain.ExpertsIteractor;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
 import com.example.client_self_employed.domain.model.Appointment;
@@ -15,10 +16,12 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class ExpertScheduleViewModel extends ViewModel {
-    private final Executor mExecutor;
-    private long mExpertId;
     private final ExpertsIteractor mExpertScheduleInteractor;
     private final IResourceWrapper mResourceWrapper;
+
+    private final Executor mExecutor;
+    private long mExpertId;
+
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private MutableLiveData<String> mExpertName = new MutableLiveData<>();
 
@@ -29,6 +32,7 @@ public class ExpertScheduleViewModel extends ViewModel {
     private IExpertScheduleCallback mScheduleStatus = new IExpertScheduleCallback() {
         @Override
         public void scheduleIsLoaded(List<Appointment> expertSchedule, String expertName) {
+            List<Appointment> expertCheckedSchedule = CheckedDateOfAppointmentsInteractor.checkData(expertSchedule);
             mExpertSchedule.postValue(expertSchedule);
             mExpertName.postValue(expertName);
             mIsLoading.postValue(false);

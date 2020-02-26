@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
 import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
@@ -48,7 +49,7 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper, ExpertScheduleDetailedAppointment expertScheduleDetailedAppointment) {
-        mExpertSchedule = expertSchedule;
+        mExpertSchedule = CheckedDateOfAppointmentsInteractor.checkData(expertSchedule);
         mResourceWrapper = resourceWrapper;
         mClickListeners = expertScheduleDetailedAppointment;
         groupAppointmentByDate(mExpertSchedule);
@@ -57,16 +58,16 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void groupAppointmentByDate(List<Appointment> expertSchedule) {
-
         mAdapterItems = new ArrayList<>();
         if (expertSchedule.size() != 0) {
             ArrayList<Appointment> timesForDay = new ArrayList<>();
 
             int day = 0;
+            int month = 0;
             for (Appointment appointment : expertSchedule) {
-
-                if (appointment.getDayOfMonth() > day) {
+                if (appointment.getMonth() > month || appointment.getDayOfMonth() > day) {
                     day = appointment.getDayOfMonth();
+                    month = appointment.getMonth();
                     timesForDay = new ArrayList<>();
                     mAdapterItems.add(ruDateFormat(appointment));
                     mAdapterItems.add(timesForDay);
@@ -130,8 +131,7 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
         Object item = mAdapterItems.get(position);
         switch (getItemViewType(position)) {
             case ITEM_VIEW_TYPE_TIME:
-                List<Appointment> appointments1 = new ArrayList<>((List<Appointment>) item);
-                ((ScheduleHolder) holder).mRecycler.setAdapter(new AdapterExpertScheduleDaysTime(appointments1, mClickListeners));
+                ((ScheduleHolder) holder).mRecycler.setAdapter(new AdapterExpertScheduleDaysTime((List<Appointment>) item, mClickListeners));
                 break;
             case ITEM_VIEW_TYPE_DATE:
                 ((DateHolder) holder).bindView((String) item);

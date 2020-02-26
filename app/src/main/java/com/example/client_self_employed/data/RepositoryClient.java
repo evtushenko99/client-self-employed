@@ -134,7 +134,7 @@ public class RepositoryClient implements IClientRepository {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        String error = "onCancelled updateClientGender: " + databaseError.getMessage();
+                        String error = "onCancelled updateAppointmentRating: " + databaseError.getMessage();
                         callback.errorWorkOnClient(error);
                         Log.d(TAG, error);
                     }

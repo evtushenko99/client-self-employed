@@ -1,31 +1,47 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
 import android.view.View;
+import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
 import com.example.client_self_employed.domain.ILoadOneAppointmentCallback;
 import com.example.client_self_employed.domain.ILoadOneExpertCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
+import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.ICallPhoneClickListener;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.ICancelAppointmentClickListener;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IWhatsAppClickListeners;
 
+import java.util.Calendar;
 import java.util.concurrent.Executor;
 
 public class DetailedAppointmentViewModel extends ViewModel {
     private final DetailedAppointmentInteractor mInteractor;
     private final Executor mExecutor;
     private final ResourceWrapper mResourceWrapper;
+
+    public MutableLiveData<String> getErrors() {
+        return mErrors;
+    }
+
+    public LiveData<String> getLiveDataErrors() {
+        return mErrors;
+    }
+
+    private final MutableLiveData<String> mErrors = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> mIsLoadingExpert = new MutableLiveData<>(false);
     private MutableLiveData<Boolean> mIsLoadingAppointment = new MutableLiveData<>(false);
@@ -41,11 +57,19 @@ public class DetailedAppointmentViewModel extends ViewModel {
     private ObservableField<String> mAppointmentDuration = new ObservableField<>();
     private ObservableField<String> mAppointmentLocation = new ObservableField<>();
     private ObservableField<String> mAppointmentStartTime = new ObservableField<>();
+    private ObservableField<Float> mAppointmentRating = new ObservableField<>();
+
     private ObservableInt mAppointmentCost = new ObservableInt();
     private ObservableField<Boolean> mAdditionalInformationAboutExpert = new ObservableField<>();
     private ObservableField<String> mMoreInformationTextView = new ObservableField<>();
+    private ObservableField<Appointment> mObservableAppointment = new ObservableField<>();
+
+    public Appointment getAppointment() {
+        return mAppointment;
+    }
 
     private Appointment mAppointment;
+
     private Expert mExpert;
 
 
@@ -57,6 +81,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
     private View.OnClickListener mViberClickListener;
     private View.OnClickListener mTelegrammClickListener;
     private View.OnClickListener mMoreInformationClickListener;
+    private RatingClickListeners mRatingClickListener;
 
 
     private ILoadOneExpertCallback mExpertCallback = new ILoadOneExpertCallback() {
@@ -80,6 +105,8 @@ public class DetailedAppointmentViewModel extends ViewModel {
             mIsLoadingAppointment.postValue(false);
             if (appointment != null) {
                 mAppointment = appointment;
+
+                mObservableAppointment.set(mAppointment);
                 bindAppointmentViews(appointment);
             }
         }
@@ -87,6 +114,13 @@ public class DetailedAppointmentViewModel extends ViewModel {
         @Override
         public void errorLoadOneAppointment(String errorLoadOneAppointment) {
 
+        }
+
+        @Override
+        public void onUpdateCallback(boolean isRatingUpdate) {
+            if (isRatingUpdate) {
+                loadDetailedInformation(mAppointment.getId(), mExpert.getId());
+            }
         }
     };
 
@@ -110,6 +144,10 @@ public class DetailedAppointmentViewModel extends ViewModel {
                 mInteractor.loadExpert(expertId, mExpertCallback));
     }
 
+    public void updateAppointmentRating(@NonNull Long appointmentId, float rating) {
+        mExecutor.execute(() -> mInteractor.updateAppointmentRating(appointmentId, rating, mAppointmentCallback));
+    }
+
     private void bindExpertViews(@NonNull Expert expert) {
         mExpertProfession.set(expert.getProfession());
         mExpertFullName.set(expert.getFullName());
@@ -126,6 +164,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mAppointmentDate.set(appointment.getStringDate());
         mAppointmentDuration.set(appointment.getSessionDuration());
         mAppointmentStartTime.set(appointment.getStringTime());
+        mAppointmentRating.set(appointment.getRating());
     }
 
     public void setCancelAppointmentClickListener(ICancelAppointmentClickListener cancelAppointmentClickListener) {
@@ -199,6 +238,71 @@ public class DetailedAppointmentViewModel extends ViewModel {
     }
 
 
+    public ObservableField<Float> getAppointmentRating() {
+        return mAppointmentRating;
+    }
+
+    public void setAppointmentRating(ObservableField<Float> appointmentRating) {
+        mAppointmentRating = appointmentRating;
+    }
+
+
+    public ObservableField<String> getMoreInformationTextView() {
+        return mMoreInformationTextView;
+    }
+
+    public void setMoreInformationTextView(String moreInformationTextView) {
+        mMoreInformationTextView.set(moreInformationTextView);
+    }
+
+
+    public RatingClickListeners getRatingClickListener() {
+        return mRatingClickListener;
+    }
+
+    public void setRatingClickListener(RatingClickListeners ratingClickListener) {
+        mRatingClickListener = ratingClickListener;
+    }
+
+
+    @BindingAdapter(value = {"RatingChanged", "GetRating", "GetAppointment", "GetError"}, requireAll = false)
+    public static void setListeners(RatingBar view, RatingClickListeners listener, float oldRating, Appointment appointment, String error) {
+        view.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (appointment != null) {
+                    Calendar calendar = CheckedDateOfAppointmentsInteractor.makeCalendar(appointment);
+                    if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+                        if (oldRating != rating) {
+                            //    error.postValue("Вы не можете оценить данную запись, так как она еще не началась");
+                            listener.onRatingClickListeners(rating);
+                        }
+                    } else {
+
+                        ratingBar.setRating(0);
+                    }
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Состояние для определения загрузки информации об эксперте
+     */
+    public MutableLiveData<Boolean> getIsLoadingExpert() {
+        return mIsLoadingExpert;
+    }
+
+    /**
+     * Состояние для определения загрузки информации об активной записи
+     *
+     * @return
+     */
+    public MutableLiveData<Boolean> getIsLoadingAppointment() {
+        return mIsLoadingAppointment;
+    }
+
     public ObservableField<String> getExpertProfession() {
         return mExpertProfession;
     }
@@ -255,30 +359,12 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mAdditionalInformationAboutExpert.set(additionalInformationAboutExpert);
     }
 
-
-    public ObservableField<String> getMoreInformationTextView() {
-        return mMoreInformationTextView;
+    public ObservableField<Appointment> getObservableAppointment() {
+        return mObservableAppointment;
     }
 
-    public void setMoreInformationTextView(String moreInformationTextView) {
-        mMoreInformationTextView.set(moreInformationTextView);
-    }
-
-
-    /**
-     * Состояние для определения загрузки информации об эксперте
-     */
-    public MutableLiveData<Boolean> getIsLoadingExpert() {
-        return mIsLoadingExpert;
-    }
-
-    /**
-     * Состояние для определения загрузки информации об активной записи
-     *
-     * @return
-     */
-    public MutableLiveData<Boolean> getIsLoadingAppointment() {
-        return mIsLoadingAppointment;
+    public void setObservableAppointment(ObservableField<Appointment> observableAppointment) {
+        mObservableAppointment = observableAppointment;
     }
 
 

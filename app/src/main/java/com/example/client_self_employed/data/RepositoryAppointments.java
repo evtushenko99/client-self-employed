@@ -25,10 +25,11 @@ import java.util.List;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class RepositoryAppointments implements IAppointmentsRepository {
-    private DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mDatabaseReferenceAppointment = mReference.child("appointments");
-    private DatabaseReference mDatabaseReferenceExpert = mReference.child("experts");
-    private DatabaseReference mDatabaseReferenceClient = mReference.child("clients");
+    private final FirebaseDatabase mReference = FirebaseDatabase.getInstance();
+    private final DatabaseReference mDatabaseReferenceAppointment = mReference.getReference().child("appointments");
+    private final DatabaseReference mDatabaseReferenceExpert = mReference.getReference().child("experts");
+    private final DatabaseReference mDatabaseReferenceClient = mReference.getReference().child("clients");
+    private final DatabaseReference mDatabaseConnection = mReference.getReference(".info/connected");
 
     public RepositoryAppointments() {
     }
@@ -66,16 +67,16 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         List<Appointment> appointments = new ArrayList<>();
-                        List<Long> epertId = new ArrayList<>();
+                        List<Long> expertId = new ArrayList<>();
                         for (DataSnapshot keyMode : dataSnapshot.getChildren()) {
-                            long expertId = keyMode.getValue(Appointment.class).getExpertId();
-                            if (!epertId.contains(expertId)) {
-                                epertId.add(expertId);
+                            long id = keyMode.getValue(Appointment.class).getExpertId();
+                            if (!expertId.contains(id)) {
+                                expertId.add(id);
                             }
                             appointments.add(keyMode.getValue(Appointment.class));
                         }
                         Collections.sort(appointments);
-                        callback.onAppointmentCallback(appointments, epertId);
+                        callback.onAppointmentCallback(appointments, expertId);
 
                     }
 
@@ -86,7 +87,32 @@ public class RepositoryAppointments implements IAppointmentsRepository {
                         Log.d(TAG, error);
                     }
                 });
+    }
 
+    @Override
+    public void updateAppointmentRating(@NonNull Long appoinmentId, float rating, ILoadOneAppointmentCallback callback) {
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID)
+                .equalTo(appoinmentId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot appoinmentSnapshot : dataSnapshot.getChildren()) {
+                            Appointment appointment = appoinmentSnapshot.getValue(Appointment.class);
+                            if (appointment != null) {
+                                appointment.setRating(rating);
+                                String appointmentId = String.valueOf(appointment.getId());
+                                mDatabaseReferenceAppointment.child(appointmentId)
+                                        .setValue(appointment)
+                                        .addOnCompleteListener(task -> callback.onUpdateCallback(true));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @Override

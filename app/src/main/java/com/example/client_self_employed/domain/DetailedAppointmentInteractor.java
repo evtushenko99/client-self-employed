@@ -19,4 +19,8 @@ public class DetailedAppointmentInteractor {
     public void loadAppointment(long appointmentId, ILoadOneAppointmentCallback oneAppointmentCallback) {
         mAppointmentsRepository.loadOneAppointment(appointmentId, oneAppointmentCallback);
     }
+
+    public void updateAppointmentRating(long appointmentId, float rating, ILoadOneAppointmentCallback appointmentsCallback) {
+        mAppointmentsRepository.updateAppointmentRating(appointmentId, rating, appointmentsCallback);
+    }
 }

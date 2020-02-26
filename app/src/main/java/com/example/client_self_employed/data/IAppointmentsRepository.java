@@ -23,7 +23,7 @@ public interface IAppointmentsRepository {
     /**
      * Загрузка информации об одной записи клиента
      */
-
+    void updateAppointmentRating(@NonNull Long appoinmentId, float rating, ILoadOneAppointmentCallback callback);
     void loadOneAppointment(@NonNull Long appoinmentId, ILoadOneAppointmentCallback callback);
 
     void uploadExpert(Expert expert);

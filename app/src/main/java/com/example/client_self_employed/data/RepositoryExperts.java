@@ -31,14 +31,14 @@ import java.util.List;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class RepositoryExperts implements IExpertsRepository {
-
-    private DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mDatabaseReferenceExpert = mReference.child("experts");
+    private final FirebaseDatabase mReference = FirebaseDatabase.getInstance();
+    private final DatabaseReference mDatabaseReferenceAppointment = mReference.getReference().child("appointments");
+    private final DatabaseReference mDatabaseReferenceExpert = mReference.getReference().child("experts");
+    private final DatabaseReference mDatabaseConnection = mReference.getReference(".info/connected");
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
-    private DatabaseReference mDatabaseReferenceAppointment = mReference.child("appointments");
-    private List<Appointment> mAppointments = new ArrayList<>();
 
-    private void loadExpertName(long expertId, IExpertScheduleCallback expertScheduleStatus) {
+
+    private void loadExpertName(long expertId, List<Appointment> appointments, IExpertScheduleCallback expertScheduleStatus) {
         mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)
                 .equalTo(expertId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -49,7 +49,7 @@ public class RepositoryExperts implements IExpertsRepository {
                             Expert expert = keyExpert.getValue(Expert.class);
                             name = expert.getFullName();
                         }
-                        expertScheduleStatus.scheduleIsLoaded(mAppointments, name);
+                        expertScheduleStatus.scheduleIsLoaded(appointments, name);
                     }
 
                     @Override
@@ -64,29 +64,32 @@ public class RepositoryExperts implements IExpertsRepository {
     @Override
     public void loadAllExperts(IExpertsCallBack callBack) {
         List<Expert> experts = new ArrayList<>();
-        mDatabaseReferenceExpert.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot expertKey : dataSnapshot.getChildren()) {
-                    Expert expert = expertKey.getValue(Expert.class);
-                    experts.add(expert);
-                }
-                loadExpertsPhoto(experts, callBack);
-            }
+        mDatabaseReferenceExpert
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot expertKey : dataSnapshot.getChildren()) {
+                            Expert expert = expertKey.getValue(Expert.class);
+                            experts.add(expert);
+                        }
+                        loadExpertsPhoto(experts, callBack);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                String error = "onCancelled loadAllExperts: " + databaseError.getMessage();
-                callBack.errorLoadingExperts(error);
-                Log.d(TAG, error);
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        String error = "onCancelled loadAllExperts: " + databaseError.getMessage();
+                        callBack.errorLoadingExperts(error);
+                        Log.d(TAG, error);
+                    }
+                });
     }
 
+
     @Override
-    public void loadExpertsNameForActiveAppointments(List<Appointment> activeAppointment, List<Long> expertsId, IClientAppointmentCallback dataStatus) {
+    public void loadExpertsNameForActiveAppointments(List<Appointment> activeAppointment, List<Long> expertsId, IClientAppointmentCallback callback) {
+
         if (expertsId.size() == 0) {
-            dataStatus.clientsAppointmentsIsLoaded(activeAppointment, new ArrayList<>());
+            callback.clientsAppointmentsIsLoaded(activeAppointment, new ArrayList<>());
         } else {
             List<Expert> experts = new ArrayList<>();
             for (Long expertId : expertsId) {
@@ -94,6 +97,8 @@ public class RepositoryExperts implements IExpertsRepository {
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                long count = dataSnapshot.getChildrenCount();
+
                                 for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                                     Expert expert = keyExpert.getValue(Expert.class);
                                     if (!experts.contains(expert)) {
@@ -101,22 +106,21 @@ public class RepositoryExperts implements IExpertsRepository {
                                     }
                                 }
                                 if (experts.size() == expertsId.size()) {
-                                    dataStatus.clientsAppointmentsIsLoaded(activeAppointment, experts);
-                                } else {
-                                    dataStatus.errorOnLoadingClientExperts("not enough experts loaded");
+                                    callback.clientsAppointmentsIsLoaded(activeAppointment, experts);
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 String error = "onCancelled loadExpertsNameForActiveAppointments = [" + databaseError.getMessage() + "]";
-                                dataStatus.errorOnLoadingClientExperts(error);
+                                callback.errorOnLoadingClientExperts(error);
                                 Log.d(TAG, error);
                             }
                         });
 
             }
         }
+
 
     }
 
@@ -127,13 +131,13 @@ public class RepositoryExperts implements IExpertsRepository {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        mAppointments.clear();
+                        List<Appointment> appointments = new ArrayList<>();
                         for (DataSnapshot keyMode : dataSnapshot.getChildren()) {
                             Appointment appointment = keyMode.getValue(Appointment.class);
-                            mAppointments.add(appointment);
+                            appointments.add(appointment);
                         }
-                        Collections.sort(mAppointments);
-                        loadExpertName(expertId, expertScheduleCallback);
+                        Collections.sort(appointments);
+                        loadExpertName(expertId, appointments, expertScheduleCallback);
                     }
 
                     @Override

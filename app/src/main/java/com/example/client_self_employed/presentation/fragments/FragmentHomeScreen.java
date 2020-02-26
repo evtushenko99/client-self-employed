@@ -41,7 +41,6 @@ public class FragmentHomeScreen extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -93,7 +92,9 @@ public class FragmentHomeScreen extends Fragment {
                         .commit(),
                 getResources()
         ));
-        mViewModel.getErrors().observe(getViewLifecycleOwner(), error -> Toast.makeText(requireActivity(), error, Toast.LENGTH_LONG).show());
+        mViewModel.getErrors().observe(getViewLifecycleOwner(), error -> {
+            CustomToast.makeToast(requireActivity(), error, view);
+        });
     }
 
 

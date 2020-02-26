@@ -8,4 +8,6 @@ public interface IAppointmentsCallback {
     void onAppointmentCallback(List<Appointment> appointments, List<Long> expertsId);
 
     void onErrorLoadingActiveAppointments(String errorLoadingActiveAppointments);
+
+
 }

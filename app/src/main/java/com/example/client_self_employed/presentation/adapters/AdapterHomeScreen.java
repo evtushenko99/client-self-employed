@@ -77,7 +77,6 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
         switch (viewType) {
             case RowType.APPOINTMENT_ROW_TYPE: {
                 ClientActiveAppointmentsBinding appointmentsBinding = DataBindingUtil.inflate(inflater, R.layout.item_active_appointments, parent, false);
-                // View viewAppointment = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_active_appointments, parent, false);
                 return new AppointmentViewHolder(appointmentsBinding);
             }
             case RowType.EXPERT_PHOTO_ROW_TYPE: {

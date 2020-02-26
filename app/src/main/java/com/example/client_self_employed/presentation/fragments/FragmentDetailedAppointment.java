@@ -25,6 +25,7 @@ import com.example.client_self_employed.databinding.FragmentDetailedAppointmentB
 import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
+import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
@@ -162,12 +163,21 @@ public class FragmentDetailedAppointment extends Fragment {
                 mDetailedAppointmentViewModel.setMoreInformationTextView(getString(R.string.fragment_detailed_information_inf));
             }
         });
+        mDetailedAppointmentViewModel.setRatingClickListener(new RatingClickListeners() {
+            @Override
+            public void onRatingClickListeners(float rating) {
+                mDetailedAppointmentViewModel.updateAppointmentRating(mAppointmentId, rating);
+            }
+        });
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mDetailedAppointmentViewModel.getLiveDataErrors().observe(getViewLifecycleOwner(), error -> {
+            CustomToast.makeToast(requireActivity(), error, view);
+        });
     }
 
     @Override

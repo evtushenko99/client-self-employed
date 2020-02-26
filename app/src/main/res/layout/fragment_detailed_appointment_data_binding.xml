@@ -397,6 +397,56 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_rate_appointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="@id/cardView_appointment_information"
+                app:layout_constraintStart_toStartOf="@id/cardView_appointment_information"
+                app:layout_constraintTop_toBottomOf="@id/cardView_appointment_information">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+
+                        android:id="@+id/textView2"
+                        style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/text_vew_rating_bar"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RatingBar
+                        android:id="@+id/fragment_detailed_appointment_ration_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:numStars="5"
+                        android:rating="@{ViewModel.appointmentRating}"
+                        app:GetAppointment="@{ViewModel.appointment}"
+                        app:GetError="@{ViewModel.errors}"
+                        app:GetRating="@{ViewModel.appointmentRating}"
+                        app:RatingChanged="@{ViewModel.ratingClickListener}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2"
+                        app:layout_constraintVertical_bias="1.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancel_appointment"
                 style="@style/MyButton"
@@ -426,8 +476,8 @@
                 android:text="Добавить уведовление"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/cardView_appointment_information"
-                app:layout_constraintTop_toBottomOf="@+id/cardView_appointment_information" />
+                app:layout_constraintStart_toStartOf="@+id/cardView_rate_appointment"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_rate_appointment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>
