@@ -402,6 +402,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:visibility="@{ViewModel.timeCheck ? View.VISIBLE: View.GONE  }"
                 app:cardCornerRadius="@dimen/card_corner_radius_small"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="@id/cardView_appointment_information"
@@ -434,9 +435,6 @@
                         android:layout_marginBottom="8dp"
                         android:numStars="5"
                         android:rating="@{ViewModel.appointmentRating}"
-                        app:GetAppointment="@{ViewModel.appointment}"
-                        app:GetError="@{ViewModel.errors}"
-                        app:GetRating="@{ViewModel.appointmentRating}"
                         app:RatingChanged="@{ViewModel.ratingClickListener}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -447,14 +445,15 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancel_appointment"
                 style="@style/MyButton"
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:elevation="@dimen/elevation_medium"
                 android:onClick="@{ViewModel.cancelAppointmentClickListener}"
                 android:padding="@dimen/padding_high"
                 android:text="@string/cancel_appointment"
@@ -467,17 +466,19 @@
                 android:id="@+id/fragment_detailed_appointment_notification"
                 style="@style/MyButton"
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:onClick="@{ViewModel.addNotificationClickListener}"
-                android:padding="@dimen/padding_small"
+                android:drawableEnd="@{ViewModel.appointmentNotification}"
+                android:elevation="@dimen/elevation_medium"
+                android:onClick="@{ViewModel.notificationClickListener}"
 
-                android:text="Добавить уведовление"
+                android:padding="@dimen/padding_small"
+                android:text="@{ViewModel.appointmentNotification}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/cardView_rate_appointment"
-                app:layout_constraintTop_toBottomOf="@+id/cardView_rate_appointment" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView_rate_appointment"
+                tools:ignore="PrivateResource" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

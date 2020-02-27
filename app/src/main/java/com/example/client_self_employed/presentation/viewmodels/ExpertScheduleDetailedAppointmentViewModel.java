@@ -7,13 +7,8 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.ViewModel;
 
 import com.example.client_self_employed.domain.model.Appointment;
-import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
 
-import java.util.concurrent.Executor;
-
-public class ExpertSheduleDetailedAppointmentViewModel extends ViewModel {
-    private final Executor mExecutor;
-    private final IResourceWrapper mResourceWrapper;
+public class ExpertScheduleDetailedAppointmentViewModel extends ViewModel {
     private ObservableField<String> mAppointmentServiceName = new ObservableField<>();
     private ObservableField<String> mAppointmentStartTime = new ObservableField<>();
     private ObservableField<String> mAppointmentDuration = new ObservableField<>();
@@ -21,11 +16,6 @@ public class ExpertSheduleDetailedAppointmentViewModel extends ViewModel {
     private ObservableField<String> mAppointmentLocation = new ObservableField<>();
     private ObservableField<String> mAppointmentDate = new ObservableField<>();
     private View.OnClickListener mOnNewAppointmentClickListener;
-
-    public ExpertSheduleDetailedAppointmentViewModel(Executor executor, IResourceWrapper resourceWrapper) {
-        mExecutor = executor;
-        mResourceWrapper = resourceWrapper;
-    }
 
     public void setDetailedAppointment(Appointment appointment) {
         mAppointmentServiceName.set(appointment.getServiceName());

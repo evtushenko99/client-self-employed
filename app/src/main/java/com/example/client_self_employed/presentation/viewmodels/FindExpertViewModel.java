@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.client_self_employed.domain.ExpertsIteractor;
+import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.IExpertsCallBack;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class FindExpertViewModel extends ViewModel {
-    private final ExpertsIteractor mExpertsIteractor;
+    private final ExpertInteractor mExpertInteractor;
     private final Executor mExecutor;
     private final IResourceWrapper mResourceWrapper;
     private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
@@ -38,9 +38,9 @@ public class FindExpertViewModel extends ViewModel {
         }
     };
 
-    public FindExpertViewModel(ExpertsIteractor appointmentsIteractor, Executor executor, ResourceWrapper resourceWrapper) {
+    public FindExpertViewModel(ExpertInteractor appointmentsIteractor, Executor executor, ResourceWrapper resourceWrapper) {
         mExecutor = executor;
-        mExpertsIteractor = appointmentsIteractor;
+        mExpertInteractor = appointmentsIteractor;
         mResourceWrapper = resourceWrapper;
         mIsLoading.setValue(false);
     }
@@ -49,7 +49,7 @@ public class FindExpertViewModel extends ViewModel {
         mIsLoading.setValue(true);
 
         mExecutor.execute(() -> {
-            mExpertsIteractor.loadAllExperts(mExpertCallBack);
+            mExpertInteractor.loadAllExperts(mExpertCallBack);
         });
     }
 
@@ -61,7 +61,7 @@ public class FindExpertViewModel extends ViewModel {
     public void setSearchQuery(String searchQuery) {
         if (!searchQuery.equals("")) {
             mExecutor.execute(() -> {
-                List<Expert> newExpets = mExpertsIteractor.findExpert(mExperts, searchQuery);
+                List<Expert> newExpets = mExpertInteractor.findExpert(mExperts, searchQuery);
                 mLiveData.postValue(newExpets);
 
             });

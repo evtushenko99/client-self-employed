@@ -21,6 +21,16 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     private long mClientId;
     private float mRating;
 
+    public boolean getNotification() {
+        return mNotification;
+    }
+
+    public void setNotification(boolean notification) {
+        mNotification = notification;
+    }
+
+    private boolean mNotification;//Есть ли уведомление
+
     public Appointment() {
 
     }
@@ -40,6 +50,7 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         mExpertId = expertId;
         mClientId = clientId;
         mRating = rating;
+        mNotification = false;
     }
 
     protected Appointment(Parcel in) {

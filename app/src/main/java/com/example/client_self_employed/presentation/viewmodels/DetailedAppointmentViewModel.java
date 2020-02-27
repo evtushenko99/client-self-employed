@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
@@ -28,20 +29,12 @@ import com.example.client_self_employed.presentation.fragments.fragmentdetailedc
 import java.util.Calendar;
 import java.util.concurrent.Executor;
 
+
 public class DetailedAppointmentViewModel extends ViewModel {
     private final DetailedAppointmentInteractor mInteractor;
     private final Executor mExecutor;
     private final ResourceWrapper mResourceWrapper;
-
-    public MutableLiveData<String> getErrors() {
-        return mErrors;
-    }
-
-    public LiveData<String> getLiveDataErrors() {
-        return mErrors;
-    }
-
-    private final MutableLiveData<String> mErrors = new MutableLiveData<>();
+    private final MutableLiveData<String> mMessage = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> mIsLoadingExpert = new MutableLiveData<>(false);
     private MutableLiveData<Boolean> mIsLoadingAppointment = new MutableLiveData<>(false);
@@ -57,30 +50,43 @@ public class DetailedAppointmentViewModel extends ViewModel {
     private ObservableField<String> mAppointmentDuration = new ObservableField<>();
     private ObservableField<String> mAppointmentLocation = new ObservableField<>();
     private ObservableField<String> mAppointmentStartTime = new ObservableField<>();
+
     private ObservableField<Float> mAppointmentRating = new ObservableField<>();
+
+    public ObservableField<Boolean> getTimeCheck() {
+        return mTimeCheck;
+    }
+
+    private ObservableField<Boolean> mTimeCheck = new ObservableField<>(false);
+
+    public ObservableField<Boolean> getAppointmentNotification() {
+        return mAppointmentNotification;
+    }
+
+    private ObservableField<Boolean> mAppointmentNotification = new ObservableField<>();
+
 
     private ObservableInt mAppointmentCost = new ObservableInt();
     private ObservableField<Boolean> mAdditionalInformationAboutExpert = new ObservableField<>();
     private ObservableField<String> mMoreInformationTextView = new ObservableField<>();
     private ObservableField<Appointment> mObservableAppointment = new ObservableField<>();
-
-    public Appointment getAppointment() {
-        return mAppointment;
-    }
-
+    //Запись, информация о которой отображается на экране FragmentDetailedAppointment
     private Appointment mAppointment;
-
+    //Эксперт, информация о котором отображается на экране FragmentDetailedAppointment
     private Expert mExpert;
-
-
+    //Слушатель для отмены активной записи
     private View.OnClickListener mCancelAppointmentClickListener;
-    private View.OnClickListener mAddNotificationClickListener;
-
+    //Слушатель для добавления или удаления уведомления
+    private View.OnClickListener mNotificationClickListener;
+    //слушатели, которые отвечают за связь с экспертом через сторонние приложения
     private View.OnClickListener mCallPhoneClickListener;
     private View.OnClickListener mWhatsAppClickListener;
     private View.OnClickListener mViberClickListener;
     private View.OnClickListener mTelegrammClickListener;
+    // Слушаель, который за предоставление дополнительной информации об эксперте
     private View.OnClickListener mMoreInformationClickListener;
+    // Слушатель, который отвечает за оценку оказанной услуги клиенту,
+    // появляется только у записи, которая началась или уже прошла
     private RatingClickListeners mRatingClickListener;
 
 
@@ -124,7 +130,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
         }
     };
 
-    public DetailedAppointmentViewModel(
+    DetailedAppointmentViewModel(
             @NonNull DetailedAppointmentInteractor interactor,
             @NonNull Executor executor,
             @NonNull ResourceWrapper resourceWrapper) {
@@ -148,6 +154,11 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mExecutor.execute(() -> mInteractor.updateAppointmentRating(appointmentId, rating, mAppointmentCallback));
     }
 
+    public void removeNotification(@NonNull Long appointmentId) {
+        updateAppointmentNotification();
+        // updateAppointmentNotification();
+    }
+
     private void bindExpertViews(@NonNull Expert expert) {
         mExpertProfession.set(expert.getProfession());
         mExpertFullName.set(expert.getFullName());
@@ -165,6 +176,29 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mAppointmentDuration.set(appointment.getSessionDuration());
         mAppointmentStartTime.set(appointment.getStringTime());
         mAppointmentRating.set(appointment.getRating());
+        mAppointmentNotification.set(appointment.getNotification());
+        Calendar calendar = CheckedDateOfAppointmentsInteractor.makeCalendar(appointment);
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            mTimeCheck.set(true);
+        } else {
+            mTimeCheck.set(false);
+        }
+    }
+
+    @BindingAdapter("android:text")
+    public static void setText(AppCompatButton view, boolean notification) {
+        if (notification) {
+            view.setText(R.string.fragment_detailed_appointment_delete_notification);
+        } else {
+            view.setText(R.string.fragment_detailed_appointment_add_notification);
+        }
+    }
+
+    @BindingAdapter("android:drawableEnd")
+    public static void setDrawable(AppCompatButton view, boolean notification) {
+        if (notification) {
+            view.setCompoundDrawables(null, null, view.getResources().getDrawable(R.drawable.ic_clear_black_24dp), null);
+        }
     }
 
     public void setCancelAppointmentClickListener(ICancelAppointmentClickListener cancelAppointmentClickListener) {
@@ -180,12 +214,27 @@ public class DetailedAppointmentViewModel extends ViewModel {
     }
 
 
-    public void setAddNotificationClickListener(IAddNotificationClickListener addNotificationClickListener) {
-        mAddNotificationClickListener = v -> {
-            if (mAppointment != null) {
-                addNotificationClickListener.onAddNotificationClickListener(mAppointment.getServiceName(), mAppointment.getStringTime(), mAppointment.getId());
+    public void setNotificationClickListener(IAddNotificationClickListener addNotificationClickListener) {
+        mNotificationClickListener = v -> {
+            if (mAppointmentNotification.get()) {
+                addNotificationClickListener.onRemoveNotificationClickListenrs(mAppointment.getId());
+            } else {
+                addNotificationClickListener.onAddNotificationClickListener(mAppointment.getServiceName(), mAppointment.getStringTime(), mAppointment.getId(), mExpert.getId());
             }
         };
+    }
+
+    /**
+     * Метод, обновляющий значение поля AppointmentNotificatioн на сервере, если была нажата
+     * добавить или удалить уведомление (обновление которой приводит к изменению текста кнопки)
+     */
+    public void updateAppointmentNotification() {
+        mExecutor.execute(() -> {
+            if (mAppointment != null) {
+                mAppointmentNotification.set(!mAppointmentNotification.get());
+                mInteractor.updateAppointmentNotification(mAppointment.getId(), mAppointmentNotification.get(), mAppointmentCallback);
+            }
+        });
     }
 
     public View.OnClickListener getCallPhoneClickListener() {
@@ -233,8 +282,8 @@ public class DetailedAppointmentViewModel extends ViewModel {
     }
 
 
-    public View.OnClickListener getAddNotificationClickListener() {
-        return mAddNotificationClickListener;
+    public View.OnClickListener getNotificationClickListener() {
+        return mNotificationClickListener;
     }
 
 
@@ -246,6 +295,30 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mAppointmentRating = appointmentRating;
     }
 
+  /*  @BindingAdapter("android:rating")
+        public static void setRating(RatingBar view, float rating) {
+            if (view.getRating() != rating) {
+                view.setRating(rating);
+            }
+        }
+        @BindingAdapter(value = {"android:onRatingChanged", "android:ratingAttrChanged"},
+                requireAll = false)
+        public static void setListeners(RatingBar view, final OnRatingBarChangeListener listener,
+        final InverseBindingListener ratingChange) {
+            if (ratingChange == null) {
+                view.setOnRatingBarChangeListener(listener);
+            } else {
+                view.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        if (listener != null) {
+                            listener.onRatingChanged(ratingBar, rating, fromUser);
+                        }
+                        ratingChange.onChange();
+                    }
+                });
+            }
+    }*/
 
     public ObservableField<String> getMoreInformationTextView() {
         return mMoreInformationTextView;
@@ -265,23 +338,12 @@ public class DetailedAppointmentViewModel extends ViewModel {
     }
 
 
-    @BindingAdapter(value = {"RatingChanged", "GetRating", "GetAppointment", "GetError"}, requireAll = false)
-    public static void setListeners(RatingBar view, RatingClickListeners listener, float oldRating, Appointment appointment, String error) {
-        view.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (appointment != null) {
-                    Calendar calendar = CheckedDateOfAppointmentsInteractor.makeCalendar(appointment);
-                    if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
-                        if (oldRating != rating) {
-                            //    error.postValue("Вы не можете оценить данную запись, так как она еще не началась");
-                            listener.onRatingClickListeners(rating);
-                        }
-                    } else {
-
-                        ratingBar.setRating(0);
-                    }
-                }
+    @BindingAdapter(value = {"RatingChanged"}, requireAll = false)
+    public static void setListeners(RatingBar view, RatingClickListeners listener) {
+        view.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (view.getRating() != rating) {
+                //    error.postValue("Вы не можете оценить данную запись, так как она еще не началась");
+                listener.onRatingClickListeners(rating);
             }
         });
 
@@ -365,6 +427,14 @@ public class DetailedAppointmentViewModel extends ViewModel {
 
     public void setObservableAppointment(ObservableField<Appointment> observableAppointment) {
         mObservableAppointment = observableAppointment;
+    }
+
+    public Appointment getAppointment() {
+        return mAppointment;
+    }
+
+    public LiveData<String> getMessage() {
+        return mMessage;
     }
 
 

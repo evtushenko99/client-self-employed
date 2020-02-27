@@ -6,31 +6,40 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.client_self_employed.data.IExpertsRepository;
-import com.example.client_self_employed.data.RepositoryExperts;
-import com.example.client_self_employed.domain.ExpertsIteractor;
+import com.example.client_self_employed.SelfEmployedApp;
+import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ExpertScheduleViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private final Context mApplicationContext;
+import javax.inject.Inject;
 
-    public ExpertScheduleViewModelFactory(@NonNull Context applicationContext) {
-        mApplicationContext = applicationContext.getApplicationContext();
+public class ExpertScheduleViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+    private final Context mContext;
+
+    public ExpertScheduleViewModelFactory(@NonNull Context context) {
+        mContext = context.getApplicationContext();
     }
+
+
+    @Inject
+    ResourceWrapper resourceWrapper;
+    @Inject
+    ExpertInteractor expertInteractor;
+
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (ExpertScheduleViewModel.class.equals(modelClass)) {
+            ((SelfEmployedApp) mContext).getDaggerComponent().injectExpertScheduleFactory(this);
             Executor executor = Executors.newFixedThreadPool(10);
-            ResourceWrapper resourceWrapper = new ResourceWrapper(mApplicationContext.getResources());
-            IExpertsRepository expertRepository = new RepositoryExperts();
-            ExpertsIteractor expertScheduleInteractor = new ExpertsIteractor(expertRepository);
+            // ResourceWrapper resourceWrapper = new ResourceWrapper(mContext.getResources());
+            // IExpertRepository expertRepository = new RepositoryExpert(resourceWrapper);
+            // ExpertInteractor expertInteractor = new ExpertInteractor(expertRepository);
             return (T) new ExpertScheduleViewModel(
-                    expertScheduleInteractor,
+                    expertInteractor,
                     executor,
                     resourceWrapper);
         } else {

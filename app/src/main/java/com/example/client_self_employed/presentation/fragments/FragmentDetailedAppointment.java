@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 
 import com.example.client_self_employed.R;
@@ -26,6 +28,7 @@ import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
 import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
+import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
@@ -49,13 +52,18 @@ public class FragmentDetailedAppointment extends Fragment {
     private long mAppointmentId;
     private int mPosition;
 
+    public FragmentDetailedAppointment(long appointmentId, long expertId) {
+        mExpertId = expertId;
+        mAppointmentId = appointmentId;
+    }
+
     public static FragmentDetailedAppointment newInstance(long appointmentId, long expertId, int position) {
 
         Bundle args = new Bundle();
         args.putLong(APPOINTMENT_ID, appointmentId);
         args.putLong(EXPERT_ID, expertId);
         args.putInt(POSITION, position);
-        FragmentDetailedAppointment fragment = new FragmentDetailedAppointment();
+        FragmentDetailedAppointment fragment = new FragmentDetailedAppointment(appointmentId, expertId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,12 +71,10 @@ public class FragmentDetailedAppointment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mExpertId = this.getArguments() != null ? this.getArguments().getLong(EXPERT_ID) : 0;
-        mAppointmentId = this.getArguments() != null ? this.getArguments().getLong(APPOINTMENT_ID) : 0;
+
         if (this.getArguments() != null) {
             mPosition = this.getArguments().getInt(POSITION);
         }
-
         FragmentDetailedAppointmentBinding binding = FragmentDetailedAppointmentBinding.inflate(inflater, container, false);
         mDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), new DetailedAppointmentViewModelFactory(requireActivity()))
                 .get(DetailedAppointmentViewModel.class);
@@ -76,21 +82,37 @@ public class FragmentDetailedAppointment extends Fragment {
         setClickListeners();
 
         binding.setViewModel(mDetailedAppointmentViewModel);
+
         return binding.getRoot();
 
 
     }
 
     private void setClickListeners() {
-        mDetailedAppointmentViewModel.setAddNotificationClickListener((serviceName, startTime, appointmentId) -> {
-            int secondsBeforAlert = 10;
-            long current = System.currentTimeMillis();
+        mDetailedAppointmentViewModel.setNotificationClickListener(new IAddNotificationClickListener() {
+            @Override
+            public void onAddNotificationClickListener(String serviceName, String startTime, long appointmentId, long expertId) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+                boolean isActivated = sharedPreferences.getBoolean(getString(R.string.preferences_enable_notifications_switch_key), false);
+                if (isActivated) {
+                    int secondsBeforAlert = 10;
+                    long current = System.currentTimeMillis();
+                    mDetailedAppointmentViewModel.updateAppointmentNotification();
+                    Data data = createWorkInputData(serviceName, startTime, appointmentId, expertId);
+                    NotificationHandler.schedulerReminder(secondsBeforAlert, data, String.valueOf(appointmentId));
+                } else {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_host_appointments_with_experts, FragmentPreferences.newInstance())
+                            .commit();
+                }
+            }
 
-            // long alertTime = getAlertTime(secondsBeforAlert);
-
-            Data data = createWorkInputData(serviceName, startTime, (int) appointmentId);
-            NotificationHandler.schedulerReminder(secondsBeforAlert, data, String.valueOf(appointmentId));
-
+            @Override
+            public void onRemoveNotificationClickListenrs(long appointmentId) {
+                mDetailedAppointmentViewModel.updateAppointmentNotification();
+                NotificationHandler.cancelReminder(String.valueOf(appointmentId));
+            }
         });
 
         mDetailedAppointmentViewModel.setCancelAppointmentClickListener(appointmentId -> {
@@ -175,7 +197,7 @@ public class FragmentDetailedAppointment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mDetailedAppointmentViewModel.getLiveDataErrors().observe(getViewLifecycleOwner(), error -> {
+        mDetailedAppointmentViewModel.getMessage().observe(getViewLifecycleOwner(), error -> {
             CustomToast.makeToast(requireActivity(), error, view);
         });
     }
@@ -187,11 +209,12 @@ public class FragmentDetailedAppointment extends Fragment {
         super.onStart();
     }
 
-    private Data createWorkInputData(String title, String text, int id) {
+    private Data createWorkInputData(String title, String text, long id, long expertId) {
         return new Data.Builder()
                 .putString(Constants.EXTRA_TITLE, title)
                 .putString(Constants.EXTRA_TEXT, text)
-                .putInt(Constants.EXTRA_ID, id)
+                .putLong(Constants.EXTRA_EXPERT_ID, expertId)
+                .putLong(Constants.EXTRA_APPOINTMENT_ID, id)
                 .build();
     }
 

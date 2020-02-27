@@ -11,7 +11,7 @@ import com.example.client_self_employed.domain.model.Appointment;
 
 import java.util.List;
 
-public interface IExpertsRepository {
+public interface IExpertRepository {
     void loadAllExperts(IExpertsCallBack callBack);
 
     /**

@@ -6,32 +6,37 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.client_self_employed.data.IAppointmentsRepository;
-import com.example.client_self_employed.data.IExpertsRepository;
-import com.example.client_self_employed.data.RepositoryAppointments;
-import com.example.client_self_employed.data.RepositoryExperts;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class DetailedAppointmentViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private final Context mApplicationContext;
+import javax.inject.Inject;
 
-    public DetailedAppointmentViewModelFactory(@NonNull Context applicationContext) {
-        mApplicationContext = applicationContext.getApplicationContext();
+public class DetailedAppointmentViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+    private final Context mContext;
+
+    public DetailedAppointmentViewModelFactory(@NonNull Context context) {
+        mContext = context.getApplicationContext();
     }
+
+    @Inject
+    DetailedAppointmentInteractor detailedAppointmentInteractor;
+    @Inject
+    ResourceWrapper resourceWrapper;
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (DetailedAppointmentViewModel.class.equals(modelClass)) {
             Executor executor = Executors.newFixedThreadPool(10);
-            ResourceWrapper resourceWrapper = new ResourceWrapper(mApplicationContext.getResources());
-            IExpertsRepository expertRepository = new RepositoryExperts();
-            IAppointmentsRepository appointmentsRepository = new RepositoryAppointments();
-            DetailedAppointmentInteractor detailedAppointmentInteractor = new DetailedAppointmentInteractor(appointmentsRepository, expertRepository);
+            ((SelfEmployedApp) mContext).getDaggerComponent().injectDetailedAppointmentFactory(this);
+            // ResourceWrapper resourceWrapper = new ResourceWrapper(mContext.getResources());
+            // IExpertRepository expertRepository = new RepositoryExpert(resourceWrapper);
+            // IAppointmentRepository appointmentsRepository = new RepositoryAppointment(resourceWrapper);
+            // DetailedAppointmentInteractor detailedAppointmentInteractor = new DetailedAppointmentInteractor(appointmentsRepository, expertRepository);
 
             return (T) new DetailedAppointmentViewModel(
                     detailedAppointmentInteractor,

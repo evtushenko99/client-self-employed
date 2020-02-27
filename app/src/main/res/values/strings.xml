@@ -57,6 +57,8 @@
     <string name="dialog_fragment_change_full_name_title">Изменение ФИО</string>
     <string name="toast_message">Включите интернет соединение для корректной работы приложения</string>
     <string name="text_vew_rating_bar">Оцените услугу</string>
+    <string name="fragment_detailed_appointment_add_notification">Добавить уведомление</string>
+    <string name="fragment_detailed_appointment_delete_notification">Убрать уведомление</string>
 
     <string-array name="professions">
         <item>Тренер по фигурному катанию</item>

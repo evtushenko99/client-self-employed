@@ -14,10 +14,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.databinding.ExpertScheduleDetailedAppointmentBinding;
 import com.example.client_self_employed.domain.model.Appointment;
+import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleDetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
-import com.example.client_self_employed.presentation.viewmodels.ExpertSheduleDetailedAppointmentViewModel;
-import com.example.client_self_employed.presentation.viewmodels.ExpertSheduleDetailedAppointmentViewModelFactory;
 
 public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
     public static final String DETAILED_APPOINTMENT = "DETAILED APPOINTMENT";
@@ -25,7 +24,7 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
     private Appointment mAppointment;
 
     private ExpertScheduleViewModel mExpertViewModel;
-    private ExpertSheduleDetailedAppointmentViewModel mExpertDetailedAppointmentViewModel;
+    private ExpertScheduleDetailedAppointmentViewModel mExpertDetailedAppointmentViewModel;
 
     private long mClientId;
 
@@ -62,8 +61,8 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
 
         mExpertViewModel = ViewModelProviders.of(getActivity(), new ExpertScheduleViewModelFactory(getActivity()))
                 .get(ExpertScheduleViewModel.class);
-        mExpertDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), new ExpertSheduleDetailedAppointmentViewModelFactory(requireContext()))
-                .get(ExpertSheduleDetailedAppointmentViewModel.class);
+        mExpertDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity())
+                .get(ExpertScheduleDetailedAppointmentViewModel.class);
         setDetailedAppointmentViewModel();
 
         ExpertScheduleDetailedAppointmentBinding binding = ExpertScheduleDetailedAppointmentBinding.inflate(inflater, container, false);

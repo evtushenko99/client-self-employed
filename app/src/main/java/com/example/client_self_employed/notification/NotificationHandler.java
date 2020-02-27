@@ -58,15 +58,16 @@ public class NotificationHandler extends Worker {
         String title = data.getString(Constants.EXTRA_TITLE);
         String text = data.getString(Constants.EXTRA_TEXT);
         String uri = data.getString(Constants.EXTRA_EXPERT_PHOTO);
-        int id = data.getInt(Constants.EXTRA_ID, 1);
+        long id = data.getLong(Constants.EXTRA_APPOINTMENT_ID, 1);
+        long expertId = data.getLong(Constants.EXTRA_EXPERT_ID, 1);
        /* Intent intent = new Intent(mContext, NotificationService.class);
           mContext.startService(intent);*/
 
-        createNotification(title, text, id, null);
+        createNotification(title, text, id, expertId, null);
         return Result.success();
     }
 
-    private void createNotification(String title, String text, int id, String uri) {
+    private void createNotification(String title, String text, long id, long expertId, String uri) {
         // NotificationService notificationService = new NotificationService(title, text,id);
         // Intent intent = new Intent(mContext, NotificationService.class);
         //  mContext.startService(intent);
@@ -78,9 +79,11 @@ public class NotificationHandler extends Worker {
 
 
         Intent intent = new Intent(mContext, ActivityActiveAppointments.class);
-        intent.putExtra(Constants.EXTRA_ID, id);
+        intent.putExtra(Constants.OPEN_DETAILED_FRAGMENT, "detailed fragment");
+        intent.putExtra(Constants.EXTRA_APPOINTMENT_ID, id);
+        intent.putExtra(Constants.EXTRA_EXPERT_ID, expertId);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
@@ -88,11 +91,12 @@ public class NotificationHandler extends Worker {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_launcher_foreground);
 
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
-        notificationManager.notify(id, notification.build());
+        notificationManager.notify((int) id, notification.build());
 
     }
 

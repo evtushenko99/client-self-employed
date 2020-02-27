@@ -1,13 +1,13 @@
 package com.example.client_self_employed.domain;
 
-import com.example.client_self_employed.data.IAppointmentsRepository;
-import com.example.client_self_employed.data.IExpertsRepository;
+import com.example.client_self_employed.data.IAppointmentRepository;
+import com.example.client_self_employed.data.IExpertRepository;
 
 public class DetailedAppointmentInteractor {
-    private final IAppointmentsRepository mAppointmentsRepository;
-    private final IExpertsRepository mExpertsRepository;
+    private final IAppointmentRepository mAppointmentsRepository;
+    private final IExpertRepository mExpertsRepository;
 
-    public DetailedAppointmentInteractor(IAppointmentsRepository appointmentsRepository, IExpertsRepository expertsRepository) {
+    public DetailedAppointmentInteractor(IAppointmentRepository appointmentsRepository, IExpertRepository expertsRepository) {
         mAppointmentsRepository = appointmentsRepository;
         mExpertsRepository = expertsRepository;
     }
@@ -22,5 +22,9 @@ public class DetailedAppointmentInteractor {
 
     public void updateAppointmentRating(long appointmentId, float rating, ILoadOneAppointmentCallback appointmentsCallback) {
         mAppointmentsRepository.updateAppointmentRating(appointmentId, rating, appointmentsCallback);
+    }
+
+    public void updateAppointmentNotification(long appointmentId, boolean isNotification, ILoadOneAppointmentCallback appointmentsCallback) {
+        mAppointmentsRepository.updateAppointmentNotification(appointmentId, isNotification, appointmentsCallback);
     }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.data.model.FirebaseClient;
 import com.example.client_self_employed.domain.IClientCallback;
 import com.example.client_self_employed.domain.model.Client;
+import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +30,11 @@ public class RepositoryClient implements IClientRepository {
     private DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mDatabaseReferenceClient = mReference.child("clients");
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
+    private ResourceWrapper mResourceWrapper;
+
+    public RepositoryClient(ResourceWrapper resourceWrapper) {
+        mResourceWrapper = resourceWrapper;
+    }
 
 
     @Override

@@ -14,7 +14,7 @@ import com.example.client_self_employed.domain.model.Review;
  * Интерфейс для работы загрузки активных записей клиента
  * и всех экспертов
  */
-public interface IAppointmentsRepository {
+public interface IAppointmentRepository {
 
     void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback status);
 
@@ -34,4 +34,5 @@ public interface IAppointmentsRepository {
 
     void uploadReview(Review review);
 
+    void updateAppointmentNotification(Long appointmentId, boolean isNotification, ILoadOneAppointmentCallback appointmentsCallback);
 }

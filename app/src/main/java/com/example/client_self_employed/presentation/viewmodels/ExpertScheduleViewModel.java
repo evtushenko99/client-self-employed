@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
-import com.example.client_self_employed.domain.ExpertsIteractor;
+import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class ExpertScheduleViewModel extends ViewModel {
-    private final ExpertsIteractor mExpertScheduleInteractor;
+    private final ExpertInteractor mExpertScheduleInteractor;
     private final IResourceWrapper mResourceWrapper;
 
     private final Executor mExecutor;
@@ -53,7 +53,7 @@ public class ExpertScheduleViewModel extends ViewModel {
     };
 
     public ExpertScheduleViewModel(
-            @NonNull ExpertsIteractor expertScheduleInteractor,
+            @NonNull ExpertInteractor expertScheduleInteractor,
             @NonNull Executor executor,
             @NonNull IResourceWrapper resourceWrapper) {
         mExecutor = executor;

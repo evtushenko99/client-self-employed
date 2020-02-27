@@ -50,7 +50,6 @@ public class FragmentHomeScreen extends Fragment {
         ActiveAppointmentsBinding binding = ActiveAppointmentsBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(requireActivity(), new HomeScreenModelFactory(requireActivity()))
                 .get(HomeScreenViewModel.class);
-        mViewModel.loadClientExperts();
         binding.setActiveAppointmentViewModel(mViewModel);
         return binding.getRoot();
 

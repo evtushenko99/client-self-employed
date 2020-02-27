@@ -1,16 +1,16 @@
 package com.example.client_self_employed.domain;
 
-import com.example.client_self_employed.data.IExpertsRepository;
+import com.example.client_self_employed.data.IExpertRepository;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpertsIteractor {
-    private final IExpertsRepository mRepositoryExperts;
+public class ExpertInteractor {
+    private final IExpertRepository mRepositoryExperts;
 
-    public ExpertsIteractor(IExpertsRepository repositoryExperts) {
+    public ExpertInteractor(IExpertRepository repositoryExperts) {
         mRepositoryExperts = repositoryExperts;
     }
 

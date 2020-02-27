@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.client_self_employed.domain.AppointmentsInteractor;
-import com.example.client_self_employed.domain.ExpertsIteractor;
+import com.example.client_self_employed.domain.AppointmentInteractor;
+import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
 import com.example.client_self_employed.domain.IExpertsCallBack;
@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class HomeScreenViewModel extends ViewModel {
-    private final AppointmentsInteractor mAppointmentsInteractor;
-    private final ExpertsIteractor mExpertsInteractor;
+    private final AppointmentInteractor mAppointmentInteractor;
+    private final ExpertInteractor mExpertsInteractor;
     private final Executor mExecutor;
     private final ObservableField<Boolean> mIsBestExpertLoading = new ObservableField<>(false);
     private final ObservableField<Boolean> mIsActiveAppointmentLoading = new ObservableField<>(false);
@@ -128,11 +128,12 @@ public class HomeScreenViewModel extends ViewModel {
     };
 
     HomeScreenViewModel(
-            @NonNull AppointmentsInteractor iteractor,
-            @NonNull ExpertsIteractor expertsInteractor, @NonNull Executor executor) {
-        mAppointmentsInteractor = iteractor;
+            @NonNull AppointmentInteractor iteractor,
+            @NonNull ExpertInteractor expertsInteractor, @NonNull Executor executor) {
+        mAppointmentInteractor = iteractor;
         mExpertsInteractor = expertsInteractor;
         mExecutor = executor;
+        loadClientExperts();
     }
 
     @BindingAdapter("data")
@@ -150,11 +151,11 @@ public class HomeScreenViewModel extends ViewModel {
 
     public void loadActiveAppointments() {
         mIsActiveAppointmentLoading.set(true);
-        mExecutor.execute(() -> mAppointmentsInteractor.loadClientsAppointments(2, mAppointmentsCallback));
+        mExecutor.execute(() -> mAppointmentInteractor.loadClientsAppointments(2, mAppointmentsCallback));
     }
 
     public void deleteClientAppointment(long appointmentId) {
-        mExecutor.execute(() -> mAppointmentsInteractor.deleteClientAppointment(appointmentId, mClientAppointmentCallback));
+        mExecutor.execute(() -> mAppointmentInteractor.deleteClientAppointment(appointmentId, mClientAppointmentCallback));
     }
 
     public ObservableField<Boolean> getIsBestExpertLoading() {
@@ -168,6 +169,7 @@ public class HomeScreenViewModel extends ViewModel {
     public ObservableField<List<RowType>> getLiveData() {
         return mLiveData;
     }
+
     public LiveData<String> getErrors() {
         return mErrors;
     }

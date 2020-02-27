@@ -1,19 +1,17 @@
 package com.example.client_self_employed.domain;
 
-import com.example.client_self_employed.data.IAppointmentsRepository;
-import com.example.client_self_employed.data.IExpertsRepository;
+import com.example.client_self_employed.data.IAppointmentRepository;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
 
-public class AppointmentsInteractor {
-    private final IAppointmentsRepository mAppointmentsRepository;
-    private final IExpertsRepository mExpertsRepository;
+public class AppointmentInteractor {
+    private final IAppointmentRepository mAppointmentsRepository;
 
 
-    public AppointmentsInteractor(IAppointmentsRepository appointmentsRepository, IExpertsRepository expertsRepository) {
+    public AppointmentInteractor(IAppointmentRepository appointmentsRepository) {
         mAppointmentsRepository = appointmentsRepository;
-        mExpertsRepository = expertsRepository;
+
         Appointment appointment1 = new Appointment(1, "Подкатка", "90 минут", 2000,
                 "Европейский", 2020, 3, 1, 10, 30,
                 1,
@@ -57,7 +55,7 @@ public class AppointmentsInteractor {
                 "Остров", 2020, 3, 1, 19, 0,
                 1,
                 0, 0);
-        Appointment appointment11 = new Appointment(31, "Тренировка", "90 минут", 5500,
+        Appointment appointment11 = new Appointment(11, "Тренировка", "90 минут", 5500,
                 "Остров", 2020, 2, 26, 17, 19,
                 1,
                 0,
@@ -67,7 +65,7 @@ public class AppointmentsInteractor {
         Expert expert3 = new Expert(3, "Литвиненко", "Сергей", "Владиславович", 23, "lotvinenko@mail.ru", "+7-915-133-97-43", "Тренер по йоге", 10, null);
 
         Client client = new Client(2, "Юрин", "Максим", "Евгеньевич", 21, 22, 2, 1999, "evtushenko99@mail.ru", "+7-906-087-11-00", "Мужской", null);
-        mAppointmentsRepository.uploadAppointment(appointment11); /*       mAppointmentsRepository.uploadAppointment(appointment1);
+      /*   mAppointmentsRepository.uploadAppointment(appointment11);       mAppointmentsRepository.uploadAppointment(appointment1);
         mAppointmentsRepository.uploadAppointment(appointment2);
         mAppointmentsRepository.uploadAppointment(appointment3);
         mAppointmentsRepository.uploadAppointment(appointment4);

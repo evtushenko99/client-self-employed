@@ -12,6 +12,7 @@ import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.domain.model.Review;
+import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,16 +25,18 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class RepositoryAppointments implements IAppointmentsRepository {
+public class RepositoryAppointment implements IAppointmentRepository {
     private final FirebaseDatabase mReference = FirebaseDatabase.getInstance();
     private final DatabaseReference mDatabaseReferenceAppointment = mReference.getReference().child("appointments");
     private final DatabaseReference mDatabaseReferenceExpert = mReference.getReference().child("experts");
     private final DatabaseReference mDatabaseReferenceClient = mReference.getReference().child("clients");
     private final DatabaseReference mDatabaseConnection = mReference.getReference(".info/connected");
 
-    public RepositoryAppointments() {
-    }
+    private ResourceWrapper mResourceWrapper;
 
+    public RepositoryAppointment(ResourceWrapper resourceWrapper) {
+        mResourceWrapper = resourceWrapper;
+    }
     @Override
     public void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback callback) {
 
@@ -159,6 +162,32 @@ public class RepositoryAppointments implements IAppointmentsRepository {
     @Override
     public void uploadReview(Review review) {
         // mDatabaseReferenceAppointment.child(String.valueOf(review.getId())).setValue(review);
+    }
+
+    @Override
+    public void updateAppointmentNotification(Long appointmentId, boolean isNotification, ILoadOneAppointmentCallback callback) {
+        mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID)
+                .equalTo(appointmentId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot appoinmentSnapshot : dataSnapshot.getChildren()) {
+                            Appointment appointment = appoinmentSnapshot.getValue(Appointment.class);
+                            if (appointment != null) {
+                                appointment.setNotification(isNotification);
+                                String appointmentId = String.valueOf(appointment.getId());
+                                mDatabaseReferenceAppointment.child(appointmentId)
+                                        .setValue(appointment)
+                                        .addOnCompleteListener(task -> callback.onUpdateCallback(true));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 

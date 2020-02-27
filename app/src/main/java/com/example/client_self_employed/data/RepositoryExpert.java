@@ -14,6 +14,7 @@ import com.example.client_self_employed.domain.ILoadExpertPhotoCallback;
 import com.example.client_self_employed.domain.ILoadOneExpertCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
+import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -30,13 +31,18 @@ import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class RepositoryExperts implements IExpertsRepository {
+public class RepositoryExpert implements IExpertRepository {
     private final FirebaseDatabase mReference = FirebaseDatabase.getInstance();
     private final DatabaseReference mDatabaseReferenceAppointment = mReference.getReference().child("appointments");
     private final DatabaseReference mDatabaseReferenceExpert = mReference.getReference().child("experts");
     private final DatabaseReference mDatabaseConnection = mReference.getReference(".info/connected");
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
 
+    private ResourceWrapper mResourceWrapper;
+
+    public RepositoryExpert(ResourceWrapper resourceWrapper) {
+        mResourceWrapper = resourceWrapper;
+    }
 
     private void loadExpertName(long expertId, List<Appointment> appointments, IExpertScheduleCallback expertScheduleStatus) {
         mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)

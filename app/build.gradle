@@ -62,7 +62,7 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger2_version"
 
     //data binding
-    annotationProcessor "androidx.databinding:databinding-compiler:3.5.3"
+    annotationProcessor "androidx.databinding:databinding-compiler:3.6.0"
 
 
 }
