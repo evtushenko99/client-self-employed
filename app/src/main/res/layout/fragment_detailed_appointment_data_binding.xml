@@ -445,40 +445,80 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cancel_appointment"
-                style="@style/MyButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:elevation="@dimen/elevation_medium"
-                android:onClick="@{ViewModel.cancelAppointmentClickListener}"
-                android:padding="@dimen/padding_high"
-                android:text="@string/cancel_appointment"
-                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_detailed_appointment_notification" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/fragment_detailed_appointment_notification"
-                style="@style/MyButton"
-                android:layout_width="0dp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_notification_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:drawableEnd="@{ViewModel.appointmentNotification}"
-                android:elevation="@dimen/elevation_medium"
-                android:onClick="@{ViewModel.notificationClickListener}"
-
-                android:padding="@dimen/padding_small"
-                android:text="@{ViewModel.appointmentNotification}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/cardView_rate_appointment"
                 app:layout_constraintStart_toStartOf="@+id/cardView_rate_appointment"
-                app:layout_constraintTop_toBottomOf="@+id/cardView_rate_appointment"
-                tools:ignore="PrivateResource" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView_rate_appointment">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/fragment_detailed_appointment_notification"
+                        style="@style/MyButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@{ViewModel.appointmentNotification}"
+                        android:elevation="@dimen/elevation_medium"
+                        android:gravity="center"
+
+                        android:onClick="@{ViewModel.notificationClickListener}"
+                        android:padding="@dimen/padding_small"
+                        android:text="@{ViewModel.appointmentNotification}"
+
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="PrivateResource" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:cardElevation="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/cardView_notification_button"
+                app:layout_constraintStart_toStartOf="@+id/cardView_notification_button"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_notification_button">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/cancel_appointment"
+                        style="@style/MyButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:elevation="@dimen/elevation_medium"
+                        android:gravity="center"
+                        android:onClick="@{ViewModel.cancelAppointmentClickListener}"
+                        android:padding="@dimen/padding_high"
+                        android:text="@string/cancel_appointment"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

@@ -1,7 +1,10 @@
 package com.example.client_self_employed.domain;
 
+import androidx.work.Data;
+
 import com.example.client_self_employed.data.IAppointmentRepository;
 import com.example.client_self_employed.data.IExpertRepository;
+import com.example.client_self_employed.notification.Constants;
 
 public class DetailedAppointmentInteractor {
     private final IAppointmentRepository mAppointmentsRepository;
@@ -26,5 +29,14 @@ public class DetailedAppointmentInteractor {
 
     public void updateAppointmentNotification(long appointmentId, boolean isNotification, ILoadOneAppointmentCallback appointmentsCallback) {
         mAppointmentsRepository.updateAppointmentNotification(appointmentId, isNotification, appointmentsCallback);
+    }
+
+    public Data createWorkInputData(String serviceName, String startTime, long appointmentId, long expertId) {
+        return new Data.Builder()
+                .putString(Constants.EXTRA_TITLE, serviceName)
+                .putString(Constants.EXTRA_TEXT, startTime)
+                .putLong(Constants.EXTRA_EXPERT_ID, expertId)
+                .putLong(Constants.EXTRA_APPOINTMENT_ID, appointmentId)
+                .build();
     }
 }

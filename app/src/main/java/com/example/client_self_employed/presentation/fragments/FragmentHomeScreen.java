@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.ActiveAppointmentsBinding;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterHomeScreen;
-import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 
@@ -48,7 +48,7 @@ public class FragmentHomeScreen extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ActiveAppointmentsBinding binding = ActiveAppointmentsBinding.inflate(inflater, container, false);
-        mViewModel = ViewModelProviders.of(requireActivity(), new HomeScreenModelFactory(requireActivity()))
+        mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                 .get(HomeScreenViewModel.class);
         binding.setActiveAppointmentViewModel(mViewModel);
         return binding.getRoot();

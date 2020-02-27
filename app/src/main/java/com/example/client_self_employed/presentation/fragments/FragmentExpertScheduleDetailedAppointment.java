@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.ExpertScheduleDetailedAppointmentBinding;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleDetailedAppointmentViewModel;
@@ -48,6 +49,7 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         return dialog;
     }
 
@@ -58,8 +60,8 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
             mAppointment = this.getArguments().getParcelable(DETAILED_APPOINTMENT);
             mClientId = this.getArguments().getLong(CLIENT_ID);
         }
-
-        mExpertViewModel = ViewModelProviders.of(getActivity(), new ExpertScheduleViewModelFactory(getActivity()))
+        ExpertScheduleViewModelFactory expertScheduleViewModelFactory = ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getExpertScheduleViewModelFactory();
+        mExpertViewModel = ViewModelProviders.of(getActivity(), expertScheduleViewModelFactory)
                 .get(ExpertScheduleViewModel.class);
         mExpertDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity())
                 .get(ExpertScheduleDetailedAppointmentViewModel.class);

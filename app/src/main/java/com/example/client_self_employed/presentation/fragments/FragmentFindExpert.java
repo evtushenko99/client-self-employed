@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterFindExperts;
 import com.example.client_self_employed.presentation.viewmodels.FindExpertViewModel;
-import com.example.client_self_employed.presentation.viewmodels.FindExpertViewModelFactory;
 
 public class FragmentFindExpert extends Fragment implements View.OnClickListener {
     private SearchView mSearchView;
@@ -68,7 +68,7 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
     }
 
     private void setupMVVM() {
-        mFindExpertViewModel = ViewModelProviders.of(getActivity(), new FindExpertViewModelFactory(getActivity()))
+        mFindExpertViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getFindExpertViewModelFactory())
                 .get(FindExpertViewModel.class);
         mFindExpertViewModel.loadAllEcperts();
         mFindExpertViewModel.getLiveData().observe(getViewLifecycleOwner(), experts -> {

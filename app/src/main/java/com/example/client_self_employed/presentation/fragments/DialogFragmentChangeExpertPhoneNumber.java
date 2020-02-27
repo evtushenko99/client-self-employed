@@ -13,8 +13,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
-import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class DialogFragmentChangeExpertPhoneNumber extends DialogFragment implements View.OnClickListener {
@@ -48,7 +48,7 @@ public class DialogFragmentChangeExpertPhoneNumber extends DialogFragment implem
             mOldPhoneNumber = this.getArguments().getString(EXPERT_OLD_PHONE_NUMBER);
         }
 
-        mAccountViewModel = ViewModelProviders.of(requireActivity(), new AccountViewModelFactory(requireContext()))
+        mAccountViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
         return inflater.inflate(R.layout.dialog_fragment_change_expert_phone_number, container, false);
     }

@@ -25,10 +25,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.AccountViewModelBinding;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
-import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
-        mViewModel = ViewModelProviders.of(requireActivity(), new AccountViewModelFactory(requireContext()))
+        mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
         mViewModel.loadInformationAboutClient();
         binding.setViewModel(mViewModel);

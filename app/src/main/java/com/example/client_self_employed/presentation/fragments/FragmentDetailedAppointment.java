@@ -20,22 +20,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
-import androidx.work.Data;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.FragmentDetailedAppointmentBinding;
-import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
 import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
-import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
-import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class FragmentDetailedAppointment extends Fragment {
     private static final String APPOINTMENT_ID = "appointment id";
@@ -76,16 +70,12 @@ public class FragmentDetailedAppointment extends Fragment {
             mPosition = this.getArguments().getInt(POSITION);
         }
         FragmentDetailedAppointmentBinding binding = FragmentDetailedAppointmentBinding.inflate(inflater, container, false);
-        mDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), new DetailedAppointmentViewModelFactory(requireActivity()))
+        mDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getDetailedAppointmentViewModelFactory())
                 .get(DetailedAppointmentViewModel.class);
 
         setClickListeners();
-
         binding.setViewModel(mDetailedAppointmentViewModel);
-
         return binding.getRoot();
-
-
     }
 
     private void setClickListeners() {
@@ -95,11 +85,8 @@ public class FragmentDetailedAppointment extends Fragment {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
                 boolean isActivated = sharedPreferences.getBoolean(getString(R.string.preferences_enable_notifications_switch_key), false);
                 if (isActivated) {
-                    int secondsBeforAlert = 10;
-                    long current = System.currentTimeMillis();
                     mDetailedAppointmentViewModel.updateAppointmentNotification();
-                    Data data = createWorkInputData(serviceName, startTime, appointmentId, expertId);
-                    NotificationHandler.schedulerReminder(secondsBeforAlert, data, String.valueOf(appointmentId));
+                    mDetailedAppointmentViewModel.createNotification(serviceName, startTime, appointmentId, expertId);
                 } else {
                     requireActivity().getSupportFragmentManager().beginTransaction()
                             .addToBackStack(null)
@@ -123,7 +110,7 @@ public class FragmentDetailedAppointment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    mViewModel = ViewModelProviders.of(requireActivity(), new HomeScreenModelFactory(requireContext()))
+                    mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                             .get(HomeScreenViewModel.class);
                     mViewModel.deleteClientAppointment(appointmentId);
                     ((ActivityActiveAppointments) requireActivity()).deleteAppointmentFromRecycler(mPosition);
@@ -208,33 +195,6 @@ public class FragmentDetailedAppointment extends Fragment {
 
         super.onStart();
     }
-
-    private Data createWorkInputData(String title, String text, long id, long expertId) {
-        return new Data.Builder()
-                .putString(Constants.EXTRA_TITLE, title)
-                .putString(Constants.EXTRA_TEXT, text)
-                .putLong(Constants.EXTRA_EXPERT_ID, expertId)
-                .putLong(Constants.EXTRA_APPOINTMENT_ID, id)
-                .build();
-    }
-
-    private long getAlertTime(int userInput) {
-        long current = Calendar.getInstance().getTimeInMillis();
-        String[] hoursAndMinutes = mDetailedAppointmentViewModel.getAppointmentStartTime().toString().split(":");
-        String[] dayMonthYear = mDetailedAppointmentViewModel.getAppointmentDate().toString().split("\\.");
-
-        Calendar calendar = new GregorianCalendar();
-
-        calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayMonthYear[0]));
-        calendar.set(Calendar.WEEK_OF_MONTH, Integer.valueOf(dayMonthYear[1]) - 1);
-        calendar.set(Calendar.YEAR, Integer.valueOf(dayMonthYear[2]));
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(hoursAndMinutes[0]));
-        calendar.set(Calendar.MINUTE, Integer.valueOf(hoursAndMinutes[1]));
-
-        long alertTime = calendar.getTimeInMillis() - current;
-        return alertTime;
-    }
-
 
     private static boolean isAppAvailable(Context context, String appName) {
         PackageManager pm = context.getPackageManager();

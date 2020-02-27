@@ -18,13 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterClientExpertSchedule;
 import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
-import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
-import com.example.client_self_employed.presentation.viewmodels.HomeScreenModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 public class FragmentExpertSchedule extends Fragment {
@@ -71,9 +70,9 @@ public class FragmentExpertSchedule extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setupScheduleMVVM(long id) {
-        mScheduleViewModel = ViewModelProviders.of(getActivity(), new ExpertScheduleViewModelFactory(getActivity()))
+        mScheduleViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getExpertScheduleViewModelFactory())
                 .get(ExpertScheduleViewModel.class);
-        mHomeScreenViewModel = ViewModelProviders.of(getActivity(), new HomeScreenModelFactory(getActivity()))
+        mHomeScreenViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                 .get(HomeScreenViewModel.class);
         mScheduleViewModel.loadExpertSchedule(this.getArguments().getLong(Arguments.EXPERT_ID));
         mScheduleViewModel.getExpertName().observe(getViewLifecycleOwner(), expertName -> {

@@ -11,6 +11,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.work.Data;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
@@ -19,6 +20,7 @@ import com.example.client_self_employed.domain.ILoadOneAppointmentCallback;
 import com.example.client_self_employed.domain.ILoadOneExpertCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
+import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
@@ -185,6 +187,13 @@ public class DetailedAppointmentViewModel extends ViewModel {
         }
     }
 
+    public void createNotification(String serviceName, String startTime, long appointmentId, long expertId) {
+        int secondsBeforAlert = 10;
+        long current = System.currentTimeMillis();
+        Data data = mInteractor.createWorkInputData(serviceName, startTime, appointmentId, expertId);
+        NotificationHandler.schedulerReminder(secondsBeforAlert, data, String.valueOf(appointmentId));
+    }
+
     @BindingAdapter("android:text")
     public static void setText(AppCompatButton view, boolean notification) {
         if (notification) {
@@ -197,7 +206,9 @@ public class DetailedAppointmentViewModel extends ViewModel {
     @BindingAdapter("android:drawableEnd")
     public static void setDrawable(AppCompatButton view, boolean notification) {
         if (notification) {
-            view.setCompoundDrawables(null, null, view.getResources().getDrawable(R.drawable.ic_clear_black_24dp), null);
+            view.setCompoundDrawablesWithIntrinsicBounds(null, null, view.getResources().getDrawable(R.drawable.ic_clear_black_24dp), null);
+        } else {
+            view.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
     }
 

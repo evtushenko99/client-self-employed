@@ -13,8 +13,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.R;
+import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
-import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 
 public class DialogFragmentChangeExpertGender extends DialogFragment {
     public static final String CLIENT_OLD_GENDER = "client old gender";
@@ -54,7 +54,7 @@ public class DialogFragmentChangeExpertGender extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        mAccountViewModel = ViewModelProviders.of(requireActivity(), new AccountViewModelFactory(requireContext()))
+        mAccountViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_fragment_change_expert_gender)
