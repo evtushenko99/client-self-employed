@@ -1,14 +1,21 @@
 package com.example.client_self_employed.domain;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import com.example.client_self_employed.data.IClientRepository;
+import com.example.client_self_employed.data.IFileWrapper;
+
+import java.io.File;
 
 public class ClientInteractor {
     private final IClientRepository mClientRepository;
+    private final IFileWrapper mFileWrapper;
 
-    public ClientInteractor(IClientRepository clientRepository) {
+    public ClientInteractor(IClientRepository clientRepository, IFileWrapper fileWrapper) {
         mClientRepository = clientRepository;
+        mFileWrapper = fileWrapper;
     }
 
     public void loadClient(long clientId, IClientCallback clientCallback) {
@@ -37,5 +44,13 @@ public class ClientInteractor {
 
     public void loadNewClientPhoto(long clientId, String newClientPhotoUri, IClientCallback callback) {
         mClientRepository.loadNewClientPhoto(clientId, newClientPhotoUri, callback);
+    }
+
+    public Uri createNewImageURI(File imageFile) {
+        return mFileWrapper.createNewImageURI(imageFile);
+    }
+
+    public File createImageFile(String imageName) {
+        return mFileWrapper.createImageFile(imageName);
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data class="AccountViewModelBinding">
 
@@ -48,6 +48,7 @@
                         android:layout_height="@dimen/image_height"
                         android:layout_marginEnd="8dp"
                         android:background="#FFF"
+                        android:onClick="@{ViewModel.onChangePhotoClickListener}"
                         app:clientPhotoUri="@{ViewModel.photoUri}"
                         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_second_name"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -208,6 +209,7 @@
                     android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
                     android:focusable="false"
                     android:hint="@string/fragment_account_date_hint"
+                    android:onClick="@{ViewModel.onChangeBirthdayClickListener}"
                     android:text="@{ViewModel.birthDay}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
                     tools:text="22.02.1999" />
@@ -242,10 +244,9 @@
                 android:id="@+id/fragment_account_notifications"
                 style="@style/MyButton"
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-
+                android:onClick="@{ViewModel.onNotificationClickListener}"
                 android:text="@string/fragment_account_notifications"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout6"

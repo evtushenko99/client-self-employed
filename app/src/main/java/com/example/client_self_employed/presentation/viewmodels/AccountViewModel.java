@@ -1,14 +1,14 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
 
+import android.content.Context;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableField;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bumptech.glide.Glide;
@@ -19,19 +19,23 @@ import com.example.client_self_employed.domain.ClientInteractor;
 import com.example.client_self_employed.domain.IClientCallback;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
+import com.example.client_self_employed.presentation.clicklisteners.ChangeClientBirthdayClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.ChangeClientInformationClickListener;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class AccountViewModel extends ViewModel {
+
+    private final Context mContext;
     private final ClientInteractor mClientInteractor;
     private final Executor mExecutor;
     private final ResourceWrapper mResourceWrapper;
     private Client mClient;
-    private MutableLiveData<Client> mMutableClient = new MutableLiveData<>();
-
+    private String mImageFileLocation = "";
+    private Uri mUriForFile;
     private ObservableField<String> mLastName = new ObservableField<>();
     private ObservableField<String> mName = new ObservableField<>();
     private ObservableField<String> mSecondName = new ObservableField<>();
@@ -50,6 +54,8 @@ public class AccountViewModel extends ViewModel {
     private View.OnClickListener mOnChangeGenderClickListener;
     private View.OnClickListener mOnChangePhoneNumberClickListener;
     private View.OnClickListener mOnChangeFullNameClickListener;
+    private View.OnClickListener mOnNotificationClickListener;
+
     /**
      * Ckeifntkb для изменения существующих параметров аккаунта
      */
@@ -62,7 +68,6 @@ public class AccountViewModel extends ViewModel {
         public void clientIsLoaded(Client client) {
             mClient = client;
             setClientViews(client);
-            mMutableClient.postValue(client);
         }
 
         @Override
@@ -91,14 +96,72 @@ public class AccountViewModel extends ViewModel {
     }
 
     public AccountViewModel(
-            @NonNull ClientInteractor clientInteractor,
+            Context context, @NonNull ClientInteractor clientInteractor,
             @NonNull Executor executor,
             @NonNull ResourceWrapper resourceWrapper) {
+        mContext = context;
         mClientInteractor = clientInteractor;
         mExecutor = executor;
         mResourceWrapper = resourceWrapper;
+        loadInformationAboutClient();
     }
 
+    @BindingAdapter("clientPhotoUri")
+    public static void loadClientPhoto(ImageView view, String clientPhotoUri) {
+        DrawableCrossFadeFactory factory =
+                new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
+        Glide
+                .with(view.getContext())
+                .load(clientPhotoUri)
+                .apply(new RequestOptions()
+                        .centerCrop()
+                        .circleCrop()
+                        .placeholder(R.mipmap.no_photo_available_or_missing)
+                        .error(R.mipmap.no_photo_available_or_missing))
+                .transition(withCrossFade(factory))
+                .into(view);
+
+    }
+
+    public Uri createNewImageURI() {
+        if (mClient != null) {
+            mExecutor.execute(() -> {
+                File imageFile = mClientInteractor.createImageFile(mClient.getNewImageFileName());
+                mImageFileLocation = imageFile.getAbsolutePath();
+                mUriForFile = mClientInteractor.createNewImageURI(imageFile);
+            });
+        }
+        return mUriForFile;
+
+    }
+
+    private void loadInformationAboutClient() {
+        mExecutor.execute(() -> mClientInteractor.loadClient(2, mCallback));
+    }
+
+    public void updateFullName(String lastName, String name, String secondName) {
+        mExecutor.execute(() -> mClientInteractor.updateFullName(2, lastName, name, secondName, mCallback));
+    }
+
+    public void updateClientBirthday(int dayOfBirth, int monthOfBirth, int yearOfBirth) {
+        mExecutor.execute(() -> mClientInteractor.updateClientBirthday(2, dayOfBirth, monthOfBirth, yearOfBirth, mCallback));
+    }
+
+    public void updateClientEmail(String email) {
+        mExecutor.execute(() -> mClientInteractor.updateClientEmail(2, email, mCallback));
+    }
+
+    public void updateClientPhoneNumber(String phoneNumber) {
+        mExecutor.execute(() -> mClientInteractor.updateClientPhoneNumber(2, phoneNumber, mCallback));
+    }
+
+    public void updateClientGender(String gender) {
+        mExecutor.execute(() -> mClientInteractor.updateClientGender(2, gender, mCallback));
+    }
+
+    public void loadClientImageToStorage(String newImageFile) {
+        mExecutor.execute(() -> mClientInteractor.loadNewClientPhoto(2, newImageFile, mCallback));
+    }
 
     public ObservableField<String> getLastName() {
         return mLastName;
@@ -132,62 +195,8 @@ public class AccountViewModel extends ViewModel {
         return mPhotoUri;
     }
 
-
-    public ObservableField<String> getNewEmail() {
-        return mNewEmail;
-    }
-
-    public void setNewEmail(ObservableField<String> newEmail) {
-        mNewEmail = newEmail;
-    }
-
-    public void loadInformationAboutClient() {
-        mExecutor.execute(() -> mClientInteractor.loadClient(2, mCallback));
-    }
-
-    public LiveData<Client> getMutableClient() {
-        return mMutableClient;
-    }
-
-    public void updateFullName(String lastName, String name, String secondName) {
-        mExecutor.execute(() -> mClientInteractor.updateFullName(2, lastName, name, secondName, mCallback));
-    }
-
-    public void updateClientBirthday(int dayOfBirth, int monthOfBirth, int yearOfBirth) {
-        mExecutor.execute(() -> mClientInteractor.updateClientBirthday(2, dayOfBirth, monthOfBirth, yearOfBirth, mCallback));
-    }
-
-    public void updateClientEmail(String email) {
-        mExecutor.execute(() -> mClientInteractor.updateClientEmail(2, email, mCallback));
-    }
-
-    public void updateClientPhoneNumber(String phoneNumber) {
-        mExecutor.execute(() -> mClientInteractor.updateClientPhoneNumber(2, phoneNumber, mCallback));
-    }
-
-    public void updateClientGender(String gender) {
-        mExecutor.execute(() -> mClientInteractor.updateClientGender(2, gender, mCallback));
-    }
-
-    public void loadClientImageToStorage(String newImageFile) {
-        mExecutor.execute(() -> mClientInteractor.loadNewClientPhoto(2, newImageFile, mCallback));
-    }
-
-    @BindingAdapter("clientPhotoUri")
-    public static void loadClientPhoto(ImageView view, String clientPhotoUri) {
-        DrawableCrossFadeFactory factory =
-                new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
-        Glide
-                .with(view.getContext())
-                .load(clientPhotoUri)
-                .apply(new RequestOptions()
-                        .centerCrop()
-                        .circleCrop()
-                        .placeholder(R.mipmap.no_photo_available_or_missing)
-                        .error(R.mipmap.no_photo_available_or_missing))
-                .transition(withCrossFade(factory))
-                .into(view);
-
+    public String getImageFileLocation() {
+        return mImageFileLocation;
     }
 
 
@@ -203,8 +212,11 @@ public class AccountViewModel extends ViewModel {
         return mOnChangeBirthdayClickListener;
     }
 
-    public void setOnChangeBirthdayClickListener(View.OnClickListener onChangeBirthdayClickListener) {
-        mOnChangeBirthdayClickListener = onChangeBirthdayClickListener;
+    public void setOnChangeBirthdayClickListener(ChangeClientBirthdayClickListener changeBirthdayClickListener) {
+        mOnChangeBirthdayClickListener = v -> {
+            if (mClient != null)
+                changeBirthdayClickListener.onChangeClientBirthdayClickListener(mClient.getYearOfBirth(), mClient.getMonthOfBirth(), mClient.getDayOfBirth());
+        };
     }
 
     public View.OnClickListener getOnChangeEmailClickListener() {
@@ -270,6 +282,15 @@ public class AccountViewModel extends ViewModel {
 
     public void setOnChangeFullNameClickListener(View.OnClickListener onChangeFullNameClickListener) {
         mOnChangeFullNameClickListener = onChangeFullNameClickListener;
+    }
+
+
+    public View.OnClickListener getOnNotificationClickListener() {
+        return mOnNotificationClickListener;
+    }
+
+    public void setOnNotificationClickListener(View.OnClickListener onNotificationClickListener) {
+        mOnNotificationClickListener = onNotificationClickListener;
     }
 
 

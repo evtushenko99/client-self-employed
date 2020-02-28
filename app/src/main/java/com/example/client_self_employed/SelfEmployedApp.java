@@ -4,9 +4,9 @@ import android.app.Application;
 
 import com.example.client_self_employed.dagger.ContextModule;
 import com.example.client_self_employed.dagger.DaggerFactoryComponent;
+import com.example.client_self_employed.dagger.DataModule;
 import com.example.client_self_employed.dagger.FactoryComponent;
 import com.example.client_self_employed.dagger.InteractorModule;
-import com.example.client_self_employed.dagger.RepositoryModule;
 import com.example.client_self_employed.dagger.ResourceModule;
 
 public class SelfEmployedApp extends Application {
@@ -20,7 +20,7 @@ public class SelfEmployedApp extends Application {
                 .builder()
                 .contextModule(new ContextModule(this))
                 .interactorModule(new InteractorModule())
-                .repositoryModule(new RepositoryModule())
+                .dataModule(new DataModule())
                 .resourceModule(new ResourceModule())
                 .build();
     }

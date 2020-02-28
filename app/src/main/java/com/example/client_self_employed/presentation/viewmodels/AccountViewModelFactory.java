@@ -1,5 +1,7 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,21 +15,24 @@ import javax.inject.Inject;
 
 public class AccountViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final Executor mExecutor;
-    private final ClientInteractor clientInteractor;
-    private final ResourceWrapper resourceWrapper;
+    private final ClientInteractor mClientInteractor;
+    private final ResourceWrapper mResourceWrapper;
+    private final Context mContext;
+
 
     @Inject
-    public AccountViewModelFactory(Executor executor, ClientInteractor clientInteractor, ResourceWrapper resourceWrapper) {
+    public AccountViewModelFactory(Context context, Executor executor, ClientInteractor clientInteractor, ResourceWrapper resourceWrapper) {
+        mContext = context;
         mExecutor = executor;
-        this.clientInteractor = clientInteractor;
-        this.resourceWrapper = resourceWrapper;
+        mClientInteractor = clientInteractor;
+        mResourceWrapper = resourceWrapper;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (AccountViewModel.class.equals(modelClass)) {
-            return (T) new AccountViewModel(clientInteractor, mExecutor, resourceWrapper);
+            return (T) new AccountViewModel(mContext, mClientInteractor, mExecutor, mResourceWrapper);
         } else {
             return super.create(modelClass);
         }

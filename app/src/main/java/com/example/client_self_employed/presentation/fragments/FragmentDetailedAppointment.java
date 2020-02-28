@@ -24,6 +24,7 @@ import androidx.preference.PreferenceManager;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.FragmentDetailedAppointmentBinding;
+import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
 import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
@@ -65,14 +66,18 @@ public class FragmentDetailedAppointment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        if (this.getArguments() != null) {
-            mPosition = this.getArguments().getInt(POSITION);
+        long updateAppointment = -1;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mPosition = bundle.getInt(POSITION);
+            updateAppointment = bundle.getLong(Constants.UPDATE_APPOINTMENT, -1);
         }
         FragmentDetailedAppointmentBinding binding = FragmentDetailedAppointmentBinding.inflate(inflater, container, false);
         mDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getDetailedAppointmentViewModelFactory())
                 .get(DetailedAppointmentViewModel.class);
-
+        if (updateAppointment != -1) {
+            mDetailedAppointmentViewModel.setUpdateButtonText(true);
+        }
         setClickListeners();
         binding.setViewModel(mDetailedAppointmentViewModel);
         return binding.getRoot();

@@ -1,5 +1,7 @@
 package com.example.client_self_employed.dagger;
 
+import android.content.Context;
+
 import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ClientInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
@@ -16,7 +18,7 @@ import java.util.concurrent.Executor;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {InteractorModule.class, RepositoryModule.class, ResourceModule.class, ExecutorModule.class, ContextModule.class})
+@Module(includes = {InteractorModule.class, DataModule.class, ResourceModule.class, ExecutorModule.class, ContextModule.class})
 class FactoriesModule {
     @Provides
     HomeScreenModelFactory getHomeScreenModelFactory(AppointmentInteractor iteractor,
@@ -48,10 +50,10 @@ class FactoriesModule {
     }
 
     @Provides
-    AccountViewModelFactory getAccountFactory(Executor executor,
+    AccountViewModelFactory getAccountFactory(Context context, Executor executor,
                                               ClientInteractor clientInteractor,
                                               ResourceWrapper resourceWrapper) {
-        return new AccountViewModelFactory(executor, clientInteractor, resourceWrapper);
+        return new AccountViewModelFactory(context, executor, clientInteractor, resourceWrapper);
     }
 
 }

@@ -8,42 +8,30 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.AccountViewModelBinding;
-import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
 
-public class FragmentAccountSettings extends Fragment implements View.OnClickListener {
-
+public class FragmentAccountSettings extends Fragment {
     private static final int REQUEST_EXTERNAL_STORAGE_RESULT = 1;
     private static final int START_CAMERA_APP = 2;
     private Uri mImageUri;
-    private String mImageFileLocation = "";
-
-
-    private ImageView mClientPhotoImageView;
-    private TextInputEditText mDateOfBirthEditText;
-    private Client mClient;
     private AccountViewModel mViewModel;
 
 
@@ -51,34 +39,19 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         return new FragmentAccountSettings();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
-        mViewModel.loadInformationAboutClient();
         binding.setViewModel(mViewModel);
         setClickListeners();
         return binding.getRoot();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mClientPhotoImageView = view.findViewById(R.id.fragment_account_client_photo);
-        mClientPhotoImageView.setOnClickListener(this);
-
-        mDateOfBirthEditText = view.findViewById(R.id.fragment_account_client_date_of_birth);
-        mDateOfBirthEditText.setOnClickListener(this);
-
-        mViewModel.getMutableClient().observe(getViewLifecycleOwner(), client -> {
-            mClient = client;
-        });
-        view.findViewById(R.id.fragment_account_notifications).setOnClickListener(this);
-
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setClickListeners() {
         mViewModel.setOnChangeEmailClickListener(v ->
                 DialogFragmentChangeExpertEmail.newInstance(mViewModel.getEmail().get())
@@ -94,37 +67,24 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
             DialogFragmentChangeExpertGender.newInstance(mViewModel.getGender().get())
                     .show(requireActivity().getSupportFragmentManager(), null);
         });
+        mViewModel.setOnChangeBirthdayClickListener((year, month, day) -> setDatePicker(year, month, day));
+        mViewModel.setOnChangePhotoClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                callCameraApp();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(requireContext(), "Требуется разрешение на запись", Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_RESULT);
+            }
+        });
+        mViewModel.setOnNotificationClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_host_appointments_with_experts, FragmentPreferences.newInstance())
+                .commit());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fragment_account_notifications:
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.fragment_host_appointments_with_experts, FragmentPreferences.newInstance())
-                        .commit();
-                break;
-            case R.id.fragment_account_client_date_of_birth:
-
-                if (mClient != null) {
-                    setDatePicker(mClient.getYearOfBirth(), mClient.getMonthOfBirth(), mClient.getDayOfBirth());
-                }
-                break;
-            case R.id.fragment_account_client_photo:
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    callCameraApp();
-                } else {
-                    if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        Toast.makeText(requireContext(), "Требуется разрешение на запись", Toast.LENGTH_SHORT).show();
-                    }
-                    this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_RESULT);
-                }
-                break;
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setDatePicker(int year, int month, int day) {
@@ -152,29 +112,10 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
         Intent cameraAppIntent = new Intent();
         cameraAppIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraAppIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        File photoFile;
-
-        photoFile = createImageFile();
-
-        if (photoFile != null) {
-            String authorities = requireActivity().getPackageName() + ".provider";
-
-            mImageUri = FileProvider.getUriForFile(requireActivity(), authorities, photoFile);
+        mImageUri = mViewModel.createNewImageURI();
+        if (mImageUri != null) {
             cameraAppIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-
             this.startActivityForResult(cameraAppIntent, START_CAMERA_APP);
-        }
-    }
-
-    private File createImageFile() {
-        if (mClient != null) {
-            String imageName = mClient.getNewImageFileName();
-            File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File imageFile = new File(storageDirectory, imageName + ".jpg");
-            mImageFileLocation = imageFile.getAbsolutePath();
-            return imageFile;
-        } else {
-            return null;
         }
     }
 
@@ -185,15 +126,15 @@ public class FragmentAccountSettings extends Fragment implements View.OnClickLis
             galleryAddPic();
             mViewModel.loadClientImageToStorage(mImageUri.toString());
         }
-
     }
 
     /**
      * Добавление фотографии в галерию
      */
     private void galleryAddPic() {
+        String imageFileLocation = mViewModel.getImageFileLocation();
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mImageFileLocation);
+        File f = new File(imageFileLocation);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         requireContext().sendBroadcast(mediaScanIntent);

@@ -7,5 +7,5 @@ public final class Constants {
     public static final String EXTRA_TEXT = "EXTRA TEXT";
     public static final String EXTRA_APPOINTMENT_ID = "EXTRA APPOINTMENT ID";
     public static final String OPEN_DETAILED_FRAGMENT = "OPEN DETAILED FRAGMENT";
-    public static final String DELETE_APPOINTMENT = "DELETE_APPOINTMENT";
+    public static final String UPDATE_APPOINTMENT = "UPDATE_APPOINTMENT";
 }

@@ -20,12 +20,13 @@ import androidx.work.WorkerParameters;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.ActivityActiveAppointments;
+import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 
 import java.util.concurrent.TimeUnit;
 
 public class NotificationHandler extends Worker {
     private final Context mContext = getApplicationContext();
-
+    private DetailedAppointmentViewModel mDetailedAppointmentViewModel;
     public static final String CHANNEL_ID = "ID";
     public static final int NOTIFICATION_ID = 1;
     private RemoteViews mNotificationLayout;
@@ -60,18 +61,13 @@ public class NotificationHandler extends Worker {
         String uri = data.getString(Constants.EXTRA_EXPERT_PHOTO);
         long id = data.getLong(Constants.EXTRA_APPOINTMENT_ID, 1);
         long expertId = data.getLong(Constants.EXTRA_EXPERT_ID, 1);
-       /* Intent intent = new Intent(mContext, NotificationService.class);
-          mContext.startService(intent);*/
+
 
         createNotification(title, text, id, expertId, null);
         return Result.success();
     }
 
     private void createNotification(String title, String text, long id, long expertId, String uri) {
-        // NotificationService notificationService = new NotificationService(title, text,id);
-        // Intent intent = new Intent(mContext, NotificationService.class);
-        //  mContext.startService(intent);
-        // NotificationManager notificationManager = createNotificationChannel();
         createNotificationChannel();
         mNotificationLayout = new RemoteViews(mContext.getPackageName(), R.layout.notification);
         mNotificationLayout.setTextViewText(R.id.notification_expert_name, title);
@@ -79,7 +75,7 @@ public class NotificationHandler extends Worker {
 
 
         Intent intent = new Intent(mContext, ActivityActiveAppointments.class);
-        intent.putExtra(Constants.OPEN_DETAILED_FRAGMENT, "detailed fragment");
+        intent.putExtra(Constants.OPEN_DETAILED_FRAGMENT, "update fragment");
         intent.putExtra(Constants.EXTRA_APPOINTMENT_ID, id);
         intent.putExtra(Constants.EXTRA_EXPERT_ID, expertId);
 
@@ -93,7 +89,6 @@ public class NotificationHandler extends Worker {
                 .setContentText(text)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_launcher_foreground);
-
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
         notificationManager.notify((int) id, notification.build());

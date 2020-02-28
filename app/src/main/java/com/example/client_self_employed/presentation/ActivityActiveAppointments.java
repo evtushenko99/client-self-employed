@@ -42,7 +42,7 @@ public class ActivityActiveAppointments extends AppCompatActivity implements IUp
                 long expertId = extras.getLong(Constants.EXTRA_EXPERT_ID);
                 FragmentDetailedAppointment fragmentDetailedAppointment = FragmentDetailedAppointment.newInstance(appointmentId, expertId, 0);
                 Bundle arg = new Bundle();
-                arg.putLong(Constants.DELETE_APPOINTMENT, appointmentId);
+                arg.putLong(Constants.UPDATE_APPOINTMENT, appointmentId);
                 fragmentDetailedAppointment.setArguments(arg);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_host_appointments_with_experts, fragmentDetailedAppointment)

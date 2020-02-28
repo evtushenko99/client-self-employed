@@ -33,6 +33,10 @@ import java.util.concurrent.Executor;
 
 
 public class DetailedAppointmentViewModel extends ViewModel {
+    //Обновить текст кнопки уведомлений, когда пользователь нажимает на уведомление
+    private boolean mUpdateButtonText = false;
+
+
     private final DetailedAppointmentInteractor mInteractor;
     private final Executor mExecutor;
     private final ResourceWrapper mResourceWrapper;
@@ -116,6 +120,10 @@ public class DetailedAppointmentViewModel extends ViewModel {
 
                 mObservableAppointment.set(mAppointment);
                 bindAppointmentViews(appointment);
+                if (isUpdateButtonText() && mAppointment.getNotification()) {
+                    updateAppointmentNotification();
+                    mUpdateButtonText = false;
+                }
             }
         }
 
@@ -446,6 +454,14 @@ public class DetailedAppointmentViewModel extends ViewModel {
 
     public LiveData<String> getMessage() {
         return mMessage;
+    }
+
+    public boolean isUpdateButtonText() {
+        return mUpdateButtonText;
+    }
+
+    public void setUpdateButtonText(boolean updateButtonText) {
+        mUpdateButtonText = updateButtonText;
     }
 
 
