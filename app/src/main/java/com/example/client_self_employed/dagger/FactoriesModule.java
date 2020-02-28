@@ -6,6 +6,7 @@ import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ClientInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
 import com.example.client_self_employed.domain.ExpertInteractor;
+import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
@@ -23,16 +24,17 @@ class FactoriesModule {
     @Provides
     HomeScreenModelFactory getHomeScreenModelFactory(AppointmentInteractor iteractor,
                                                      ExpertInteractor expertsInteractor,
+                                                     FilterActiveAppointmentsInteractor filterInteractor,
                                                      Executor executor) {
-        return new HomeScreenModelFactory(iteractor, expertsInteractor, executor);
+        return new HomeScreenModelFactory(iteractor, expertsInteractor, filterInteractor, executor);
     }
 
     @Provides
-    DetailedAppointmentViewModelFactory getDetailedAppointmentFactory(DetailedAppointmentInteractor
-                                                                              detailedAppointmentInteractor,
+    DetailedAppointmentViewModelFactory getDetailedAppointmentFactory(DetailedAppointmentInteractor detailedAppointmentInteractor,
+                                                                      FilterActiveAppointmentsInteractor filterInteractor,
                                                                       Executor executor,
                                                                       ResourceWrapper resourceWrapper) {
-        return new DetailedAppointmentViewModelFactory(detailedAppointmentInteractor, executor, resourceWrapper);
+        return new DetailedAppointmentViewModelFactory(detailedAppointmentInteractor, filterInteractor, executor, resourceWrapper);
     }
 
     @Provides
@@ -45,8 +47,9 @@ class FactoriesModule {
     @Provides
     ExpertScheduleViewModelFactory getExpertScheduleFactory(Executor executor,
                                                             ResourceWrapper resourceWrapper,
-                                                            ExpertInteractor expertInteractor) {
-        return new ExpertScheduleViewModelFactory(executor, resourceWrapper, expertInteractor);
+                                                            ExpertInteractor expertInteractor,
+                                                            FilterActiveAppointmentsInteractor filterInteractor) {
+        return new ExpertScheduleViewModelFactory(executor, resourceWrapper, expertInteractor, filterInteractor);
     }
 
     @Provides

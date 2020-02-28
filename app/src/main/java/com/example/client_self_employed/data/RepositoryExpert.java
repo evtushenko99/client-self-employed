@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -216,14 +217,36 @@ public class RepositoryExpert implements IExpertRepository {
     }
 
     private void loadExpertsPhoto(List<Expert> experts, IExpertsCallBack callBack) {
-        mStorageReference.child("expert_" + experts.get(0).getId() + ".jpg").getDownloadUrl()
+        mStorageReference.listAll()
+                .addOnCompleteListener(new OnCompleteListener<ListResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ListResult> task) {
+                        for (int i = 0; i < experts.size(); i++) {
+                            experts.get(i).setExpertPhotoUri(task.getResult().getItems().get(i).toString());
+                        }
+                        //callBack.expertsIsLoaded(experts);
+                    }
+                });
+        for (Expert expert : experts) {
+            mStorageReference.child("expert_" + expert.getId() + ".jpg").getDownloadUrl()
+                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            expert.setExpertPhotoUri(task.getResult().toString());
+                            if (experts.size() == expert.getId())
+                                callBack.expertsIsLoaded(experts);
+                        }
+                    });
+        }
+
+       /* mStorageReference.child("expert_" + experts.get(0).getId() + ".jpg").getDownloadUrl()
                 .addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         experts.get(0).setExpertPhotoUri(task.getResult().toString());
                         callBack.expertsIsLoaded(experts);
                     }
-                });
+                });*/
 
     }
 }

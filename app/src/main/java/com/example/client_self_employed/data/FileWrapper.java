@@ -19,16 +19,6 @@ public class FileWrapper implements IFileWrapper {
         mContext = context;
     }
 
-    public Uri createNewImageURI(String imageName) {
-        File photoFile;
-        photoFile = createImageFile(imageName);
-        if (photoFile != null) {
-            String authorities = mContext.getPackageName() + ".provider";
-            return FileProvider.getUriForFile(mContext, authorities, photoFile);
-        }
-        return null;
-    }
-
     @Override
     public Uri createNewImageURI(File imageFile) {
         if (imageFile != null) {

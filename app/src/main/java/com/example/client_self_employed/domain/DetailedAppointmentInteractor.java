@@ -3,16 +3,18 @@ package com.example.client_self_employed.domain;
 import androidx.work.Data;
 
 import com.example.client_self_employed.data.IAppointmentRepository;
+import com.example.client_self_employed.data.IDataWrapper;
 import com.example.client_self_employed.data.IExpertRepository;
-import com.example.client_self_employed.notification.Constants;
 
 public class DetailedAppointmentInteractor {
     private final IAppointmentRepository mAppointmentsRepository;
     private final IExpertRepository mExpertsRepository;
+    private final IDataWrapper mDataWrapper;
 
-    public DetailedAppointmentInteractor(IAppointmentRepository appointmentsRepository, IExpertRepository expertsRepository) {
+    public DetailedAppointmentInteractor(IAppointmentRepository appointmentsRepository, IExpertRepository expertsRepository, IDataWrapper dataWrapper) {
         mAppointmentsRepository = appointmentsRepository;
         mExpertsRepository = expertsRepository;
+        mDataWrapper = dataWrapper;
     }
 
     public void loadExpert(long expertId, ILoadOneExpertCallback oneExpertCallback) {
@@ -32,11 +34,6 @@ public class DetailedAppointmentInteractor {
     }
 
     public Data createWorkInputData(String serviceName, String startTime, long appointmentId, long expertId) {
-        return new Data.Builder()
-                .putString(Constants.EXTRA_TITLE, serviceName)
-                .putString(Constants.EXTRA_TEXT, startTime)
-                .putLong(Constants.EXTRA_EXPERT_ID, expertId)
-                .putLong(Constants.EXTRA_APPOINTMENT_ID, appointmentId)
-                .build();
+        return mDataWrapper.createInputData(serviceName, startTime, appointmentId, expertId);
     }
 }

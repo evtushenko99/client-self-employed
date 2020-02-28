@@ -2,8 +2,6 @@ package com.example.client_self_employed.domain;
 
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
 import com.example.client_self_employed.data.IClientRepository;
 import com.example.client_self_employed.data.IFileWrapper;
 
@@ -30,15 +28,15 @@ public class ClientInteractor {
         mClientRepository.updateFullName(clientId, lastName, name, secondName, callback);
     }
 
-    public void updateClientEmail(@NonNull long clientId, String newEmail, IClientCallback callback) {
+    public void updateClientEmail(long clientId, String newEmail, IClientCallback callback) {
         mClientRepository.updateClientEmail(clientId, newEmail, callback);
     }
 
-    public void updateClientGender(@NonNull long clientId, String newGender, IClientCallback callback) {
+    public void updateClientGender(long clientId, String newGender, IClientCallback callback) {
         mClientRepository.updateClientGender(clientId, newGender, callback);
     }
 
-    public void updateClientPhoneNumber(@NonNull long clientId, String newPhoneNumber, IClientCallback callback) {
+    public void updateClientPhoneNumber(long clientId, String newPhoneNumber, IClientCallback callback) {
         mClientRepository.updateClientPhoneNumber(clientId, newPhoneNumber, callback);
     }
 

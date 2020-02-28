@@ -3,6 +3,8 @@ package com.example.client_self_employed.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Сущность записи, содержащая освновные ее характеристики
  */
@@ -136,6 +138,52 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
                 && this.getStartHourOfDay() < o.getStartHourOfDay()) {
             return -1;
         } else return +1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Appointment)) return false;
+        Appointment that = (Appointment) o;
+        return getId() == that.getId() &&
+                getCost() == that.getCost() &&
+                getYear() == that.getYear() &&
+                getMonth() == that.getMonth() &&
+                getDayOfMonth() == that.getDayOfMonth() &&
+                getStartHourOfDay() == that.getStartHourOfDay() &&
+                getStartMinute() == that.getStartMinute() &&
+                getExpertId() == that.getExpertId() &&
+                getClientId() == that.getClientId() &&
+                Float.compare(that.getRating(), getRating()) == 0 &&
+                getNotification() == that.getNotification() &&
+                Objects.equals(getServiceName(), that.getServiceName()) &&
+                Objects.equals(getSessionDuration(), that.getSessionDuration()) &&
+                Objects.equals(getLocation(), that.getLocation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getServiceName(), getSessionDuration(), getCost(), getLocation(), getYear(), getMonth(), getDayOfMonth(), getStartHourOfDay(), getStartMinute(), getExpertId(), getClientId(), getRating(), getNotification());
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "mId=" + mId +
+                ", mServiceName='" + mServiceName + '\'' +
+                ", mSessionDuration='" + mSessionDuration + '\'' +
+                ", mCost=" + mCost +
+                ", mLocation='" + mLocation + '\'' +
+                ", mYear=" + mYear +
+                ", mMonth=" + mMonth +
+                ", mDayOfMonth=" + mDayOfMonth +
+                ", mStartHourOfDay=" + mStartHourOfDay +
+                ", mStartMinute=" + mStartMinute +
+                ", mExpertId=" + mExpertId +
+                ", mClientId=" + mClientId +
+                ", mRating=" + mRating +
+                ", mNotification=" + mNotification +
+                '}';
     }
 
     public long getId() {

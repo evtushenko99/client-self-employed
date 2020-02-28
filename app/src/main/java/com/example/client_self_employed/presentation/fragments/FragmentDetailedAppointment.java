@@ -90,7 +90,6 @@ public class FragmentDetailedAppointment extends Fragment {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
                 boolean isActivated = sharedPreferences.getBoolean(getString(R.string.preferences_enable_notifications_switch_key), false);
                 if (isActivated) {
-                    mDetailedAppointmentViewModel.updateAppointmentNotification();
                     mDetailedAppointmentViewModel.createNotification(serviceName, startTime, appointmentId, expertId);
                 } else {
                     requireActivity().getSupportFragmentManager().beginTransaction()

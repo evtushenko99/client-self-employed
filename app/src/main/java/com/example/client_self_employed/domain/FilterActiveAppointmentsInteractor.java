@@ -1,5 +1,7 @@
 package com.example.client_self_employed.domain;
 
+import androidx.annotation.NonNull;
+
 import com.example.client_self_employed.domain.model.Appointment;
 
 import java.util.ArrayList;
@@ -7,22 +9,24 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class CheckedDateOfAppointmentsInteractor {
-    public static List<Appointment> checkData(List<Appointment> expertSchedule) {
+public class FilterActiveAppointmentsInteractor {
+
+
+    public List<Appointment> filterActiveAppointments(long now, @NonNull List<Appointment> expertSchedule) {
         List<Appointment> checkedExpertedSchedule = new ArrayList<>();
+        // long now = System.currentTimeMillis();
         for (Appointment appointment : expertSchedule) {
             Calendar calendar = makeCalendar(appointment);
-            if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
+            if (calendar.getTimeInMillis() >= now) {
                 checkedExpertedSchedule.add(appointment);
             }
         }
         return checkedExpertedSchedule;
     }
 
-    public static Calendar makeCalendar(Appointment appointment) {
+    public Calendar makeCalendar(@NonNull Appointment appointment) {
 
         Calendar calendar = new GregorianCalendar();
-
         calendar.set(Calendar.DAY_OF_MONTH, appointment.getDayOfMonth());
         calendar.set(Calendar.MONTH, appointment.getMonth() - 1);
         calendar.set(Calendar.YEAR, appointment.getYear());
@@ -31,4 +35,5 @@ public class CheckedDateOfAppointmentsInteractor {
 
         return calendar;
     }
+
 }

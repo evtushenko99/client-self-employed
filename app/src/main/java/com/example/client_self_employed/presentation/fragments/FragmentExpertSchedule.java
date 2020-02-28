@@ -21,7 +21,7 @@ import com.example.client_self_employed.R;
 import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Arguments;
-import com.example.client_self_employed.presentation.adapters.AdapterClientExpertSchedule;
+import com.example.client_self_employed.presentation.adapters.AdapterExpertSchedule;
 import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
@@ -79,12 +79,14 @@ public class FragmentExpertSchedule extends Fragment {
             mExpertNameTitle.setText(expertName);
         });
         mScheduleViewModel.getExpertSchedule().observe(getViewLifecycleOwner(), expertSchedule -> {
-            mScheduleRecycler.setAdapter(new AdapterClientExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointment() {
+            mScheduleRecycler.setAdapter(new AdapterExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointment() {
                 @Override
                 public void onExpertScheduleDetailedAppointmentClickListners(Appointment appointment, long clientId) {
-                    FragmentExpertScheduleDetailedAppointment.newInstance(appointment, clientId).show(getActivity().getSupportFragmentManager(), null);
+                    FragmentExpertScheduleDetailedAppointment
+                            .newInstance(appointment, clientId)
+                            .show(getActivity().getSupportFragmentManager(), null);
                 }
-            }));
+            }, mHomeScreenViewModel.getFilterInteractor()));
         });
         mScheduleViewModel.getIsChanged().observe(getViewLifecycleOwner(), isChanged -> {
             if (isChanged) {

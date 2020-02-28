@@ -1,5 +1,7 @@
 package com.example.client_self_employed.domain.model;
 
+import java.util.Objects;
+
 /**
  * Сущность эксперта, содержащая освновные его характеристики
  */
@@ -122,5 +124,41 @@ public class Expert {
         mWorkExperience = workExperience;
     }
 
+    @Override
+    public String toString() {
+        return "Expert{" +
+                "mId=" + mId +
+                ", mLastName='" + mLastName + '\'' +
+                ", mFirstName='" + mFirstName + '\'' +
+                ", mSecondName='" + mSecondName + '\'' +
+                ", mAge=" + mAge +
+                ", mEmail='" + mEmail + '\'' +
+                ", mPhoneNumber='" + mPhoneNumber + '\'' +
+                ", mProfession='" + mProfession + '\'' +
+                ", mWorkExperience=" + mWorkExperience +
+                ", mExpertPhotoUri='" + mExpertPhotoUri + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Expert)) return false;
+        Expert expert = (Expert) o;
+        return getId() == expert.getId() &&
+                getAge() == expert.getAge() &&
+                getWorkExperience() == expert.getWorkExperience() &&
+                Objects.equals(getLastName(), expert.getLastName()) &&
+                Objects.equals(getFirstName(), expert.getFirstName()) &&
+                Objects.equals(getSecondName(), expert.getSecondName()) &&
+                Objects.equals(getEmail(), expert.getEmail()) &&
+                Objects.equals(getPhoneNumber(), expert.getPhoneNumber()) &&
+                Objects.equals(getProfession(), expert.getProfession()) &&
+                Objects.equals(getExpertPhotoUri(), expert.getExpertPhotoUri());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getLastName(), getFirstName(), getSecondName(), getAge(), getEmail(), getPhoneNumber(), getProfession(), getWorkExperience(), getExpertPhotoUri());
+    }
 }

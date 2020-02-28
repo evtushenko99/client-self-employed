@@ -265,8 +265,4 @@ public class RepositoryClient implements IClientRepository {
                 });
     }
 
-    public void loadClientPhoto() {
-    }
-
-
 }

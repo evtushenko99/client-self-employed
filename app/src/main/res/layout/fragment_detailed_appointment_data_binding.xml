@@ -435,7 +435,7 @@
                         android:layout_marginBottom="8dp"
                         android:numStars="5"
                         android:rating="@{ViewModel.appointmentRating}"
-                        app:RatingChanged="@{ViewModel.ratingClickListener}"
+                        android:onRatingChanged="@{ViewModel.ratingClickListener}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.497"

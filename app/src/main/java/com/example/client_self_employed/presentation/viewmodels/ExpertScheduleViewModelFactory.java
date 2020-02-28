@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.client_self_employed.domain.ExpertInteractor;
+import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 
 import java.util.concurrent.Executor;
@@ -15,12 +16,14 @@ public class ExpertScheduleViewModelFactory extends ViewModelProvider.NewInstanc
     private final Executor mExecutor;
     private final ResourceWrapper mResourceWrapper;
     private final ExpertInteractor mExpertInteractor;
+    private final FilterActiveAppointmentsInteractor mFilterActiveAppointmentsInteractor;
 
     @Inject
-    public ExpertScheduleViewModelFactory(Executor executor, ResourceWrapper resourceWrapper, ExpertInteractor expertInteractor) {
+    public ExpertScheduleViewModelFactory(Executor executor, ResourceWrapper resourceWrapper, ExpertInteractor expertInteractor, FilterActiveAppointmentsInteractor filterActiveAppointmentsInteractor) {
         mExecutor = executor;
         mResourceWrapper = resourceWrapper;
         mExpertInteractor = expertInteractor;
+        mFilterActiveAppointmentsInteractor = filterActiveAppointmentsInteractor;
     }
 
 
@@ -30,6 +33,7 @@ public class ExpertScheduleViewModelFactory extends ViewModelProvider.NewInstanc
         if (ExpertScheduleViewModel.class.equals(modelClass)) {
             return (T) new ExpertScheduleViewModel(
                     mExpertInteractor,
+                    mFilterActiveAppointmentsInteractor,
                     mExecutor,
                     mResourceWrapper);
         } else {

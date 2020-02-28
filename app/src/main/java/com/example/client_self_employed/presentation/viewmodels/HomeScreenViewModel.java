@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ExpertInteractor;
+import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
 import com.example.client_self_employed.domain.IExpertsCallBack;
@@ -32,7 +33,9 @@ import java.util.concurrent.Executor;
 public class HomeScreenViewModel extends ViewModel {
     private final AppointmentInteractor mAppointmentInteractor;
     private final ExpertInteractor mExpertsInteractor;
+    private final FilterActiveAppointmentsInteractor mFilterInteractor;
     private final Executor mExecutor;
+    private final ModelsConverter mModelsConverter;
     private final ObservableField<Boolean> mIsBestExpertLoading = new ObservableField<>(false);
     private final ObservableField<Boolean> mIsActiveAppointmentLoading = new ObservableField<>(false);
     private final MutableLiveData<String> mErrors = new MutableLiveData<>();
@@ -77,7 +80,7 @@ public class HomeScreenViewModel extends ViewModel {
             mRowTypes = new ArrayList<>(mRowTypes.subList(0, 1));
 
             if (appointmentList.size() != 0 && expertList.size() != 0) {
-                List<ClientAppointment> activeAppointments = ModelsConverter.convertAppointmentToRowType(appointmentList, expertList);
+                List<ClientAppointment> activeAppointments = mModelsConverter.convertAppointmentToRowType(appointmentList, expertList);
                 if (appointmentList != null) {
 
                     ClientActiveAppointmentsItem clientActiveAppointmentsItem = new ClientActiveAppointmentsItem(activeAppointments);
@@ -129,10 +132,14 @@ public class HomeScreenViewModel extends ViewModel {
 
     HomeScreenViewModel(
             @NonNull AppointmentInteractor iteractor,
-            @NonNull ExpertInteractor expertsInteractor, @NonNull Executor executor) {
+            @NonNull ExpertInteractor expertsInteractor,
+            @NonNull FilterActiveAppointmentsInteractor filterActiveAppointmentsInteractor,
+            @NonNull Executor executor) {
         mAppointmentInteractor = iteractor;
         mExpertsInteractor = expertsInteractor;
+        mFilterInteractor = filterActiveAppointmentsInteractor;
         mExecutor = executor;
+        mModelsConverter = new ModelsConverter(mFilterInteractor);
         loadClientExperts();
     }
 
@@ -172,6 +179,10 @@ public class HomeScreenViewModel extends ViewModel {
 
     public LiveData<String> getErrors() {
         return mErrors;
+    }
+
+    public FilterActiveAppointmentsInteractor getFilterInteractor() {
+        return mFilterInteractor;
     }
 
 

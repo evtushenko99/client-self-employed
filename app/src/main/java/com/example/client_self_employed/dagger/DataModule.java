@@ -2,9 +2,11 @@ package com.example.client_self_employed.dagger;
 
 import android.content.Context;
 
+import com.example.client_self_employed.data.DataWrapper;
 import com.example.client_self_employed.data.FileWrapper;
 import com.example.client_self_employed.data.IAppointmentRepository;
 import com.example.client_self_employed.data.IClientRepository;
+import com.example.client_self_employed.data.IDataWrapper;
 import com.example.client_self_employed.data.IExpertRepository;
 import com.example.client_self_employed.data.IFileWrapper;
 import com.example.client_self_employed.data.RepositoryAppointment;
@@ -37,5 +39,9 @@ public class DataModule {
         return new FileWrapper(context);
     }
 
+    @Provides
+    public IDataWrapper getDataWrapper() {
+        return new DataWrapper();
+    }
 
 }

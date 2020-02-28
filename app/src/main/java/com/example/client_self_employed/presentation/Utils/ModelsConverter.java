@@ -2,7 +2,7 @@ package com.example.client_self_employed.presentation.Utils;
 
 import androidx.annotation.NonNull;
 
-import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
+import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.model.ClientAppointment;
@@ -14,7 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ModelsConverter {
-    public static List<ClientAppointment> convertAppointmentToRowType(@NonNull List<Appointment> appointments, @NonNull List<Expert> experts) {
+    private final FilterActiveAppointmentsInteractor mFilterInteractor;
+
+    public ModelsConverter(FilterActiveAppointmentsInteractor filterInteractor) {
+        mFilterInteractor = filterInteractor;
+    }
+
+    public List<ClientAppointment> convertAppointmentToRowType(@NonNull List<Appointment> appointments, @NonNull List<Expert> experts) {
         List<ClientAppointment> data = new ArrayList<>();
         Map<Integer, String> expertsName = new HashMap<>();
         Map<Integer, Long> expertsId = new HashMap<>();
@@ -30,7 +36,7 @@ public class ModelsConverter {
         }
         for (int i = 0; i < appointments.size(); i++) {
             Appointment appointment = appointments.get(i);
-            Calendar calendar = CheckedDateOfAppointmentsInteractor.makeCalendar(appointment);
+            Calendar calendar = mFilterInteractor.makeCalendar(appointment);
             // if (calendar.getTimeInMillis() > System.currentTimeMillis())
             data.add(new ClientAppointment(
                     appointment.getId(),

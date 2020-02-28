@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
+import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
 import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
@@ -30,7 +30,7 @@ import java.util.Locale;
 /**
  * Адаптер для отображения расписания эксперта
  */
-public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
+public class AdapterExpertSchedule extends RecyclerView.Adapter {
     /**
      * Тип элемента списка - дата
      */
@@ -43,13 +43,15 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
     private List<Object> mAdapterItems;
     private List<Appointment> mExpertSchedule;
     private IResourceWrapper mResourceWrapper;
+    private final FilterActiveAppointmentsInteractor mFilterInteractor;
 
     private ExpertScheduleDetailedAppointment mClickListeners;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public AdapterClientExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper, ExpertScheduleDetailedAppointment expertScheduleDetailedAppointment) {
-        mExpertSchedule = CheckedDateOfAppointmentsInteractor.checkData(expertSchedule);
+    public AdapterExpertSchedule(List<Appointment> expertSchedule, IResourceWrapper resourceWrapper, ExpertScheduleDetailedAppointment expertScheduleDetailedAppointment, FilterActiveAppointmentsInteractor filterInteractor) {
+        mFilterInteractor = filterInteractor;
+        mExpertSchedule = expertSchedule;
         mResourceWrapper = resourceWrapper;
         mClickListeners = expertScheduleDetailedAppointment;
         groupAppointmentByDate(mExpertSchedule);
@@ -58,6 +60,8 @@ public class AdapterClientExpertSchedule extends RecyclerView.Adapter {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void groupAppointmentByDate(List<Appointment> expertSchedule) {
+        long now = System.currentTimeMillis();
+        mExpertSchedule = mFilterInteractor.filterActiveAppointments(now, mExpertSchedule);
         mAdapterItems = new ArrayList<>();
         if (expertSchedule.size() != 0) {
             ArrayList<Appointment> timesForDay = new ArrayList<>();

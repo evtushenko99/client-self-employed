@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.client_self_employed.domain.CheckedDateOfAppointmentsInteractor;
 import com.example.client_self_employed.domain.ExpertInteractor;
+import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.Utils.IResourceWrapper;
@@ -18,7 +18,7 @@ import java.util.concurrent.Executor;
 public class ExpertScheduleViewModel extends ViewModel {
     private final ExpertInteractor mExpertScheduleInteractor;
     private final IResourceWrapper mResourceWrapper;
-
+    private final FilterActiveAppointmentsInteractor mFilterInteractor;
     private final Executor mExecutor;
     private long mExpertId;
 
@@ -32,7 +32,8 @@ public class ExpertScheduleViewModel extends ViewModel {
     private IExpertScheduleCallback mScheduleStatus = new IExpertScheduleCallback() {
         @Override
         public void scheduleIsLoaded(List<Appointment> expertSchedule, String expertName) {
-            List<Appointment> expertCheckedSchedule = CheckedDateOfAppointmentsInteractor.checkData(expertSchedule);
+            long now = System.currentTimeMillis();
+            List<Appointment> expertCheckedSchedule = mFilterInteractor.filterActiveAppointments(now, expertSchedule);
             mExpertSchedule.postValue(expertSchedule);
             mExpertName.postValue(expertName);
             mIsLoading.postValue(false);
@@ -54,10 +55,12 @@ public class ExpertScheduleViewModel extends ViewModel {
 
     public ExpertScheduleViewModel(
             @NonNull ExpertInteractor expertScheduleInteractor,
+            @NonNull FilterActiveAppointmentsInteractor filterInteractor,
             @NonNull Executor executor,
             @NonNull IResourceWrapper resourceWrapper) {
         mExecutor = executor;
         mExpertScheduleInteractor = expertScheduleInteractor;
+        mFilterInteractor = filterInteractor;
         mResourceWrapper = resourceWrapper;
         mIsLoading.setValue(false);
         mIsChanged.postValue(false);
