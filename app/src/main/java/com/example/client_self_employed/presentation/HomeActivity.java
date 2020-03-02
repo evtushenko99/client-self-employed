@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -31,15 +32,26 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
         setContentView(R.layout.activity_main);
         mToolBar = findViewById(R.id.toolbar);
         mToolBar.setTitle(R.string.title_home);
+        mToolBar.setNavigationIcon(R.drawable.ic__back_white_24dp);
         setSupportActionBar(mToolBar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
         BottomNavigationView navigationView = findViewById(R.id.bottom_navigation_view);
         navigationView.setOnNavigationItemSelectedListener(this);
-
         Log.d(TAG, "onCreate: ");
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, FragmentHomeScreen.newInstance())
                 .commit();
 
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                actionBar.setDisplayHomeAsUpEnabled(true);// show back button
+
+                mToolBar.setNavigationOnClickListener(v -> onBackPressed());
+            } else {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+            }
+        });
 
     }
 

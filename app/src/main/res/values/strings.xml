@@ -56,9 +56,9 @@
     <string name="client_information_changed">Ваши данные успешно изменены</string>
     <string name="expert_schedule_new_appointment">Новая запись успешно добавлена</string>
     <string name="detailed_fragment_title">Описание записи</string>
-    <string name="title_home">home</string>
-    <string name="title_expert_search">Expert Search</string>
-    <string name="title_account_settings">Account settings</string>
+    <string name="title_home">Расписание</string>
+    <string name="title_expert_search">Поиск эксперта</string>
+    <string name="title_account_settings">Настройки аккаунта</string>
     <string name="fragment_detailed_expert_number">Телефон:</string>
     <string name="simple_activity_transition">proverhs</string>
 
@@ -83,6 +83,7 @@
     <string name="detailed_appointment_location">Место:</string>
     <string name="detailed_appointment_time">Время:</string>
     <string name="detailed_appointment_cost">Стоимость</string>
+
     <string name="required_write_external_permission">Требуется разрешение на запись</string>
     <string name="no_write_external_storage_permission">Нет разрешения на запись, фото не сохранено</string>
     <string name="need_to_choose_expert">Выберите эксперта</string>
