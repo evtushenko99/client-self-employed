@@ -43,9 +43,10 @@ public class FragmentAccountSettings extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
+        AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
         binding.setViewModel(mViewModel);
         setClickListeners();
         return binding.getRoot();
@@ -54,17 +55,17 @@ public class FragmentAccountSettings extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setClickListeners() {
         mViewModel.setOnChangeEmailClickListener(v ->
-                DialogFragmentChangeExpertEmail.newInstance(mViewModel.getEmail().get())
+                DialogFragmentChangeExpertEmail.newInstance(mViewModel.getEmail().getValue())
                         .show(requireActivity().getSupportFragmentManager(), null));
         mViewModel.setOnChangePhoneNumberClickListener(v ->
-                DialogFragmentChangeExpertPhoneNumber.newInstance(mViewModel.getPhoneNumber().get())
+                DialogFragmentChangeExpertPhoneNumber.newInstance(mViewModel.getPhoneNumber().getValue())
                         .show(requireActivity().getSupportFragmentManager(), null));
         mViewModel.setOnChangeFullNameClickListener(v -> {
             DialogFragmentChangeExpertFullName.newInstance()
                     .show(requireActivity().getSupportFragmentManager(), null);
         });
         mViewModel.setOnChangeGenderClickListener(v -> {
-            DialogFragmentChangeExpertGender.newInstance(mViewModel.getGender().get())
+            DialogFragmentChangeExpertGender.newInstance(mViewModel.getGender().getValue())
                     .show(requireActivity().getSupportFragmentManager(), null);
         });
         mViewModel.setOnChangeBirthdayClickListener((year, month, day) -> setDatePicker(year, month, day));
@@ -81,10 +82,18 @@ public class FragmentAccountSettings extends Fragment {
         });
         mViewModel.setOnNotificationClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragment_host_appointments_with_experts, FragmentPreferences.newInstance())
+                .replace(R.id.fragment_container, FragmentPreferences.newInstance())
                 .commit());
+
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewModel.getMessage().observe(getViewLifecycleOwner(), error -> {
+            CustomToast.makeToast(requireActivity(), error, view);
+        });
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setDatePicker(int year, int month, int day) {

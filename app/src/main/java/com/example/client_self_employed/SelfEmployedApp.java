@@ -1,6 +1,7 @@
 package com.example.client_self_employed;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.example.client_self_employed.dagger.ContextModule;
 import com.example.client_self_employed.dagger.DaggerFactoryComponent;
@@ -23,6 +24,11 @@ public class SelfEmployedApp extends Application {
                 .dataModule(new DataModule())
                 .resourceModule(new ResourceModule())
                 .build();
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectNetwork()
+                .penaltyDialog()
+                .build());
     }
 
     public FactoryComponent getDaggerComponent() {

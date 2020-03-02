@@ -7,11 +7,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,16 +42,17 @@ public class FragmentHomeScreen extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ActiveAppointmentsBinding binding = ActiveAppointmentsBinding.inflate(inflater, container, false);
         mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                 .get(HomeScreenViewModel.class);
+        mViewModel.loadClientExperts();
+        ActiveAppointmentsBinding binding = ActiveAppointmentsBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
         binding.setActiveAppointmentViewModel(mViewModel);
         return binding.getRoot();
 
@@ -58,44 +61,49 @@ public class FragmentHomeScreen extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        requireActivity().setTitle(R.string.title_fragment_active_appointments);
 
         mRecyclerView = view.findViewById(R.id.list_of_active_appointments_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(new AdapterHomeScreen(null,
                 (appointment, position) -> {
+                    TextView textView = view.findViewById(R.id.item_expert_name);
                     requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_host_appointments_with_experts, FragmentDetailedAppointment.newInstance(appointment.getId(), appointment.getExpertId(), position))
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                            .replace(R.id.fragment_container, FragmentDetailedAppointment.newInstance(appointment.getId(), appointment.getExpertId(), position))
                             .addToBackStack("active_appointments")
                             .commit();
                 },
-                () -> {
-                    if (mExpertId != 0) {
+                (expertId) -> {
+                    if (expertId != 0) {
                         FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
                         Bundle bundle = new Bundle();
-                        bundle.putLong(Arguments.EXPERT_ID, mExpertId);
+                        bundle.putLong(Arguments.EXPERT_ID, expertId);
                         fragmentExpertSchedule.setArguments(bundle);
                         requireActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
+                                .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right)
+                                .replace(R.id.fragment_container, fragmentExpertSchedule)
                                 .addToBackStack("active_appointments")
                                 .commit();
                     } else {
                         Toast.makeText(getActivity(), "Выберите желаемого эксперта", Toast.LENGTH_LONG).show();
                     }
                 },
-                expertId -> mExpertId = expertId,
                 () -> requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
+                        .replace(R.id.fragment_container, FragmentFindExpert.newInstance())
                         .addToBackStack("active_appointments")
                         .commit(),
                 getResources()
         ));
-        mViewModel.getErrors().observe(getViewLifecycleOwner(), error -> {
-            CustomToast.makeToast(requireActivity(), error, view);
+        mViewModel.getErrors().observe(getViewLifecycleOwner(), message -> {
+            CustomToast.makeToast(requireActivity(), message, view);
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -107,14 +115,14 @@ public class FragmentHomeScreen extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_find_expert: {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_host_appointments_with_experts, FragmentFindExpert.newInstance())
+                        .replace(R.id.fragment_container, FragmentFindExpert.newInstance())
                         .addToBackStack("active_appointments")
                         .commit();
             }
             break;
             case R.id.menu_settings: {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_host_appointments_with_experts, FragmentAccountSettings.newInstance())
+                        .replace(R.id.fragment_container, FragmentAccountSettings.newInstance())
                         .addToBackStack("active_appointments")
                         .commit();
             }

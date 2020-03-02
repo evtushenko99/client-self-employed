@@ -20,7 +20,7 @@ import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleVi
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
 
 public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
-    public static final String DETAILED_APPOINTMENT = "DETAILED APPOINTMENT";
+    private static final String DETAILED_APPOINTMENT = "DETAILED APPOINTMENT";
     private static final String CLIENT_ID = "CLIENT ID";
     private Appointment mAppointment;
 
@@ -68,6 +68,7 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
         setDetailedAppointmentViewModel();
 
         ExpertScheduleDetailedAppointmentBinding binding = ExpertScheduleDetailedAppointmentBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
         binding.setViewModel(mExpertDetailedAppointmentViewModel);
         return binding.getRoot();
     }

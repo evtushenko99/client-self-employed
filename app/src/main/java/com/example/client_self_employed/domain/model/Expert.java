@@ -1,11 +1,12 @@
 package com.example.client_self_employed.domain.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Сущность эксперта, содержащая освновные его характеристики
  */
-public class Expert {
+public class Expert implements Serializable {
 
     private long mId;
     private String mLastName;

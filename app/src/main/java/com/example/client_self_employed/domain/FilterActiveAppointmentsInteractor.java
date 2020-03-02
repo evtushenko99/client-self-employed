@@ -11,7 +11,6 @@ import java.util.List;
 
 public class FilterActiveAppointmentsInteractor {
 
-
     public List<Appointment> filterActiveAppointments(long now, @NonNull List<Appointment> expertSchedule) {
         List<Appointment> checkedExpertedSchedule = new ArrayList<>();
         // long now = System.currentTimeMillis();

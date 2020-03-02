@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,22 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.SelfEmployedApp;
-import com.example.client_self_employed.domain.model.Appointment;
+import com.example.client_self_employed.databinding.ExpertScheduleBinding;
 import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.adapters.AdapterExpertSchedule;
-import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 public class FragmentExpertSchedule extends Fragment {
-
-    private TextView mExpertNameTitle;
     private RecyclerView mScheduleRecycler;
     private ExpertScheduleViewModel mScheduleViewModel;
     private HomeScreenViewModel mHomeScreenViewModel;
@@ -45,24 +40,27 @@ public class FragmentExpertSchedule extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_expert_schedule, container, false);
+        mScheduleViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getExpertScheduleViewModelFactory())
+                .get(ExpertScheduleViewModel.class);
+        ExpertScheduleBinding binding = ExpertScheduleBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(mScheduleViewModel);
+        return binding.getRoot();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mExpertNameTitle = view.findViewById(R.id.schedule_expert_name);
-
-        mScheduleRecycler = view.findViewById(R.id.schedule_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
-        //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL);
-        mScheduleRecycler.setLayoutManager(layoutManager);
-        //mScheduleRecycler.addItemDecoration(dividerItemDecoration);
         if (this.getArguments() != null) {
             long id = this.getArguments().getLong(Arguments.EXPERT_ID);
             setupScheduleMVVM(id);
+            mScheduleRecycler = view.findViewById(R.id.schedule_recycler);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            mScheduleRecycler.setLayoutManager(layoutManager);
+            mScheduleViewModel.getMessage().observe(getViewLifecycleOwner(), message -> {
+                CustomToast.makeToast(requireActivity(), message, view);
+            });
         } else {
             Toast.makeText(getActivity(), "ID эксперта не дошло", Toast.LENGTH_LONG).show();
         }
@@ -70,23 +68,16 @@ public class FragmentExpertSchedule extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setupScheduleMVVM(long id) {
-        mScheduleViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getExpertScheduleViewModelFactory())
-                .get(ExpertScheduleViewModel.class);
         mHomeScreenViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                 .get(HomeScreenViewModel.class);
-        mScheduleViewModel.loadExpertSchedule(this.getArguments().getLong(Arguments.EXPERT_ID));
-        mScheduleViewModel.getExpertName().observe(getViewLifecycleOwner(), expertName -> {
-            mExpertNameTitle.setText(expertName);
+        mScheduleViewModel.loadExpertSchedule(id);
+        mScheduleViewModel.setMoreInformation(expert -> {
+            DialogFragmentDetailedExpert.newInstance(expert).show(getActivity().getSupportFragmentManager(), null);
         });
         mScheduleViewModel.getExpertSchedule().observe(getViewLifecycleOwner(), expertSchedule -> {
-            mScheduleRecycler.setAdapter(new AdapterExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), new ExpertScheduleDetailedAppointment() {
-                @Override
-                public void onExpertScheduleDetailedAppointmentClickListners(Appointment appointment, long clientId) {
-                    FragmentExpertScheduleDetailedAppointment
-                            .newInstance(appointment, clientId)
-                            .show(getActivity().getSupportFragmentManager(), null);
-                }
-            }, mHomeScreenViewModel.getFilterInteractor()));
+            mScheduleRecycler.setAdapter(new AdapterExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), (appointment, clientId) -> FragmentExpertScheduleDetailedAppointment
+                    .newInstance(appointment, clientId)
+                    .show(getActivity().getSupportFragmentManager(), null), mHomeScreenViewModel.getFilterInteractor()));
         });
         mScheduleViewModel.getIsChanged().observe(getViewLifecycleOwner(), isChanged -> {
             if (isChanged) {
@@ -94,13 +85,5 @@ public class FragmentExpertSchedule extends Fragment {
             }
         });
 
-    }
-
-
-    @Override
-    public void onStop() {
-
-
-        super.onStop();
     }
 }

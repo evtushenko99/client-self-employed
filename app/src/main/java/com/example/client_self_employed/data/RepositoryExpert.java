@@ -1,6 +1,5 @@
 package com.example.client_self_employed.data;
 
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,15 +14,12 @@ import com.example.client_self_employed.domain.ILoadOneExpertCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -51,12 +47,11 @@ public class RepositoryExpert implements IExpertRepository {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String name = null;
+                        Expert expert = null;
                         for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
-                            Expert expert = keyExpert.getValue(Expert.class);
-                            name = expert.getFullName();
+                            expert = keyExpert.getValue(Expert.class);
                         }
-                        expertScheduleStatus.scheduleIsLoaded(appointments, name);
+                        expertScheduleStatus.scheduleIsLoaded(appointments, expert);
                     }
 
                     @Override
@@ -120,7 +115,7 @@ public class RepositoryExpert implements IExpertRepository {
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 String error = "onCancelled loadExpertsNameForActiveAppointments = [" + databaseError.getMessage() + "]";
-                                callback.errorOnLoadingClientExperts(error);
+                                callback.errorMessage(error);
                                 Log.d(TAG, error);
                             }
                         });
@@ -217,36 +212,13 @@ public class RepositoryExpert implements IExpertRepository {
     }
 
     private void loadExpertsPhoto(List<Expert> experts, IExpertsCallBack callBack) {
-        mStorageReference.listAll()
-                .addOnCompleteListener(new OnCompleteListener<ListResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ListResult> task) {
-                        for (int i = 0; i < experts.size(); i++) {
-                            experts.get(i).setExpertPhotoUri(task.getResult().getItems().get(i).toString());
-                        }
-                        //callBack.expertsIsLoaded(experts);
-                    }
-                });
-        for (Expert expert : experts) {
-            mStorageReference.child("expert_" + expert.getId() + ".jpg").getDownloadUrl()
-                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            expert.setExpertPhotoUri(task.getResult().toString());
-                            if (experts.size() == expert.getId())
-                                callBack.expertsIsLoaded(experts);
-                        }
+        for (int i = 0; i < experts.size(); i++) {
+            Expert expert = experts.get(i);
+            mStorageReference.child("expert_" + (expert.getId()) + ".jpg").getDownloadUrl()
+                    .addOnCompleteListener(task -> {
+                        expert.setExpertPhotoUri(task.getResult().toString());
+                        callBack.expertsIsLoaded(experts);
                     });
         }
-
-       /* mStorageReference.child("expert_" + experts.get(0).getId() + ".jpg").getDownloadUrl()
-                .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        experts.get(0).setExpertPhotoUri(task.getResult().toString());
-                        callBack.expertsIsLoaded(experts);
-                    }
-                });*/
-
     }
 }

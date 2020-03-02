@@ -22,7 +22,7 @@
         android:layout_marginEnd="@dimen/margin_medium"
         android:layout_marginBottom="@dimen/margin_medium"
         android:onClick="@{ClientAppointment.onItemClickListener}"
-        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardCornerRadius="@dimen/card_corner_radius_high"
         app:cardElevation="@dimen/elevation_medium">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,6 +52,7 @@
                 android:layout_alignStart="@+id/item_service_name"
                 android:layout_marginTop="8dp"
                 android:text="@{ClientAppointment.expertName}"
+
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="@+id/item_service_name"
                 app:layout_constraintTop_toBottomOf="@+id/item_service_name"

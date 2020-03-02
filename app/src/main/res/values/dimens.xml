@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="margin_small">4dp</dimen>
     <dimen name="margin_medium">8dp</dimen>
-    <dimen name="card_corner_radius">4dp</dimen>
-    <dimen name="padding_medium">8dp</dimen>
-    <dimen name="padding_small">4dp</dimen>
     <dimen name="margin_high">16dp</dimen>
 
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_high">16dp</dimen>
+
+    <dimen name="card_corner_radius_small">2dp</dimen>
+    <dimen name="card_corner_radius_medium">4dp</dimen>
+    <dimen name="card_corner_radius_high">8dp</dimen>
+
+    <dimen name="elevation_small">2dp</dimen>
     <dimen name="elevation_medium">4dp</dimen>
-    <dimen name="card_corner_radius_small">4dp</dimen>
-    <dimen name="card_corner_radius_extra_small">2dp</dimen>
+    <dimen name="elevation_high">8dp</dimen>
+
     <dimen name="image_width">96dp</dimen>
     <dimen name="image_height">96dp</dimen>
     <dimen name="image_width_small">48dp</dimen>
     <dimen name="image_height_small">48dp</dimen>
-    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_extra_high">32dp</dimen>
+    <dimen name="image_button_app">36dp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">24sp</dimen>
+
 </resources>

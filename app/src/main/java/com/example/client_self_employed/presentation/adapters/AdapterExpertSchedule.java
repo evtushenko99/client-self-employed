@@ -117,7 +117,7 @@ public class AdapterExpertSchedule extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ITEM_VIEW_TYPE_TIME: {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_schedule_time_recycler, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expert_schedule_for_one_day, parent, false);
                 return new ScheduleHolder(view);
             }
             case ITEM_VIEW_TYPE_DATE: {

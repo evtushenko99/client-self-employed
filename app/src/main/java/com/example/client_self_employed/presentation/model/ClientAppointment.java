@@ -3,6 +3,7 @@ package com.example.client_self_employed.presentation.model;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class ClientAppointment implements RowType, Serializable {
 
@@ -66,5 +67,37 @@ public class ClientAppointment implements RowType, Serializable {
         return mDate;
     }
 
+    @Override
+    public String toString() {
+        return "ClientAppointment{" +
+                "mAppointmentId=" + mAppointmentId +
+                ", mExpertId=" + mExpertId +
+                ", mExpertName='" + mExpertName + '\'' +
+                ", mServiceName='" + mServiceName + '\'' +
+                ", mStartTime='" + mStartTime + '\'' +
+                ", mCost=" + mCost +
+                ", mLocation='" + mLocation + '\'' +
+                ", mDate='" + mDate + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClientAppointment)) return false;
+        ClientAppointment that = (ClientAppointment) o;
+        return mAppointmentId == that.mAppointmentId &&
+                getExpertId() == that.getExpertId() &&
+                getCost() == that.getCost() &&
+                Objects.equals(getExpertName(), that.getExpertName()) &&
+                Objects.equals(getServiceName(), that.getServiceName()) &&
+                Objects.equals(getStartTime(), that.getStartTime()) &&
+                Objects.equals(getLocation(), that.getLocation()) &&
+                Objects.equals(getDate(), that.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mAppointmentId, getExpertId(), getExpertName(), getServiceName(), getStartTime(), getCost(), getLocation(), getDate());
+    }
 }

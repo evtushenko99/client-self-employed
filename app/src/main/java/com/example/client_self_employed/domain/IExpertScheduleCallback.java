@@ -3,6 +3,7 @@ package com.example.client_self_employed.domain;
 import androidx.annotation.Nullable;
 
 import com.example.client_self_employed.domain.model.Appointment;
+import com.example.client_self_employed.domain.model.Expert;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ public interface IExpertScheduleCallback {
      * Колбек - возвращает расписание определенного эксперта
      *
      * @param expertSchedule - все записи эксперта
-     * @param expertName     - имя эксперта
+     * @param expert         -   информация об эксперте
      */
-    void scheduleIsLoaded(@Nullable List<Appointment> expertSchedule, @Nullable String expertName);
+    void scheduleIsLoaded(@Nullable List<Appointment> expertSchedule, @Nullable Expert expert);
 
     /**
      * Колбек для записи клиента на определенное время

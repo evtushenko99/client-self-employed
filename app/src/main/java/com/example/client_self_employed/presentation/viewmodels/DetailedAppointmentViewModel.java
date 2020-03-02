@@ -4,10 +4,9 @@ import android.view.View;
 import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.databinding.BindingAdapter;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -44,28 +43,28 @@ public class DetailedAppointmentViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> mIsLoadingExpert = new MutableLiveData<>(false);
     private MutableLiveData<Boolean> mIsLoadingAppointment = new MutableLiveData<>(false);
-    private ObservableField<String> mExpertProfession = new ObservableField<>();
-    private ObservableField<String> mExpertFullName = new ObservableField<>();
-    private ObservableField<String> mExpertPhoneNumber = new ObservableField<>();
-    private ObservableField<String> mExpertEmail = new ObservableField<>();
-    private ObservableInt mExpertAge = new ObservableInt();
-    private ObservableInt mExpertWorkExperience = new ObservableInt();
+    private MutableLiveData<String> mExpertProfession = new MutableLiveData<>();
+    private MutableLiveData<String> mExpertFullName = new MutableLiveData<>();
+    private MutableLiveData<String> mExpertPhoneNumber = new MutableLiveData<>();
+    private MutableLiveData<String> mExpertEmail = new MutableLiveData<>();
+    private MutableLiveData<Integer> mExpertAge = new MutableLiveData();
+    private MutableLiveData<Integer> mExpertWorkExperience = new MutableLiveData();
 
-    private ObservableField<String> mAppointmentServiceName = new ObservableField<>();
-    private ObservableField<String> mAppointmentDate = new ObservableField<>();
-    private ObservableField<String> mAppointmentDuration = new ObservableField<>();
-    private ObservableField<String> mAppointmentLocation = new ObservableField<>();
-    private ObservableField<String> mAppointmentStartTime = new ObservableField<>();
+    private MutableLiveData<String> mAppointmentServiceName = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentDate = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentDuration = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentLocation = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentStartTime = new MutableLiveData<>();
 
-    private ObservableField<Float> mAppointmentRating = new ObservableField<>();
-    private ObservableField<Boolean> mTimeCheck = new ObservableField<>(false);
-    private ObservableField<Boolean> mAppointmentNotification = new ObservableField<>();
+    private MutableLiveData<Float> mAppointmentRating = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mTimeCheck = new MutableLiveData<>(false);
+    private MutableLiveData<Boolean> mAppointmentNotification = new MutableLiveData<>();
 
 
-    private ObservableInt mAppointmentCost = new ObservableInt();
-    private ObservableField<Boolean> mAdditionalInformationAboutExpert = new ObservableField<>();
-    private ObservableField<String> mMoreInformationTextView = new ObservableField<>();
-    private ObservableField<Appointment> mObservableAppointment = new ObservableField<>();
+    private MutableLiveData<Integer> mAppointmentCost = new MutableLiveData();
+    private MutableLiveData<Boolean> mAdditionalInformationAboutExpert = new MutableLiveData<>();
+    private MutableLiveData<String> mMoreInformationTextView = new MutableLiveData<>();
+    //private MutableLiveData<Appointment> mObservableAppointment = new MutableLiveData<>();
     //Запись, информация о которой отображается на экране FragmentDetailedAppointment
     private Appointment mAppointment;
     //Эксперт, информация о котором отображается на экране FragmentDetailedAppointment
@@ -85,21 +84,18 @@ public class DetailedAppointmentViewModel extends ViewModel {
     // Слушатель, который отвечает за оценку оказанной услуги клиенту,
     // появляется только у записи, которая началась или уже прошла
     private RatingClickListeners mRatingClickListener;
-
-
     private ILoadOneExpertCallback mExpertCallback = new ILoadOneExpertCallback() {
         @Override
         public void oneExpertIsLoaded(Expert expert) {
             mIsLoadingExpert.postValue(false);
             if (expert != null) {
-                mExpert = expert;
                 bindExpertViews(expert);
             }
         }
 
         @Override
         public void errorLoadOneExpert(String errorLoadOneExpert) {
-
+            mMessage.postValue(errorLoadOneExpert);
         }
     };
     private ILoadOneAppointmentCallback mAppointmentCallback = new ILoadOneAppointmentCallback() {
@@ -107,12 +103,8 @@ public class DetailedAppointmentViewModel extends ViewModel {
         public void oneAppointmentIsLoaded(Appointment appointment) {
             mIsLoadingAppointment.postValue(false);
             if (appointment != null) {
-                mAppointment = appointment;
-
-                mObservableAppointment.set(mAppointment);
                 bindAppointmentViews(appointment);
-                if (isUpdateButtonText() && mAppointment.getNotification()) {
-                    updateAppointmentNotification();
+                if (isUpdateButtonText() && appointment.getNotification()) {
                     mUpdateButtonText = false;
                 }
             }
@@ -120,7 +112,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
 
         @Override
         public void errorLoadOneAppointment(String errorLoadOneAppointment) {
-
+            mMessage.postValue(errorLoadOneAppointment);
         }
 
         @Override
@@ -140,8 +132,8 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mFilterInteractor = filterInteractor;
         mExecutor = executor;
         mResourceWrapper = resourceWrapper;
-        mAdditionalInformationAboutExpert.set(false);
-        mMoreInformationTextView.set(mResourceWrapper.getString(R.string.fragment_detailed_information_expert_more_inf));
+        mAdditionalInformationAboutExpert.setValue(false);
+        mMoreInformationTextView.setValue(mResourceWrapper.getString(R.string.fragment_detailed_information_expert_more_inf));
     }
 
     public void loadDetailedInformation(@NonNull Long appointmentId, @NonNull Long expertId) {
@@ -154,43 +146,77 @@ public class DetailedAppointmentViewModel extends ViewModel {
     }
 
     public void updateAppointmentRating(@NonNull Long appointmentId, float rating) {
-        if (mAppointmentRating.get() != rating) {
+        if (mAppointmentRating.getValue() != rating) {
             mExecutor.execute(() -> mInteractor.updateAppointmentRating(appointmentId, rating, mAppointmentCallback));
         }
     }
 
-    private void bindExpertViews(@NonNull Expert expert) {
-        mExpertProfession.set(expert.getProfession());
-        mExpertFullName.set(expert.getFullName());
-        mExpertEmail.set(expert.getEmail());
-        mExpertAge.set(expert.getAge());
-        mExpertWorkExperience.set(expert.getWorkExperience());
-        mExpertPhoneNumber.set(expert.getPhoneNumber());
+    public void bindExpertViews(@NonNull Expert expert) {
+        mExpert = expert;
+        mExpertProfession.setValue(expert.getProfession());
+        mExpertFullName.setValue(expert.getFullName());
+        mExpertEmail.setValue(expert.getEmail());
+        mExpertAge.setValue(expert.getAge());
+        mExpertWorkExperience.setValue(expert.getWorkExperience());
+        mExpertPhoneNumber.setValue(expert.getPhoneNumber());
     }
 
-    private void bindAppointmentViews(@NonNull Appointment appointment) {
-        mAppointmentServiceName.set(appointment.getServiceName());
-        mAppointmentLocation.set(appointment.getLocation());
-        mAppointmentCost.set(appointment.getCost());
-        mAppointmentDate.set(appointment.getStringDate());
-        mAppointmentDuration.set(appointment.getSessionDuration());
-        mAppointmentStartTime.set(appointment.getStringTime());
-        mAppointmentRating.set(appointment.getRating());
-        mAppointmentNotification.set(appointment.getNotification());
+    public void bindAppointmentViews(@NonNull Appointment appointment) {
+        mAppointment = appointment;
+        mAppointmentServiceName.setValue(appointment.getServiceName());
+        mAppointmentLocation.setValue(appointment.getLocation());
+        mAppointmentCost.setValue(appointment.getCost());
+        mAppointmentDate.setValue(appointment.getStringDate());
+        mAppointmentDuration.setValue(appointment.getSessionDuration());
+        mAppointmentStartTime.setValue(appointment.getStringTime());
+        mAppointmentRating.setValue(appointment.getRating());
+        mAppointmentNotification.setValue(appointment.getNotification());
         Calendar calendar = mFilterInteractor.makeCalendar(appointment);
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
-            mTimeCheck.set(true);
+            mTimeCheck.setValue(true);
         } else {
-            mTimeCheck.set(false);
+            mTimeCheck.setValue(false);
         }
     }
 
-    public void createNotification(String serviceName, String startTime, long appointmentId, long expertId) {
+    public void createNotification() {
         int secondsBeforAlert = 10;
         // long current = System.currentTimeMillis();
-        Data data = mInteractor.createWorkInputData(serviceName, startTime, appointmentId, expertId);
-        NotificationHandler.schedulerReminder(secondsBeforAlert, data, String.valueOf(appointmentId));
+        Data data = mInteractor.createWorkInputData(mAppointment.getServiceName(), mAppointment.getStringTime(), mAppointment.getId(), mExpert.getId());
+        NotificationHandler.schedulerReminder(secondsBeforAlert, data, String.valueOf(mAppointment.getId()));
         updateAppointmentNotification();
+    }
+
+    public void setCancelAppointmentClickListener(ICancelAppointmentClickListener cancelAppointmentClickListener) {
+        mCancelAppointmentClickListener = v -> {
+            if (mAppointment != null) {
+                cancelAppointmentClickListener.onCancelAppointmentClickListener(mAppointment.getId());
+            }
+        };
+    }
+
+    public void setNotificationClickListener(IAddNotificationClickListener addNotificationClickListener) {
+        mNotificationClickListener = v -> {
+            if (mAppointmentNotification.getValue()) {
+                addNotificationClickListener.onRemoveNotificationClickListenrs(mAppointment.getId());
+            } else {
+                addNotificationClickListener.onAddNotificationClickListener();
+            }
+        };
+    }
+
+    /**
+     * Метод, обновляющий значение поля AppointmentNotificatioн на сервере, если была нажата
+     * добавить или удалить уведомление (обновление которой приводит к изменению текста кнопки)
+     */
+    public void updateAppointmentNotification() {
+        mExecutor.execute(() -> {
+            if (mAppointment != null) {
+                mAppointmentNotification.postValue(!mAppointmentNotification.getValue());
+                mInteractor.updateAppointmentNotification(mAppointment.getId(), mAppointmentNotification.getValue(), mAppointmentCallback);
+            }
+        });
+
     }
 
     @BindingAdapter("android:text")
@@ -211,49 +237,22 @@ public class DetailedAppointmentViewModel extends ViewModel {
         }
     }
 
-    public void setCancelAppointmentClickListener(ICancelAppointmentClickListener cancelAppointmentClickListener) {
-        mCancelAppointmentClickListener = v -> {
-            if (mAppointment != null) {
-                cancelAppointmentClickListener.onCancelAppointmentClickListener(mAppointment.getId());
-            }
-        };
+
+    @BindingAdapter("rating")
+    public static void setRating(RatingBar view, float rating) {
+        if (view.getRating() != rating) {
+            view.setRating(rating);
+        }
     }
 
-    public View.OnClickListener getCancelAppointmentClickListener() {
-        return mCancelAppointmentClickListener;
-    }
-
-    public void setNotificationClickListener(IAddNotificationClickListener addNotificationClickListener) {
-        mNotificationClickListener = v -> {
-            if (mAppointmentNotification.get()) {
-                addNotificationClickListener.onRemoveNotificationClickListenrs(mAppointment.getId());
-            } else {
-                addNotificationClickListener.onAddNotificationClickListener(mAppointment.getServiceName(), mAppointment.getStringTime(), mAppointment.getId(), mExpert.getId());
-            }
-        };
-    }
-
-
-    /**
-     * Метод, обновляющий значение поля AppointmentNotificatioн на сервере, если была нажата
-     * добавить или удалить уведомление (обновление которой приводит к изменению текста кнопки)
-     */
-    public void updateAppointmentNotification() {
-        mExecutor.execute(() -> {
-            if (mAppointment != null) {
-                mAppointmentNotification.set(!mAppointmentNotification.get());
-                mInteractor.updateAppointmentNotification(mAppointment.getId(), mAppointmentNotification.get(), mAppointmentCallback);
+    @BindingAdapter(value = {"android:onRatingChanged"}, requireAll = false)
+    public static void setListeners(RatingBar view, final RatingClickListeners listener) {
+        view.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (listener != null) {
+                listener.onRatingClickListeners(rating);
             }
         });
 
-    }
-
-    public ObservableField<Boolean> getTimeCheck() {
-        return mTimeCheck;
-    }
-
-    public View.OnClickListener getCallPhoneClickListener() {
-        return mCallPhoneClickListener;
     }
 
     public void setCallPhoneClickListener(ICallPhoneClickListener callPhoneClickListener) {
@@ -264,90 +263,76 @@ public class DetailedAppointmentViewModel extends ViewModel {
         };
     }
 
-    public ObservableField<Boolean> getAppointmentNotification() {
-        return mAppointmentNotification;
-    }
-
-
-    public View.OnClickListener getWhatsAppClickListener() {
-        return mWhatsAppClickListener;
-    }
-
     public void setWhatsAppClickListener(IWhatsAppClickListeners whatsAppClickListener) {
         mWhatsAppClickListener = v -> whatsAppClickListener.onWhatsAppClickListeners(mExpert.getPhoneNumber());
-    }
-
-    public View.OnClickListener getViberClickListener() {
-        return mViberClickListener;
     }
 
     public void setViberClickListener(View.OnClickListener viberClickListener) {
         mViberClickListener = viberClickListener;
     }
 
-    public View.OnClickListener getTelegrammClickListener() {
-        return mTelegrammClickListener;
-    }
-
-    public void settelegramClickListener(View.OnClickListener mtelegramClickListener) {
+    public void setTelegramClickListener(View.OnClickListener mtelegramClickListener) {
         this.mTelegrammClickListener = mtelegramClickListener;
-    }
-
-    public View.OnClickListener getMoreInformationClickListener() {
-        return mMoreInformationClickListener;
     }
 
     public void setMoreInformationClickListener(View.OnClickListener moreInformationClickListener) {
         mMoreInformationClickListener = moreInformationClickListener;
     }
 
+    public void setMoreInformationTextView(String moreInformationTextView) {
+        mMoreInformationTextView.setValue(moreInformationTextView);
+    }
+
+    public void setAdditionalInformationAboutExpert(boolean additionalInformationAboutExpert) {
+        mAdditionalInformationAboutExpert.setValue(additionalInformationAboutExpert);
+    }
+
+    public void setUpdateButtonText(boolean updateButtonText) {
+        mUpdateButtonText = updateButtonText;
+    }
+
+    public void setRatingClickListener(RatingClickListeners ratingClickListener) {
+        mRatingClickListener = ratingClickListener;
+    }
+
+    public LiveData<Boolean> getTimeCheck() {
+        return mTimeCheck;
+    }
+
+    public LiveData<Boolean> getAppointmentNotification() {
+        return mAppointmentNotification;
+    }
+
+    public View.OnClickListener getCallPhoneClickListener() {
+        return mCallPhoneClickListener;
+    }
+
+    public View.OnClickListener getCancelAppointmentClickListener() {
+        return mCancelAppointmentClickListener;
+    }
+
+    public View.OnClickListener getWhatsAppClickListener() {
+        return mWhatsAppClickListener;
+    }
+
+    public View.OnClickListener getViberClickListener() {
+        return mViberClickListener;
+    }
+
+    public View.OnClickListener getTelegramClickListener() {
+        return mTelegrammClickListener;
+    }
+
+    public View.OnClickListener getMoreInformationClickListener() {
+        return mMoreInformationClickListener;
+    }
 
     public View.OnClickListener getNotificationClickListener() {
         return mNotificationClickListener;
     }
 
-
-    public ObservableField<Float> getAppointmentRating() {
+    public LiveData<Float> getAppointmentRating() {
         return mAppointmentRating;
-    }
-
-    public void setAppointmentRating(ObservableField<Float> appointmentRating) {
-        mAppointmentRating = appointmentRating;
-    }
-
-    @BindingAdapter("android:rating")
-    public static void setRating(RatingBar view, float rating) {
-        if (view.getRating() != rating) {
-            view.setRating(rating);
-        }
-    }
-
-    @BindingAdapter(value = {"android:onRatingChanged"},
-            requireAll = false)
-    public static void setListeners(RatingBar view, final RatingClickListeners listener) {
-        view.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (listener != null) {
-                listener.onRatingClickListeners(rating);
-            }
-        });
-
-    }
-
-    public ObservableField<String> getMoreInformationTextView() {
-        return mMoreInformationTextView;
-    }
-
-    public void setMoreInformationTextView(String moreInformationTextView) {
-        mMoreInformationTextView.set(moreInformationTextView);
-    }
-
-
-    public RatingClickListeners getRatingClickListener() {
-        return mRatingClickListener;
-    }
-
-    public void setRatingClickListener(RatingClickListeners ratingClickListener) {
-        mRatingClickListener = ratingClickListener;
     }
 
 
@@ -360,92 +345,97 @@ public class DetailedAppointmentViewModel extends ViewModel {
 
     /**
      * Состояние для определения загрузки информации об активной записи
-     *
-     * @return
      */
     public MutableLiveData<Boolean> getIsLoadingAppointment() {
         return mIsLoadingAppointment;
     }
 
-    public ObservableField<String> getExpertProfession() {
+    public LiveData<String> getExpertProfession() {
         return mExpertProfession;
     }
 
-    public ObservableField<String> getExpertFullName() {
+    public LiveData<String> getExpertFullName() {
         return mExpertFullName;
     }
 
-    public ObservableField<String> getExpertPhoneNumber() {
+    public LiveData<String> getExpertPhoneNumber() {
         return mExpertPhoneNumber;
     }
 
-    public ObservableField<String> getExpertEmail() {
+    public LiveData<String> getExpertEmail() {
         return mExpertEmail;
     }
 
-    public ObservableInt getExpertAge() {
+    public LiveData<Integer> getExpertAge() {
         return mExpertAge;
     }
 
-    public ObservableInt getExpertWorkExperience() {
+    public LiveData<Integer> getExpertWorkExperience() {
         return mExpertWorkExperience;
     }
 
-    public ObservableField<String> getAppointmentServiceName() {
+    public LiveData<String> getAppointmentServiceName() {
         return mAppointmentServiceName;
     }
 
-    public ObservableField<String> getAppointmentDate() {
+    public LiveData<String> getAppointmentDate() {
         return mAppointmentDate;
     }
 
-    public ObservableField<String> getAppointmentDuration() {
+    public LiveData<String> getAppointmentDuration() {
         return mAppointmentDuration;
     }
 
-    public ObservableField<String> getAppointmentLocation() {
+    public LiveData<String> getAppointmentLocation() {
         return mAppointmentLocation;
     }
 
-    public ObservableField<String> getAppointmentStartTime() {
+    public LiveData<String> getAppointmentStartTime() {
         return mAppointmentStartTime;
     }
 
-    public ObservableInt getAppointmentCost() {
+    public LiveData<Integer> getAppointmentCost() {
         return mAppointmentCost;
-    }
-
-    public ObservableField<Boolean> getAdditionalInformationAboutExpert() {
-        return mAdditionalInformationAboutExpert;
-    }
-
-    public void setAdditionalInformationAboutExpert(boolean additionalInformationAboutExpert) {
-        mAdditionalInformationAboutExpert.set(additionalInformationAboutExpert);
-    }
-
-    public ObservableField<Appointment> getObservableAppointment() {
-        return mObservableAppointment;
-    }
-
-    public void setObservableAppointment(ObservableField<Appointment> observableAppointment) {
-        mObservableAppointment = observableAppointment;
-    }
-
-    public Appointment getAppointment() {
-        return mAppointment;
     }
 
     public LiveData<String> getMessage() {
         return mMessage;
     }
 
-    public boolean isUpdateButtonText() {
+    public LiveData<String> getMoreInformationTextView() {
+        return mMoreInformationTextView;
+    }
+
+    public LiveData<Boolean> getAdditionalInformationAboutExpert() {
+        return mAdditionalInformationAboutExpert;
+    }
+
+    private boolean isUpdateButtonText() {
         return mUpdateButtonText;
     }
 
-    public void setUpdateButtonText(boolean updateButtonText) {
-        mUpdateButtonText = updateButtonText;
+    public RatingClickListeners getRatingClickListener() {
+        return mRatingClickListener;
     }
 
+    @VisibleForTesting
+    ILoadOneExpertCallback getExpertCallback() {
+        return mExpertCallback;
+    }
+
+    @VisibleForTesting
+    ILoadOneAppointmentCallback getAppointmentCallback() {
+        return mAppointmentCallback;
+    }
+
+    @VisibleForTesting
+    public Appointment getAppointment() {
+        return mAppointment;
+    }
+
+    @VisibleForTesting
+    public Expert getExpert() {
+        return mExpert;
+    }
 
 }

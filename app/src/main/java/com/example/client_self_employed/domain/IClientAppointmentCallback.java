@@ -25,7 +25,12 @@ public interface IClientAppointmentCallback {
      */
     void clientAppointmentIsDeleted(Boolean isDeleted);
 
-    void errorOnLoadingClientExperts(String errorOnLoadingClientExperts);
+    /**
+     * Колбек- возвращающий ошибки при загрузке или удалении записей
+     *
+     * @param message - ошибка, которую нужно показать пользователю
+     */
+    void errorMessage(String message);
 
-    void errorDeletingAppointment(String errorDeletingAppointment);
+
 }

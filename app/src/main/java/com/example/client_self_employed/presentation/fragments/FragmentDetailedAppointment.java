@@ -3,13 +3,15 @@ package com.example.client_self_employed.presentation.fragments;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -26,7 +28,7 @@ import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.FragmentDetailedAppointmentBinding;
 import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
-import com.example.client_self_employed.presentation.ActivityActiveAppointments;
+import com.example.client_self_employed.presentation.HomeActivity;
 import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
@@ -66,19 +68,23 @@ public class FragmentDetailedAppointment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // setHasOptionsMenu(true);
         long updateAppointment = -1;
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             mPosition = bundle.getInt(POSITION);
             updateAppointment = bundle.getLong(Constants.UPDATE_APPOINTMENT, -1);
         }
-        FragmentDetailedAppointmentBinding binding = FragmentDetailedAppointmentBinding.inflate(inflater, container, false);
+
         mDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getDetailedAppointmentViewModelFactory())
                 .get(DetailedAppointmentViewModel.class);
         if (updateAppointment != -1) {
             mDetailedAppointmentViewModel.setUpdateButtonText(true);
         }
         setClickListeners();
+        FragmentDetailedAppointmentBinding binding = FragmentDetailedAppointmentBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
         binding.setViewModel(mDetailedAppointmentViewModel);
         return binding.getRoot();
     }
@@ -86,15 +92,15 @@ public class FragmentDetailedAppointment extends Fragment {
     private void setClickListeners() {
         mDetailedAppointmentViewModel.setNotificationClickListener(new IAddNotificationClickListener() {
             @Override
-            public void onAddNotificationClickListener(String serviceName, String startTime, long appointmentId, long expertId) {
+            public void onAddNotificationClickListener() {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
                 boolean isActivated = sharedPreferences.getBoolean(getString(R.string.preferences_enable_notifications_switch_key), false);
                 if (isActivated) {
-                    mDetailedAppointmentViewModel.createNotification(serviceName, startTime, appointmentId, expertId);
+                    mDetailedAppointmentViewModel.createNotification();
                 } else {
                     requireActivity().getSupportFragmentManager().beginTransaction()
                             .addToBackStack(null)
-                            .replace(R.id.fragment_host_appointments_with_experts, FragmentPreferences.newInstance())
+                            .replace(R.id.fragment_container, FragmentPreferences.newInstance())
                             .commit();
                 }
             }
@@ -110,15 +116,12 @@ public class FragmentDetailedAppointment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Отмена записи");
             builder.setMessage("Вы уверены что хотите отменить запись?");
-            builder.setPositiveButton("ДА", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            builder.setPositiveButton("ДА", (dialog, which) -> {
 
-                    mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
-                            .get(HomeScreenViewModel.class);
-                    mViewModel.deleteClientAppointment(appointmentId);
-                    ((ActivityActiveAppointments) requireActivity()).deleteAppointmentFromRecycler(mPosition);
-                }
+                mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
+                        .get(HomeScreenViewModel.class);
+                mViewModel.deleteClientAppointment(appointmentId);
+                ((HomeActivity) requireActivity()).deleteAppointmentFromRecycler(mPosition);
             });
             builder.setNegativeButton("Нет", null);
             AlertDialog dialog = builder.create();
@@ -154,7 +157,7 @@ public class FragmentDetailedAppointment extends Fragment {
             }
         });
 
-        mDetailedAppointmentViewModel.settelegramClickListener(v -> {
+        mDetailedAppointmentViewModel.setTelegramClickListener(v -> {
             final String telegramName = "org.telegram.messenger";
             if (isAppAvailable(requireContext(), telegramName)) {
 
@@ -168,7 +171,7 @@ public class FragmentDetailedAppointment extends Fragment {
             }
         });
         mDetailedAppointmentViewModel.setMoreInformationClickListener(v -> {
-            if (mDetailedAppointmentViewModel.getAdditionalInformationAboutExpert().get()) {
+            if (mDetailedAppointmentViewModel.getAdditionalInformationAboutExpert().getValue()) {
                 mDetailedAppointmentViewModel.setAdditionalInformationAboutExpert(false);
                 mDetailedAppointmentViewModel.setMoreInformationTextView(getString(R.string.fragment_detailed_information_expert_more_inf));
             } else {
@@ -188,6 +191,8 @@ public class FragmentDetailedAppointment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         mDetailedAppointmentViewModel.getMessage().observe(getViewLifecycleOwner(), error -> {
             CustomToast.makeToast(requireActivity(), error, view);
         });
@@ -208,5 +213,31 @@ public class FragmentDetailedAppointment extends Fragment {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.find_expert_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_find_expert: {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, FragmentFindExpert.newInstance())
+                        .addToBackStack("active_appointments")
+                        .commit();
+            }
+            break;
+            case R.id.menu_settings: {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, FragmentAccountSettings.newInstance())
+                        .addToBackStack("active_appointments")
+                        .commit();
+            }
+            break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

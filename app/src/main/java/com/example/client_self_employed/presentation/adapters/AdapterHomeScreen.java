@@ -17,7 +17,6 @@ import com.example.client_self_employed.presentation.adapters.items.ClientExpert
 import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
-import com.example.client_self_employed.presentation.clicklisteners.BestExpertItemClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.FindExpertButtonClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItemClickListener;
 import com.example.client_self_employed.presentation.model.ClientAppointment;
@@ -34,7 +33,6 @@ import java.util.List;
 public class AdapterHomeScreen extends RecyclerView.Adapter {
     private ActiveAppointmentClickListener mItemClickListener;
     private NewRecordToBestExpertButtonItemClickListener mNewRecordToBestExpertButtonItemClickListener;
-    private BestExpertItemClickListener mBestExpertItemClickListener;
     private FindExpertButtonClickListener mFindExpertButtonClickListener;
     private Resources mResources;
     private List<RowType> mDataSet = new ArrayList<>();
@@ -43,14 +41,12 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
             List<RowType> rowTypes,
             ActiveAppointmentClickListener itemClickListener,
             NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener,
-            BestExpertItemClickListener bestExpertItemClickListener,
             FindExpertButtonClickListener findExpertListener, @NonNull Resources resources) {
         if (rowTypes != null) {
             mDataSet.addAll(rowTypes);
         }
         mItemClickListener = itemClickListener;
         mNewRecordToBestExpertButtonItemClickListener = newRecordToBestExpertButtonItemClickListener;
-        mBestExpertItemClickListener = bestExpertItemClickListener;
         mFindExpertButtonClickListener = findExpertListener;
         mResources = resources;
     }
@@ -80,11 +76,11 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
                 return new AppointmentViewHolder(appointmentsBinding);
             }
             case RowType.EXPERT_PHOTO_ROW_TYPE: {
-                ItemBestExpertsBinding bestExpertsBinding = DataBindingUtil.inflate(inflater, R.layout.item_best_experts_recycler, parent, false);
+                ItemBestExpertsBinding bestExpertsBinding = DataBindingUtil.inflate(inflater, R.layout.item_best_experts, parent, false);
                 return new BestExpertHolder(bestExpertsBinding);
             }
             case RowType.NO_APPOINTMENT_ROW_TYPE: {
-                View viewNoAppoinment = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_no_appointment, parent, false);
+                View viewNoAppoinment = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_no_active_appointment, parent, false);
                 return new NoAppointmentViewHolder(viewNoAppoinment, mFindExpertButtonClickListener);
             }
             default:
@@ -97,7 +93,7 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
         if (holder instanceof AppointmentViewHolder) {
             ((AppointmentViewHolder) holder).bindView(((ClientActiveAppointmentsItem) mDataSet.get(position)).getClientAppointmentList(), mItemClickListener);
         } else if (holder instanceof BestExpertHolder) {
-            ((BestExpertHolder) holder).bindView(((ClientExpertItem) mDataSet.get(position)).getClientSelectedExperts(), mNewRecordToBestExpertButtonItemClickListener, mBestExpertItemClickListener);
+            ((BestExpertHolder) holder).bindView(((ClientExpertItem) mDataSet.get(position)).getClientSelectedExperts(), mNewRecordToBestExpertButtonItemClickListener);
         }
     }
 
@@ -132,11 +128,9 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
         }
 
         void bindView(List<ClientSelectedExpert> clientSelectedExperts,
-                      NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener,
-                      BestExpertItemClickListener bestExpertItemClickListener) {
+                      NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener) {
             ClientBestExpertsBinding clientBestExpertsBinding = new ClientBestExpertsBinding(clientSelectedExperts);
-            clientBestExpertsBinding.setOnClickListener(newRecordToBestExpertButtonItemClickListener);
-            clientBestExpertsBinding.setOnBestExpertClickListener(bestExpertItemClickListener);
+            clientBestExpertsBinding.setOnBestExpertClickListener(newRecordToBestExpertButtonItemClickListener);
             mBinding.setBestExperts(clientBestExpertsBinding);
 
         }

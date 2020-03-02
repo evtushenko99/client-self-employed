@@ -20,19 +20,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_high"
-                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                app:cardCornerRadius="@dimen/card_corner_radius_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -46,8 +45,8 @@
                         android:id="@+id/fragment_account_client_photo"
                         android:layout_width="@dimen/image_width"
                         android:layout_height="@dimen/image_height"
-                        android:layout_marginEnd="8dp"
-                        android:background="#FFF"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:background="@color/white"
                         android:onClick="@{ViewModel.onChangePhotoClickListener}"
                         app:clientPhotoUri="@{ViewModel.photoUri}"
                         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_second_name"
@@ -59,7 +58,7 @@
                         android:id="@+id/textInputLayout_last_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="32dp"
+                        android:layout_marginEnd="@dimen/margin_extra_high"
                         android:clickable="false"
 
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
@@ -131,7 +130,7 @@
                         style="@style/MyButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/margin_medium"
                         android:onClick="@{ViewModel.onChangeFullNameClickListener}"
                         android:text="@string/fragment_account_change_button"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -144,9 +143,9 @@
                 android:id="@+id/textInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_extra_high"
+                android:layout_marginEnd="@dimen/margin_medium"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -245,7 +244,7 @@
                 style="@style/MyButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/margin_extra_high"
                 android:onClick="@{ViewModel.onNotificationClickListener}"
                 android:text="@string/fragment_account_notifications"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
@@ -257,9 +256,7 @@
                 style="@style/MyButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:elevation="@dimen/elevation_medium"
-
                 android:text="@string/fragment_account_log_out"
                 app:layout_constraintEnd_toEndOf="@+id/fragment_account_notifications"
                 app:layout_constraintStart_toStartOf="@+id/fragment_account_notifications"

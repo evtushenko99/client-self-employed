@@ -5,6 +5,7 @@ import com.example.client_self_employed.data.model.FirebaseClient;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Сущность клиента, содержащая освновные его характеристики
@@ -151,5 +152,47 @@ public class Client {
 
     public void setClientPhotoUri(String clientPhotoUri) {
         mClientPhotoUri = clientPhotoUri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+        Client client = (Client) o;
+        return getId() == client.getId() &&
+                getAge() == client.getAge() &&
+                getDayOfBirth() == client.getDayOfBirth() &&
+                getMonthOfBirth() == client.getMonthOfBirth() &&
+                getYearOfBirth() == client.getYearOfBirth() &&
+                Objects.equals(getLastName(), client.getLastName()) &&
+                Objects.equals(getFirstName(), client.getFirstName()) &&
+                Objects.equals(getSecondName(), client.getSecondName()) &&
+                Objects.equals(getEmail(), client.getEmail()) &&
+                Objects.equals(getPhoneNumber(), client.getPhoneNumber()) &&
+                Objects.equals(getGender(), client.getGender()) &&
+                Objects.equals(getClientPhotoUri(), client.getClientPhotoUri());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getLastName(), getFirstName(), getSecondName(), getAge(), getDayOfBirth(), getMonthOfBirth(), getYearOfBirth(), getEmail(), getPhoneNumber(), getGender(), getClientPhotoUri());
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "mId=" + mId +
+                ", mLastName='" + mLastName + '\'' +
+                ", mFirstName='" + mFirstName + '\'' +
+                ", mSecondName='" + mSecondName + '\'' +
+                ", mAge=" + mAge +
+                ", mDayOfBirth=" + mDayOfBirth +
+                ", mMonthOfBirth=" + mMonthOfBirth +
+                ", mYearOfBirth=" + mYearOfBirth +
+                ", mEmail='" + mEmail + '\'' +
+                ", mPhoneNumber='" + mPhoneNumber + '\'' +
+                ", mGender='" + mGender + '\'' +
+                ", mClientPhotoUri='" + mClientPhotoUri + '\'' +
+                '}';
     }
 }

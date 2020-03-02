@@ -4,12 +4,8 @@ public interface IAddNotificationClickListener {
     /**
      * Контракт, отвечающий за добавление уведомления для активной записи
      *
-     * @param serviceName   - наименование услуги
-     * @param startTime     - время начала услуги
-     * @param appointmentId - id записи
-     * @param expertId
      */
-    void onAddNotificationClickListener(String serviceName, String startTime, long appointmentId, long expertId);
+    void onAddNotificationClickListener();
 
     /**
      * КОнткракт, отвечающий за удаление уведомления для активной записи

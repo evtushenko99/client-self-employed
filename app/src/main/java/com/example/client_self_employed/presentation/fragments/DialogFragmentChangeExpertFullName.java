@@ -68,9 +68,9 @@ public class DialogFragmentChangeExpertFullName extends DialogFragment implement
         mAccountViewModel.setOnNewClientFullNameClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mAccountViewModel.getLastName().get().equals(mLastName.getText().toString()) ||
-                        !mAccountViewModel.getName().get().equals(mName.getText().toString()) ||
-                        !mAccountViewModel.getSecondName().get().equals(mSecondName.getText().toString())
+                if (!mAccountViewModel.getLastName().getValue().equals(mLastName.getText().toString()) ||
+                        !mAccountViewModel.getName().getValue().equals(mName.getText().toString()) ||
+                        !mAccountViewModel.getSecondName().getValue().equals(mSecondName.getText().toString())
                 ) {
                     mAccountViewModel.updateFullName(mLastName.getText().toString(), mName.getText().toString(), mSecondName.getText().toString());
                     dismiss();
@@ -92,10 +92,8 @@ public class DialogFragmentChangeExpertFullName extends DialogFragment implement
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.detailed_fragment_dismiss_button:
-                dismiss();
-                break;
+        if (v.getId() == R.id.detailed_fragment_dismiss_button) {
+            dismiss();
         }
     }
 }

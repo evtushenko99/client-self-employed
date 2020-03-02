@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_medium"
-    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardCornerRadius="@dimen/card_corner_radius_high"
     app:cardElevation="4dp">
 
     <LinearLayout
@@ -21,16 +21,14 @@
             android:padding="@dimen/padding_medium"
             android:text="@string/no_appointments"
             android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
-            android:textSize="24sp" />
+            android:textSize="@dimen/text_size_medium" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/item_search_for_expert"
+            style="@style/MyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:background="@drawable/corners_for_buttons"
-            android:elevation="@dimen/elevation_medium"
-            android:text="@string/item_search_expert"
-            android:textColor="#FFFFFF" />
+            android:text="@string/item_search_expert" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

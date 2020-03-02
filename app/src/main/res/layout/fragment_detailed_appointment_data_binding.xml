@@ -20,17 +20,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:orientation="vertical">
-
+            android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
 
                 android:id="@+id/cardView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/card_corner_radius_small"
+                android:elevation="@dimen/elevation_medium"
+                app:cardCornerRadius="@dimen/card_corner_radius_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -45,8 +43,6 @@
 
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/margin_medium"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
                         android:text="@{ViewModel.expertProfession}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +54,7 @@
                         android:id="@+id/expert_name_detailed_appointment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-
+                        android:layout_marginTop="@dimen/margin_medium"
                         android:padding="@dimen/padding_small"
                         android:text="@{ViewModel.expertFullName}"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
@@ -81,16 +76,16 @@
                             android:id="@+id/text_view_email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/item_expert_holder_email"
+                            android:text="@string/detailed_expert_email"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/fragment_detailed_appoinment_email"
+                            android:id="@+id/fragment_detailed_email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginStart="@dimen/margin_high"
                             android:text="@{ViewModel.expertEmail}"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                             app:layout_constraintBottom_toBottomOf="@+id/text_view_email"
@@ -102,22 +97,21 @@
                             android:id="@+id/text_view_age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-
-                            android:text="@string/item_expert_holder_age"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:text="@string/detailed_expert_age"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             app:layout_constraintStart_toStartOf="@+id/text_view_email"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_email" />
 
 
                         <TextView
-                            android:id="@+id/fragment_detailed_appoinment_expert_age"
+                            android:id="@+id/fragment_detailed_expert_age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(ViewModel.expertAge)}"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                             app:layout_constraintBottom_toBottomOf="@+id/text_view_age"
-                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_appoinment_email"
+                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_email"
                             app:layout_constraintTop_toTopOf="@+id/text_view_age"
                             tools:text="23 года" />
 
@@ -125,8 +119,8 @@
                             android:id="@+id/text_view_work_experience"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="@string/item_expert_holder_work_experience"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:text="@string/detailed_expert_work_experience"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             app:layout_constraintStart_toStartOf="@+id/text_view_age"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_age" />
@@ -135,31 +129,31 @@
                             android:id="@+id/text_view_work_experience2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Телефон:"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:text="@string/detailed_expert_phone_number"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             app:layout_constraintStart_toStartOf="@+id/text_view_work_experience"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_work_experience" />
 
                         <TextView
-                            android:id="@+id/fragment_detailed_appoinment_work_experience"
+                            android:id="@+id/fragment_detailed_work_experience"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf( ViewModel.expertWorkExperience)}"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                             app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience"
-                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_appoinment_expert_age"
+                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_expert_age"
                             app:layout_constraintTop_toTopOf="@+id/text_view_work_experience"
                             tools:text="5 лет" />
 
                         <TextView
-                            android:id="@+id/fragment_detailed_appoinment_phone_number"
+                            android:id="@+id/fragment_detailed_phone_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{ViewModel.expertPhoneNumber}"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                             app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience2"
-                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_appoinment_work_experience"
+                            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_work_experience"
                             app:layout_constraintTop_toTopOf="@+id/text_view_work_experience2"
                             tools:text="+7-906-087-11-00" />
 
@@ -167,60 +161,63 @@
                             android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Связаться с помощью:"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:text="@string/detailed_expert_contact_using_apps"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             app:layout_constraintStart_toStartOf="@+id/text_view_work_experience"
                             app:layout_constraintTop_toBottomOf="@+id/text_view_work_experience2" />
 
                         <ImageButton
                             android:id="@+id/fragment_detailed_appointment_whatsapp"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginStart="16dp"
-
+                            android:layout_width="@dimen/image_button_app"
+                            android:layout_height="@dimen/image_button_app"
+                            android:layout_marginStart="@dimen/margin_high"
                             android:onClick="@{ViewModel.whatsAppClickListener}"
                             app:layout_constraintBottom_toBottomOf="@+id/fragment_detailed_appoinment_call_phone"
                             app:layout_constraintStart_toEndOf="@+id/fragment_detailed_appoinment_call_phone"
                             app:layout_constraintTop_toTopOf="@+id/fragment_detailed_appoinment_call_phone"
-                            app:srcCompat="@drawable/whatsapp_icon" />
+                            app:srcCompat="@drawable/whatsapp_icon"
+                            tools:ignore="ContentDescription" />
 
                         <ImageButton
                             android:id="@+id/fragment_detailed_appointment_viber"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginStart="16dp"
+                            android:layout_width="@dimen/image_button_app"
+                            android:layout_height="@dimen/image_button_app"
+                            android:layout_marginStart="@dimen/margin_high"
 
                             android:onClick="@{ViewModel.viberClickListener}"
                             app:layout_constraintBottom_toBottomOf="@+id/fragment_detailed_appointment_whatsapp"
                             app:layout_constraintStart_toEndOf="@+id/fragment_detailed_appointment_whatsapp"
                             app:layout_constraintTop_toTopOf="@+id/fragment_detailed_appointment_whatsapp"
-                            app:layout_constraintVertical_bias="0.0"
-                            app:srcCompat="@mipmap/viber_icon" />
+                            app:srcCompat="@mipmap/viber_icon"
+                            tools:ignore="ContentDescription" />
 
                         <ImageButton
                             android:id="@+id/fragment_detailed_appointment_telegram"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginStart="16dp"
+                            android:layout_width="@dimen/image_button_app"
+                            android:layout_height="@dimen/image_button_app"
+                            android:layout_marginStart="@dimen/margin_high"
 
-                            android:onClick="@{ViewModel.telegrammClickListener}"
+                            android:onClick="@{ViewModel.telegramClickListener}"
                             app:layout_constraintBottom_toBottomOf="@+id/fragment_detailed_appointment_viber"
                             app:layout_constraintStart_toEndOf="@+id/fragment_detailed_appointment_viber"
                             app:layout_constraintTop_toTopOf="@+id/fragment_detailed_appointment_viber"
                             app:layout_constraintVertical_bias="1.0"
-                            app:srcCompat="@mipmap/telegram_icon" />
+                            app:srcCompat="@mipmap/telegram_icon"
+                            tools:ignore="ContentDescription" />
 
                         <ImageButton
                             android:id="@+id/fragment_detailed_appoinment_call_phone"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginTop="8dp"
-                            android:background="#FFF"
+                            android:layout_width="@dimen/image_button_app"
+                            android:layout_height="@dimen/image_button_app"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:background="@color/white"
                             android:onClick="@{ViewModel.callPhoneClickListener}"
                             app:layout_constraintStart_toStartOf="@+id/textView"
                             app:layout_constraintTop_toBottomOf="@+id/textView"
-                            app:srcCompat="@drawable/ic_phone_black_24dp" />
+                            app:srcCompat="@drawable/ic_phone_black_24dp"
+                            tools:ignore="ContentDescription" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -228,14 +225,14 @@
                     <TextView
                         android:id="@+id/fragment_detailed_expert_more_information"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="#FFF"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:background="@color/white"
                         android:onClick="@{ViewModel.moreInformationClickListener}"
                         android:padding="@dimen/padding_small"
                         android:text="@{ViewModel.moreInformationTextView}"
                         android:textColor="@color/primaryLightColor"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_small"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/expert_profession_detailed_appointment" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -246,9 +243,9 @@
                 android:id="@+id/cardView_appointment_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="@dimen/card_corner_radius_small"
-                app:cardElevation="4dp"
+                android:layout_marginTop="@dimen/margin_high"
+                app:cardCornerRadius="@dimen/card_corner_radius_medium"
+                app:cardElevation="@dimen/elevation_medium"
                 app:layout_constraintEnd_toEndOf="@id/cardView2"
                 app:layout_constraintStart_toStartOf="@id/cardView2"
                 app:layout_constraintTop_toBottomOf="@id/cardView2">
@@ -261,7 +258,7 @@
                         android:id="@+id/time_detailed_appointment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="@dimen/margin_high"
                         android:padding="@dimen/padding_small"
                         android:text="@{ViewModel.appointmentStartTime}"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
@@ -274,7 +271,7 @@
                         android:id="@+id/date_detailed_appointment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="@dimen/margin_high"
                         android:padding="@dimen/padding_small"
                         android:text="@{ViewModel.appointmentDate}"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
@@ -287,7 +284,7 @@
                         android:id="@+id/cost_detailed_appointment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="@dimen/margin_high"
                         android:padding="@dimen/padding_small"
                         android:text="@{String.valueOf(ViewModel.appointmentCost)}"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
@@ -300,7 +297,7 @@
                         android:id="@+id/location_detailed_appointment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="@dimen/margin_high"
                         android:padding="@dimen/padding_small"
                         android:text="@{ViewModel.appointmentLocation}"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
@@ -325,8 +322,8 @@
                         android:id="@+id/text_view_appointment_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Дата:"
+                        android:layout_marginTop="@dimen/margin_high"
+                        android:text="@string/detailed_appointment_date"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         app:layout_constraintStart_toStartOf="@+id/text_view_appointment_location"
                         app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_location" />
@@ -335,8 +332,8 @@
                         android:id="@+id/text_view_appointment_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Место:"
+                        android:layout_marginTop="@dimen/margin_high"
+                        android:text="@string/detailed_appointment_location"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         app:layout_constraintStart_toStartOf="@+id/textView_service_name"
                         app:layout_constraintTop_toBottomOf="@+id/textView_service_name" />
@@ -345,8 +342,8 @@
                         android:id="@+id/text_view_appointment_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Время:"
+                        android:layout_marginTop="@dimen/margin_high"
+                        android:text="@string/detailed_appointment_time"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         app:layout_constraintStart_toStartOf="@+id/text_view_appointment_date"
                         app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_date" />
@@ -355,8 +352,8 @@
                         android:id="@+id/text_view_appointment_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Стоимость"
+                        android:layout_marginTop="@dimen/margin_high"
+                        android:text="@string/detailed_appointment_cost"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         app:layout_constraintStart_toStartOf="@+id/text_view_appointment_time"
                         app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_time" />
@@ -365,8 +362,8 @@
                         android:id="@+id/text_view_appointment_information"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Дополнительная информация:"
+                        android:layout_marginTop="@dimen/margin_high"
+                        android:text="@string/detailed_appointment_extra_information"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         app:layout_constraintStart_toStartOf="@+id/text_view_appointment_cost"
                         app:layout_constraintTop_toBottomOf="@+id/text_view_appointment_cost" />
@@ -376,9 +373,9 @@
                         style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Наименование услуги:"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:text="@string/detailed_appointment_service_name"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -386,7 +383,7 @@
                         android:id="@+id/fragment_detailed_appointment_service_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="@dimen/margin_high"
                         android:padding="@dimen/padding_small"
                         android:text="@{ViewModel.appointmentServiceName}"
                         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
@@ -401,10 +398,10 @@
                 android:id="@+id/cardView_rate_appointment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/margin_high"
                 android:visibility="@{ViewModel.timeCheck ? View.VISIBLE: View.GONE  }"
-                app:cardCornerRadius="@dimen/card_corner_radius_small"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="@dimen/card_corner_radius_medium"
+                app:cardElevation="@dimen/elevation_medium"
                 app:layout_constraintEnd_toEndOf="@id/cardView_appointment_information"
                 app:layout_constraintStart_toStartOf="@id/cardView_appointment_information"
                 app:layout_constraintTop_toBottomOf="@id/cardView_appointment_information">
@@ -414,14 +411,13 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-
                         android:id="@+id/textView2"
                         style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_medium"
                         android:text="@string/text_vew_rating_bar"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -431,17 +427,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginBottom="@dimen/margin_medium"
                         android:numStars="5"
-                        android:rating="@{ViewModel.appointmentRating}"
                         android:onRatingChanged="@{ViewModel.ratingClickListener}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView2"
-                        app:layout_constraintVertical_bias="1.0" />
+                        app:rating="@{ViewModel.appointmentRating}" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -449,9 +443,9 @@
                 android:id="@+id/cardView_notification_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="@dimen/card_corner_radius_small"
-                app:cardElevation="4dp"
+                android:layout_marginTop="@dimen/margin_high"
+                app:cardCornerRadius="@dimen/card_corner_radius_medium"
+                app:cardElevation="@dimen/elevation_medium"
                 app:layout_constraintEnd_toEndOf="@+id/cardView_rate_appointment"
                 app:layout_constraintStart_toStartOf="@+id/cardView_rate_appointment"
                 app:layout_constraintTop_toBottomOf="@+id/cardView_rate_appointment">
@@ -485,10 +479,10 @@
                 android:id="@+id/cardView_cancel_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="@dimen/card_corner_radius_small"
-                app:cardElevation="4dp"
+                android:layout_marginTop="@dimen/margin_high"
+                android:layout_marginBottom="@dimen/margin_medium"
+                app:cardCornerRadius="@dimen/card_corner_radius_medium"
+                app:cardElevation="@dimen/elevation_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/cardView_notification_button"
                 app:layout_constraintStart_toStartOf="@+id/cardView_notification_button"

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_high"
     android:elevation="@dimen/elevation_medium"
-    app:cardCornerRadius="@dimen/card_corner_radius">
+    app:cardCornerRadius="@dimen/card_corner_radius_high">
 
     <LinearLayout
         android:id="@+id/custom_toast_layout"

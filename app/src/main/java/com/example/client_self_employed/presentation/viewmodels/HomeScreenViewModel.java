@@ -3,7 +3,6 @@ package com.example.client_self_employed.presentation.viewmodels;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.databinding.BindingAdapter;
-import androidx.databinding.ObservableField;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -36,41 +35,41 @@ public class HomeScreenViewModel extends ViewModel {
     private final FilterActiveAppointmentsInteractor mFilterInteractor;
     private final Executor mExecutor;
     private final ModelsConverter mModelsConverter;
-    private final ObservableField<Boolean> mIsBestExpertLoading = new ObservableField<>(false);
-    private final ObservableField<Boolean> mIsActiveAppointmentLoading = new ObservableField<>(false);
+    private final MutableLiveData<Boolean> mIsBestExpertLoading = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> mIsActiveAppointmentLoading = new MutableLiveData<>(false);
     private final MutableLiveData<String> mErrors = new MutableLiveData<>();
-    private ObservableField<List<RowType>> mLiveData = new ObservableField<>();
+    private MutableLiveData<List<RowType>> mLiveData = new MutableLiveData<>();
     private List<RowType> mRowTypes = new ArrayList<>();
-
-    @VisibleForTesting
-    IExpertsCallBack getExpertsCallBack() {
-        return mExpertsCallBack;
-    }
-
+    //Переменная, которая говорит нам, сколько ответов пришло от БД при загрузки фотографий для каждого эксперта
+    //Только если количество ответов от БД равно количеству экспертов в массиве (все фотографии загружены)
+    //можно продолжать загрузку
+    private int count = 0;
     private IExpertsCallBack mExpertsCallBack = new IExpertsCallBack() {
         @Override
         public void expertsIsLoaded(@NonNull List<Expert> expertList) {
-
-            List<ClientSelectedExpert> list = new ArrayList<>();
-            if (expertList.size() != 0) {
-                for (Expert expert : expertList) {
-                    list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), expert.getExpertPhotoUri()));
+            count++;
+            if (count == expertList.size()) {
+                List<ClientSelectedExpert> list = new ArrayList<>();
+                if (expertList.size() != 0) {
+                    for (Expert expert : expertList) {
+                        list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), expert.getExpertPhotoUri()));
+                    }
+                    ClientExpertItem item = new ClientExpertItem(list);
+                    if (mRowTypes.size() == 0) {
+                        mRowTypes.add(0, item);
+                        mLiveData.setValue(mRowTypes);
+                    }
+                    loadActiveAppointments();
                 }
-                ClientExpertItem item = new ClientExpertItem(list);
-                if (mRowTypes.size() == 0) {
-                    mRowTypes.add(0, item);
-                    mLiveData.set(mRowTypes);
-                }
-
-                loadActiveAppointments();
+                mIsBestExpertLoading.setValue(false);
+                count = 0;
             }
-            mIsBestExpertLoading.set(false);
         }
 
         @Override
         public void errorLoadingExperts(String errorLoadingExperts) {
             mErrors.postValue(errorLoadingExperts);
-            mIsBestExpertLoading.set(false);
+            mIsBestExpertLoading.setValue(false);
         }
     };
 
@@ -82,19 +81,17 @@ public class HomeScreenViewModel extends ViewModel {
             if (appointmentList.size() != 0 && expertList.size() != 0) {
                 List<ClientAppointment> activeAppointments = mModelsConverter.convertAppointmentToRowType(appointmentList, expertList);
                 if (appointmentList != null) {
-
                     ClientActiveAppointmentsItem clientActiveAppointmentsItem = new ClientActiveAppointmentsItem(activeAppointments);
                     if (mRowTypes.size() == 1) {
                         mRowTypes.add(clientActiveAppointmentsItem);
-                        mLiveData.set(mRowTypes);
+                        mLiveData.setValue(mRowTypes);
                     }
                 }
             } else {
                 mRowTypes.add(new ClientNoAppointmentItem());
-                mLiveData.set(mRowTypes);
+                mLiveData.setValue(mRowTypes);
             }
-            mIsActiveAppointmentLoading.set(false);
-
+            mIsActiveAppointmentLoading.setValue(false);
         }
 
         @Override
@@ -105,18 +102,12 @@ public class HomeScreenViewModel extends ViewModel {
         }
 
         @Override
-        public void errorOnLoadingClientExperts(String errorOnLoadingClientExperts) {
-            mErrors.postValue(errorOnLoadingClientExperts);
-            mIsActiveAppointmentLoading.set(false);
+        public void errorMessage(String message) {
+            mErrors.postValue(message);
+            mIsActiveAppointmentLoading.setValue(false);
         }
-
-        @Override
-        public void errorDeletingAppointment(String errorDeletingAppointment) {
-            mErrors.postValue(errorDeletingAppointment);
-        }
-
-
     };
+
     private IAppointmentsCallback mAppointmentsCallback = new IAppointmentsCallback() {
         @Override
         public void onAppointmentCallback(List<Appointment> appointments, List<Long> expertsId) {
@@ -130,6 +121,28 @@ public class HomeScreenViewModel extends ViewModel {
 
     };
 
+
+    @VisibleForTesting
+    IExpertsCallBack getExpertsCallBack() {
+        return mExpertsCallBack;
+    }
+
+    @VisibleForTesting
+    IAppointmentsCallback getAppointmentsCallback() {
+        return mAppointmentsCallback;
+    }
+
+    @VisibleForTesting
+    IClientAppointmentCallback getClientAppointmentCallback() {
+        return mClientAppointmentCallback;
+    }
+
+    @VisibleForTesting
+    public void setRowTypes(List<RowType> rowTypes) {
+        mRowTypes = rowTypes;
+    }
+
+
     HomeScreenViewModel(
             @NonNull AppointmentInteractor iteractor,
             @NonNull ExpertInteractor expertsInteractor,
@@ -140,7 +153,7 @@ public class HomeScreenViewModel extends ViewModel {
         mFilterInteractor = filterActiveAppointmentsInteractor;
         mExecutor = executor;
         mModelsConverter = new ModelsConverter(mFilterInteractor);
-        loadClientExperts();
+
     }
 
     @BindingAdapter("data")
@@ -152,12 +165,14 @@ public class HomeScreenViewModel extends ViewModel {
 
 
     public void loadClientExperts() {
-        mIsBestExpertLoading.set(true);
-        mExecutor.execute(() -> mExpertsInteractor.loadAllExperts(mExpertsCallBack));
+        mIsBestExpertLoading.setValue(true);
+        mExecutor.execute(() -> {
+            mExpertsInteractor.loadAllExperts(mExpertsCallBack);
+        });
     }
 
     public void loadActiveAppointments() {
-        mIsActiveAppointmentLoading.set(true);
+        mIsActiveAppointmentLoading.setValue(true);
         mExecutor.execute(() -> mAppointmentInteractor.loadClientsAppointments(2, mAppointmentsCallback));
     }
 
@@ -165,15 +180,15 @@ public class HomeScreenViewModel extends ViewModel {
         mExecutor.execute(() -> mAppointmentInteractor.deleteClientAppointment(appointmentId, mClientAppointmentCallback));
     }
 
-    public ObservableField<Boolean> getIsBestExpertLoading() {
+    public LiveData<Boolean> getIsBestExpertLoading() {
         return mIsBestExpertLoading;
     }
 
-    public ObservableField<Boolean> getIsActiveAppointmentLoading() {
+    public LiveData<Boolean> getIsActiveAppointmentLoading() {
         return mIsActiveAppointmentLoading;
     }
 
-    public ObservableField<List<RowType>> getLiveData() {
+    public LiveData<List<RowType>> getLiveData() {
         return mLiveData;
     }
 

@@ -31,7 +31,7 @@ public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiv
     @Override
     public ActiveAppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemActiveAppointmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_client_appointment, parent, false);
+        ItemActiveAppointmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_detailed_active_appointment, parent, false);
         return new ActiveAppointmentViewHolder(binding);
     }
 

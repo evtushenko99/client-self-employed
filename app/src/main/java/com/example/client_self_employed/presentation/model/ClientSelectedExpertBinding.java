@@ -13,7 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
-import com.example.client_self_employed.presentation.clicklisteners.BestExpertItemClickListener;
+import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItemClickListener;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -41,12 +41,11 @@ public class ClientSelectedExpertBinding implements RowType {
         return mOnClickListener;
     }
 
-    public void setOnClickListener(BestExpertItemClickListener onClickListener) {
-
+    public void setOnClickListener(NewRecordToBestExpertButtonItemClickListener onClickListener) {
         mOnClickListener = v -> {
-            onClickListener.onExpertItemClickListener(mExpertId);
-            mIndex = mPosition;
-            colormethod();
+            onClickListener.onButtonItemClickListener(mExpertId);
+            // mIndex = mPosition;
+            // colormethod();
         };
     }
 

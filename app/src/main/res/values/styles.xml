@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryLightColor</item>
         <item name="colorControlNormal">@color/primaryLightColor</item>
-
+        <item name="actionMenuTextColor">@color/white</item>
         <item name="colorControlActivated">@color/primaryLightColor</item>
 
     </style>
@@ -20,4 +20,5 @@
     <style name="MyEditText" parent="Widget.AppCompat.EditText">
         <item name="android:colorBackground">#ffe0b2</item>
     </style>
+
 </resources>

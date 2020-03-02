@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_medium"
     android:elevation="@dimen/elevation_medium"
-    app:cardCornerRadius="@dimen/card_corner_radius_extra_small">
+    app:cardCornerRadius="@dimen/card_corner_radius_medium">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_schedule_time_recycler"

@@ -19,7 +19,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.presentation.ActivityActiveAppointments;
+import com.example.client_self_employed.presentation.HomeActivity;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 
 import java.util.concurrent.TimeUnit;
@@ -74,7 +74,7 @@ public class NotificationHandler extends Worker {
         mNotificationLayout.setTextViewText(R.id.notification_time, text);
 
 
-        Intent intent = new Intent(mContext, ActivityActiveAppointments.class);
+        Intent intent = new Intent(mContext, HomeActivity.class);
         intent.putExtra(Constants.OPEN_DETAILED_FRAGMENT, "update fragment");
         intent.putExtra(Constants.EXTRA_APPOINTMENT_ID, id);
         intent.putExtra(Constants.EXTRA_EXPERT_ID, expertId);

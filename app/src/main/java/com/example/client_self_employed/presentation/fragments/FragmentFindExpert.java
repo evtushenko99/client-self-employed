@@ -70,7 +70,7 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
     private void setupMVVM() {
         mFindExpertViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getFindExpertViewModelFactory())
                 .get(FindExpertViewModel.class);
-        mFindExpertViewModel.loadAllEcperts();
+        mFindExpertViewModel.loadAllExperts();
         mFindExpertViewModel.getLiveData().observe(getViewLifecycleOwner(), experts -> {
             ((AdapterFindExperts) mFindRecycler.getAdapter()).setExperts(experts);
         });
@@ -99,15 +99,13 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
                     bundle.putLong(Arguments.EXPERT_ID, mExpertId);
                     fragmentExpertSchedule.setArguments(bundle);
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_host_appointments_with_experts, fragmentExpertSchedule)
+                            .replace(R.id.fragment_container, fragmentExpertSchedule)
                             .addToBackStack("active_appointments")
                             .commit();
                 } else {
                     Toast.makeText(getActivity(), "Выберите эксперта", Toast.LENGTH_SHORT).show();
                 }
             }
-
-
         }
     }
 }

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="@dimen/elevation_medium"
-        app:cardCornerRadius="@dimen/card_corner_radius">
+        app:cardCornerRadius="@dimen/card_corner_radius_high">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,9 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:clickable="false"
-
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/dialog_fragment_change_client_full_name_title"
                 app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_change_client_full_name_title">
@@ -52,7 +50,6 @@
                     android:id="@+id/dialog_fragment_change_full_name_client_last_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:hint="@string/fragment_account_last_name"
                     android:text="@{ViewModel.lastName}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
@@ -65,7 +62,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:clickable="false"
-
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintEnd_toEndOf="@+id/textInputLayout_last_name"
                 app:layout_constraintStart_toStartOf="@+id/textInputLayout_last_name"
@@ -75,7 +71,6 @@
                     android:id="@+id/dialog_fragment_change_full_name_client_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:hint="@string/fragment_account_name"
                     android:text="@{ViewModel.name}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
@@ -97,7 +92,6 @@
                     android:id="@+id/dialog_fragment_change_full_name_client_second_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:hint="@string/fragment_account_second_name"
                     android:text="@{ViewModel.secondName}"
                     tools:ignore="KeyboardInaccessibleWidget,PrivateResource"
@@ -119,12 +113,11 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/detailed_fragment_dismiss_button"
-
                 style="@style/MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textInputLayout_second_name"
-                android:layout_marginRight="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
                 android:layout_toStartOf="@+id/detailed_fragment_change_button"
                 android:text="@string/detailed_fragment_dismiss"
                 app:layout_constraintEnd_toStartOf="@+id/detailed_fragment_change_button"

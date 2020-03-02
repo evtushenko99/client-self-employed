@@ -2,28 +2,28 @@ package com.example.client_self_employed.presentation.viewmodels;
 
 import android.view.View;
 
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.client_self_employed.domain.model.Appointment;
 
 public class ExpertScheduleDetailedAppointmentViewModel extends ViewModel {
-    private ObservableField<String> mAppointmentServiceName = new ObservableField<>();
-    private ObservableField<String> mAppointmentStartTime = new ObservableField<>();
-    private ObservableField<String> mAppointmentDuration = new ObservableField<>();
-    private ObservableInt mAppointmentCost = new ObservableInt();
-    private ObservableField<String> mAppointmentLocation = new ObservableField<>();
-    private ObservableField<String> mAppointmentDate = new ObservableField<>();
+    private MutableLiveData<String> mAppointmentServiceName = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentStartTime = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentDuration = new MutableLiveData<>();
+    private MutableLiveData<Integer> mAppointmentCost = new MutableLiveData();
+    private MutableLiveData<String> mAppointmentLocation = new MutableLiveData<>();
+    private MutableLiveData<String> mAppointmentDate = new MutableLiveData<>();
     private View.OnClickListener mOnNewAppointmentClickListener;
 
     public void setDetailedAppointment(Appointment appointment) {
-        mAppointmentServiceName.set(appointment.getServiceName());
-        mAppointmentStartTime.set(appointment.getStringTime());
-        mAppointmentDuration.set(appointment.getSessionDuration());
-        mAppointmentCost.set(appointment.getCost());
-        mAppointmentLocation.set(appointment.getLocation());
-        mAppointmentDate.set(appointment.getStringDate());
+        mAppointmentServiceName.setValue(appointment.getServiceName());
+        mAppointmentStartTime.setValue(appointment.getStringTime());
+        mAppointmentDuration.setValue(appointment.getSessionDuration());
+        mAppointmentCost.setValue(appointment.getCost());
+        mAppointmentLocation.setValue(appointment.getLocation());
+        mAppointmentDate.setValue(appointment.getStringDate());
     }
 
 
@@ -36,27 +36,27 @@ public class ExpertScheduleDetailedAppointmentViewModel extends ViewModel {
     }
 
 
-    public ObservableField<String> getAppointmentServiceName() {
+    public LiveData<String> getAppointmentServiceName() {
         return mAppointmentServiceName;
     }
 
-    public ObservableField<String> getAppointmentStartTime() {
+    public LiveData<String> getAppointmentStartTime() {
         return mAppointmentStartTime;
     }
 
-    public ObservableField<String> getAppointmentDuration() {
+    public LiveData<String> getAppointmentDuration() {
         return mAppointmentDuration;
     }
 
-    public ObservableInt getAppointmentCost() {
+    public LiveData<Integer> getAppointmentCost() {
         return mAppointmentCost;
     }
 
-    public ObservableField<String> getAppointmentLocation() {
+    public LiveData<String> getAppointmentLocation() {
         return mAppointmentLocation;
     }
 
-    public ObservableField<String> getAppointmentDate() {
+    public LiveData<String> getAppointmentDate() {
         return mAppointmentDate;
     }
 

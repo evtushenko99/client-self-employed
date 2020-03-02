@@ -55,7 +55,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled() deleteClientsAppointment = [" + databaseError.getMessage() + "]";
-                        callback.errorDeletingAppointment(error);
+                        callback.errorMessage(error);
                         Log.d(TAG, error);
                     }
                 });
@@ -174,7 +174,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
                         for (DataSnapshot appoinmentSnapshot : dataSnapshot.getChildren()) {
                             Appointment appointment = appoinmentSnapshot.getValue(Appointment.class);
                             if (appointment != null) {
-                                appointment.setNotification(isNotification);
+                                appointment.setNotification(!isNotification);
                                 String appointmentId = String.valueOf(appointment.getId());
                                 mDatabaseReferenceAppointment.child(appointmentId)
                                         .setValue(appointment)

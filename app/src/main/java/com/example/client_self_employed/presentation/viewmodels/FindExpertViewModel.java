@@ -1,6 +1,7 @@
 package com.example.client_self_employed.presentation.viewmodels;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -19,8 +20,8 @@ public class FindExpertViewModel extends ViewModel {
     private final ExpertInteractor mExpertInteractor;
     private final Executor mExecutor;
     private final IResourceWrapper mResourceWrapper;
-    private final MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
-    private final MutableLiveData<String> mErrors = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>(false);
+    private MutableLiveData<String> mErrors = new MutableLiveData<>();
     private List<Expert> mExperts = new ArrayList<>();
     private MutableLiveData<String> mSearchQuery = new MutableLiveData<>();
     private MutableLiveData<List<Expert>> mLiveData = new MutableLiveData<>();
@@ -34,7 +35,7 @@ public class FindExpertViewModel extends ViewModel {
 
         @Override
         public void errorLoadingExperts(String errorLoadingExperts) {
-
+            mErrors.postValue(errorLoadingExperts);
         }
     };
 
@@ -42,34 +43,25 @@ public class FindExpertViewModel extends ViewModel {
         mExecutor = executor;
         mExpertInteractor = appointmentsIteractor;
         mResourceWrapper = resourceWrapper;
-        mIsLoading.setValue(false);
     }
 
-    public void loadAllEcperts() {
+    public void loadAllExperts() {
         mIsLoading.setValue(true);
-
         mExecutor.execute(() -> {
             mExpertInteractor.loadAllExperts(mExpertCallBack);
         });
     }
-
-    public MutableLiveData<String> getSearchQuery() {
-        return mSearchQuery;
-    }
-
 
     public void setSearchQuery(String searchQuery) {
         if (!searchQuery.equals("")) {
             mExecutor.execute(() -> {
                 List<Expert> newExpets = mExpertInteractor.findExpert(mExperts, searchQuery);
                 mLiveData.postValue(newExpets);
-
             });
         } else {
             mLiveData.postValue(mExperts);
         }
     }
-
 
     public LiveData<Boolean> getIsLoading() {
         return mIsLoading;
@@ -81,6 +73,11 @@ public class FindExpertViewModel extends ViewModel {
 
     public LiveData<List<Expert>> getLiveData() {
         return mLiveData;
+    }
+
+    @VisibleForTesting
+    public IExpertsCallBack getExpertCallBack() {
+        return mExpertCallBack;
     }
 
 

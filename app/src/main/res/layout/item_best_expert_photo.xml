@@ -24,7 +24,7 @@
             android:layout_margin="@dimen/margin_medium"
             app:cardColor="@{SelectedExpert.cardColor}"
             android:onClick="@{SelectedExpert.onClickListener}"
-            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardCornerRadius="@dimen/card_corner_radius_high"
             app:cardElevation="4dp">
 
             <LinearLayout

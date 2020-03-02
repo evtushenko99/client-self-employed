@@ -1,7 +1,5 @@
 package com.example.client_self_employed.dagger;
 
-import android.content.Context;
-
 import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ClientInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
@@ -53,10 +51,10 @@ class FactoriesModule {
     }
 
     @Provides
-    AccountViewModelFactory getAccountFactory(Context context, Executor executor,
+    AccountViewModelFactory getAccountFactory(Executor executor,
                                               ClientInteractor clientInteractor,
                                               ResourceWrapper resourceWrapper) {
-        return new AccountViewModelFactory(context, executor, clientInteractor, resourceWrapper);
+        return new AccountViewModelFactory(executor, clientInteractor, resourceWrapper);
     }
 
 }

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_gravity="center"
+    android:elevation="@dimen/elevation_medium"
+    app:cardCornerRadius="@dimen/card_corner_radius_medium">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_high">
+
+        <TextView
+            android:id="@+id/fragment_detailed_expert_profession"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Тренер по фигурному катанию" />
+
+
+        <TextView
+            android:id="@+id/fragment_detailed_expert_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:padding="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_expert_profession"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_detailed_expert_profession"
+            tools:text="@string/expert_name_example" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/expert_additional_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="@dimen/padding_medium"
+            app:layout_constraintEnd_toEndOf="@+id/fragment_detailed_expert_profession"
+            app:layout_constraintStart_toStartOf="@+id/fragment_detailed_expert_name"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_detailed_expert_name">
+
+            <TextView
+                android:id="@+id/text_view_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailed_expert_email"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/fragment_detailed_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_email"
+                app:layout_constraintStart_toEndOf="@+id/text_view_work_experience"
+                app:layout_constraintTop_toTopOf="@+id/text_view_email"
+                tools:text="evtushenko99@mail.ru" />
+
+            <TextView
+                android:id="@+id/text_view_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+
+                android:text="@string/detailed_expert_age"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="@+id/text_view_email"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_email" />
+
+
+            <TextView
+                android:id="@+id/fragment_detailed_expert_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_age"
+                app:layout_constraintStart_toStartOf="@+id/fragment_detailed_email"
+                app:layout_constraintTop_toTopOf="@+id/text_view_age"
+                tools:text="23 года" />
+
+            <TextView
+                android:id="@+id/text_view_work_experience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/detailed_expert_work_experience"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="@+id/text_view_age"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_age" />
+
+            <TextView
+                android:id="@+id/text_view_work_experience2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/fragment_detailed_expert_number"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="@+id/text_view_work_experience"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_work_experience" />
+
+            <TextView
+                android:id="@+id/fragment_detailed_work_experience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience"
+                app:layout_constraintStart_toStartOf="@+id/fragment_detailed_expert_age"
+                app:layout_constraintTop_toTopOf="@+id/text_view_work_experience"
+                tools:text="5 лет" />
+
+            <TextView
+                android:id="@+id/fragment_detailed_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_work_experience2"
+                app:layout_constraintStart_toStartOf="@+id/fragment_detailed_work_experience"
+                app:layout_constraintTop_toTopOf="@+id/text_view_work_experience2"
+                tools:text="+7-906-087-11-00" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

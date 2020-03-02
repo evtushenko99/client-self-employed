@@ -13,23 +13,17 @@
     <string name="no_appointments">Вы еще не записаны ни к одному эксперту</string>
     <string name="item_search_expert">Найти эксперта</string>
     <string name="expert_schedule_no_time">В ближайшее время нет записи у данного специалиста</string>
-    <string name="expert_detailed_appointment_service_name">Название услуги</string>
+
     <string name="button_expert_detailed_appointment">Записаться</string>
-    <string name="expert_detailed_appointment_time">Время начала предоставления услуги</string>
-    <string name="expert_detailed_appointment_date">Дата</string>
-    <string name="expert_detailed_appointment_location">Локация</string>
-    <string name="expert_detailed_appointment_duration">Продолжительность услуги</string>
-    <string name="expert_detailed_appointment_cost">Стоимость</string>
-    <string name="expert_detailed_appointment_additional_information">Дополнитльная информация</string>
+
+
     <string name="fragment_search_new_appointment">Записаться к эксперту</string>
     <string name="find_expert_filters">Фильтры</string>
     <string name="menu_find_expert">Find Expert</string>
     <string name="menu_settings">Settings</string>
     <string name="title_fragment_active_appointments">Ваше расписание</string>
     <string name="title_find_expert">Поиск эксперта</string>
-    <string name="item_expert_holder_email">Почта:</string>
-    <string name="item_expert_holder_age">Возраст:</string>
-    <string name="item_expert_holder_work_experience">Опыт работы:</string>
+
     <string name="item_expert_holder_phone_number">Телефон:</string>
     <string name="fragment_find_expert_search_view_hint">Фамилия, Имя эксперта</string>
     <string name="preferences_enable_notifications_switch_key">enable notifications</string>
@@ -59,6 +53,36 @@
     <string name="text_vew_rating_bar">Оцените услугу</string>
     <string name="fragment_detailed_appointment_add_notification">Добавить уведомление</string>
     <string name="fragment_detailed_appointment_delete_notification">Убрать уведомление</string>
+    <string name="client_information_changed">Ваши данные успешно изменены</string>
+    <string name="expert_schedule_new_appointment">Новая запись успешно добавлена</string>
+    <string name="detailed_fragment_title">Описание записи</string>
+    <string name="title_home">home</string>
+    <string name="title_expert_search">Expert Search</string>
+    <string name="title_account_settings">Account settings</string>
+    <string name="fragment_detailed_expert_number">Телефон:</string>
+    <string name="simple_activity_transition">proverhs</string>
+
+    <string name="expert_detailed_appointment_service_name">Название услуги</string>
+    <string name="expert_detailed_appointment_time">Время начала предоставления услуги</string>
+    <string name="expert_detailed_appointment_date">Дата</string>
+    <string name="expert_detailed_appointment_location">Локация</string>
+    <string name="expert_detailed_appointment_duration">Продолжительность услуги</string>
+    <string name="expert_detailed_appointment_cost">Стоимость</string>
+    <string name="expert_detailed_appointment_additional_information">Дополнитльная информация</string>
+
+    <string name="detailed_expert_email">Почта:</string>
+    <string name="detailed_expert_age">Возраст:</string>
+    <string name="detailed_expert_work_experience">Опыт работы:</string>
+    <string name="detailed_expert_phone_number">Телефон:</string>
+    <string name="detailed_expert_contact_using_apps">Связаться с помощью:</string>
+
+    <string name="detailed_appointment_extra_information">Дополнительная информация:</string>
+    <string name="detailed_appointment_service_name">Наименование услуги:</string>
+    <string name="detailed_appointment_duration">Продолжительность:</string>
+    <string name="detailed_appointment_date">Дата:</string>
+    <string name="detailed_appointment_location">Место:</string>
+    <string name="detailed_appointment_time">Время:</string>
+    <string name="detailed_appointment_cost">Стоимость</string>
 
     <string-array name="professions">
         <item>Тренер по фигурному катанию</item>
@@ -71,4 +95,11 @@
         <item>Мужской</item>
         <item>Женский</item>
     </string-array>
+    <plurals name="declination_of_years">
+        <item quantity="one">%d год</item>
+        <item quantity="two">%d года</item>
+        <item quantity="few">%d года</item>
+        <item quantity="many">%d лет</item>
+        <item quantity="other">%d года</item>
+    </plurals>
 </resources>

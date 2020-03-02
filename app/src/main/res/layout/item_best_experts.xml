@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_medium"
-        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardCornerRadius="@dimen/card_corner_radius_high"
 
         app:cardElevation="4dp">
 
@@ -46,14 +46,6 @@
                 app:loadData="@{BestExperts.liveExpertList}"
                 app:onBestClick="@{BestExperts.onBestExpertClickLisner}" />
 
-            <Button
-                android:id="@+id/best_expert_new_appointment_button"
-                style="@style/MyButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{BestExperts.onClickListener}"
-                android:text="@string/new_appointment"
-                android:textColor="@color/primaryLightColor" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

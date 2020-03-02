@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_medium"
-    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardCornerRadius="@dimen/card_corner_radius_high"
     app:cardElevation="@dimen/elevation_medium">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +65,7 @@
                 android:id="@+id/text_view_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/item_expert_holder_email"
+                android:text="@string/detailed_expert_email"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/item_expert_holder_age"
+                android:text="@string/detailed_expert_age"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintStart_toStartOf="@+id/text_view_email"
                 app:layout_constraintTop_toBottomOf="@+id/text_view_email" />
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/item_expert_holder_work_experience"
+                android:text="@string/detailed_expert_work_experience"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintStart_toStartOf="@+id/text_view_age"
                 app:layout_constraintTop_toBottomOf="@+id/text_view_age" />
