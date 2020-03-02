@@ -1,5 +1,6 @@
 package com.example.client_self_employed.data;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,9 @@ import com.example.client_self_employed.domain.ILoadOneExpertCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -217,9 +221,34 @@ public class RepositoryExpert implements IExpertRepository {
         for (int i = 0; i < experts.size(); i++) {
             Expert expert = experts.get(i);
             mStorageReference.child("expert_" + (expert.getId()) + ".jpg").getDownloadUrl()
-                    .addOnCompleteListener(task -> {
-                        expert.setExpertPhotoUri(task.getResult().toString());
-                        callBack.expertsIsLoaded(experts);
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            expert.setExpertPhotoUri(uri.toString());
+                            callBack.expertsIsLoaded(experts);
+                        }
+                    })
+                    /*.addOnCompleteListener(task -> {
+                        if (task.getException() != null) {
+                            expert.setExpertPhotoUri(task.getResult().toString());
+                        }else {
+                            expert.setExpertPhotoUri(null);
+                        }
+
+                    })*/
+                    .addOnCanceledListener(new OnCanceledListener() {
+                        @Override
+                        public void onCanceled() {
+                            expert.setExpertPhotoUri(null);
+                            callBack.expertsIsLoaded(experts);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            expert.setExpertPhotoUri(null);
+                            callBack.expertsIsLoaded(experts);
+                        }
                     });
         }
     }

@@ -56,23 +56,7 @@ public class HomeScreenViewModel extends ViewModel {
     private IExpertsCallBack mExpertsCallBack = new IExpertsCallBack() {
         @Override
         public void expertsIsLoaded(@NonNull List<Expert> expertList) {
-            count++;
-            if (count == expertList.size()) {
-                List<ClientSelectedExpert> list = new ArrayList<>();
-                if (expertList.size() != 0) {
-                    for (Expert expert : expertList) {
-                        list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), expert.getExpertPhotoUri()));
-                    }
-                    ClientExpertItem item = new ClientExpertItem(list);
-                    if (mRowTypes.size() == 0) {
-                        mRowTypes.add(0, item);
-                        mLiveData.setValue(mRowTypes);
-                    }
-                    loadActiveAppointments();
-                }
-                mIsBestExpertLoading.setValue(false);
-                count = 0;
-            }
+            getOnlyBestExperts(expertList);
         }
 
         @Override
@@ -81,6 +65,7 @@ public class HomeScreenViewModel extends ViewModel {
             mIsBestExpertLoading.setValue(false);
         }
     };
+
 
     private IClientAppointmentCallback mClientAppointmentCallback = new IClientAppointmentCallback() {
         @Override
@@ -241,8 +226,33 @@ public class HomeScreenViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public void setCount(int count) {
+    void setCount(int count) {
         this.count = count;
+    }
+
+    private void getOnlyBestExperts(@NonNull List<Expert> expertList) {
+        count++;
+        if (count == expertList.size()) {
+            List<ClientSelectedExpert> list = new ArrayList<>();
+            if (expertList.size() != 0) {
+                for (Expert expert : expertList) {
+                    int reviewCount = expert.getReviewCount();
+                    if (reviewCount != 0) {
+                        if (expert.getTotalRating() / expert.getReviewCount() >= 4) {
+                            list.add(new ClientSelectedExpert(expert.getId(), expert.getAbbreviatedFullName(), expert.getExpertPhotoUri()));
+                        }
+                    }
+                }
+                ClientExpertItem item = new ClientExpertItem(list);
+                if (mRowTypes.size() == 0) {
+                    mRowTypes.add(0, item);
+                    mLiveData.setValue(mRowTypes);
+                }
+                loadActiveAppointments();
+            }
+            mIsBestExpertLoading.setValue(false);
+            count = 0;
+        }
     }
 
 }

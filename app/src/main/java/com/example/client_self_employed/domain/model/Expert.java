@@ -18,6 +18,8 @@ public class Expert implements Serializable {
     private String mProfession;
     private int mWorkExperience;
     private String mExpertPhotoUri;
+    private int mReviewCount;
+    private int mTotalRating;
 
     public Expert() {
 
@@ -34,6 +36,21 @@ public class Expert implements Serializable {
         mProfession = profession;
         mWorkExperience = workExperience;
         mExpertPhotoUri = expertPhotoUri;
+    }
+
+    public Expert(long id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri, int reviewCount, int totalRating) {
+        mId = id;
+        mLastName = lastName;
+        mFirstName = firstName;
+        mSecondName = secondName;
+        mAge = age;
+        mEmail = email;
+        mPhoneNumber = phoneNumber;
+        mProfession = profession;
+        mWorkExperience = workExperience;
+        mExpertPhotoUri = expertPhotoUri;
+        mReviewCount = reviewCount;
+        mTotalRating = totalRating;
     }
 
     public String getFullName() {
@@ -124,6 +141,23 @@ public class Expert implements Serializable {
     public void setWorkExperience(int workExperience) {
         mWorkExperience = workExperience;
     }
+
+    public int getReviewCount() {
+        return mReviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        mReviewCount = reviewCount;
+    }
+
+    public int getTotalRating() {
+        return mTotalRating;
+    }
+
+    public void setTotalRating(int totalRating) {
+        mTotalRating = totalRating;
+    }
+
 
     @Override
     public String toString() {
