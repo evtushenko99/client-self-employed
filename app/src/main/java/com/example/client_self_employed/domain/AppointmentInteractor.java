@@ -21,7 +21,7 @@ public class AppointmentInteractor {
                 1,
                 0, 0);
         Appointment appointment3 = new Appointment(3, "Подкатка", "90 минут", 1500,
-                "Европейский", 2020, 3, 2, 14, 300,
+                "Европейский", 2020, 3, 2, 14, 30,
                 1,
                 0, 0);
 
@@ -80,7 +80,7 @@ public class AppointmentInteractor {
         expert6.setTotalRating(4);
         Client client = new Client(2, "Юрин", "Максим", "Евгеньевич", 21, 22, 2, 1999, "evtushenko99@mail.ru", "+7-906-087-11-00", "Мужской", null);
 
-        /*mAppointmentsRepository.uploadClient(client);
+     /*    mAppointmentsRepository.uploadClient(client);
         mAppointmentsRepository.uploadAppointment(appointment1);
         mAppointmentsRepository.uploadAppointment(appointment2);
         mAppointmentsRepository.uploadAppointment(appointment3);
@@ -93,7 +93,7 @@ public class AppointmentInteractor {
         mAppointmentsRepository.uploadAppointment(appointment10);
         mAppointmentsRepository.uploadAppointment(appointment11);
 
-        mAppointmentsRepository.uploadExpert(expert1);
+       mAppointmentsRepository.uploadExpert(expert1);
         mAppointmentsRepository.uploadExpert(expert2);
         mAppointmentsRepository.uploadExpert(expert3);
         mAppointmentsRepository.uploadExpert(expert4);

@@ -160,22 +160,6 @@ public class Expert implements Serializable {
 
 
     @Override
-    public String toString() {
-        return "Expert{" +
-                "mId=" + mId +
-                ", mLastName='" + mLastName + '\'' +
-                ", mFirstName='" + mFirstName + '\'' +
-                ", mSecondName='" + mSecondName + '\'' +
-                ", mAge=" + mAge +
-                ", mEmail='" + mEmail + '\'' +
-                ", mPhoneNumber='" + mPhoneNumber + '\'' +
-                ", mProfession='" + mProfession + '\'' +
-                ", mWorkExperience=" + mWorkExperience +
-                ", mExpertPhotoUri='" + mExpertPhotoUri + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Expert)) return false;
@@ -183,6 +167,8 @@ public class Expert implements Serializable {
         return getId() == expert.getId() &&
                 getAge() == expert.getAge() &&
                 getWorkExperience() == expert.getWorkExperience() &&
+                getReviewCount() == expert.getReviewCount() &&
+                getTotalRating() == expert.getTotalRating() &&
                 Objects.equals(getLastName(), expert.getLastName()) &&
                 Objects.equals(getFirstName(), expert.getFirstName()) &&
                 Objects.equals(getSecondName(), expert.getSecondName()) &&
@@ -194,6 +180,6 @@ public class Expert implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLastName(), getFirstName(), getSecondName(), getAge(), getEmail(), getPhoneNumber(), getProfession(), getWorkExperience(), getExpertPhotoUri());
+        return Objects.hash(getId(), getLastName(), getFirstName(), getSecondName(), getAge(), getEmail(), getPhoneNumber(), getProfession(), getWorkExperience(), getExpertPhotoUri(), getReviewCount(), getTotalRating());
     }
 }
