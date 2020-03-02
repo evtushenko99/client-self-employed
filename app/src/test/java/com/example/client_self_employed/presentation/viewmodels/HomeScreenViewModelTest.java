@@ -76,7 +76,7 @@ public class HomeScreenViewModelTest {
         //act
         mViewModel.getAppointmentsCallback().onErrorLoadingActiveAppointments(mException);
         //assert
-        assertThat(mViewModel.getErrors().getValue(), is(mException));
+        assertThat(mViewModel.getMessage().getValue(), is(mException));
     }
 
     @Test
@@ -98,8 +98,8 @@ public class HomeScreenViewModelTest {
     public void expertCallbackTest_exceptionCase() {
         //arrange
         //act
-        mViewModel.getExpertsCallBack().errorLoadingExperts(mException);
-        String actual = mViewModel.getErrors().getValue();
+        mViewModel.getExpertsCallBack().messageLoadingExperts(mException);
+        String actual = mViewModel.getMessage().getValue();
         //assert
         assertThat(mViewModel.getIsBestExpertLoading().getValue(), is(false));
         assertThat(actual, is(mException));
@@ -184,9 +184,9 @@ public class HomeScreenViewModelTest {
     public void clientAppointmentCallback_exceptionCase() {
         //arrange
         //act
-        mViewModel.getClientAppointmentCallback().errorMessage(mException);
+        mViewModel.getClientAppointmentCallback().message(mException);
         //assert
-        assertThat(mViewModel.getErrors().getValue(), is(mException));
+        assertThat(mViewModel.getMessage().getValue(), is(mException));
         assertThat(mViewModel.getIsActiveAppointmentLoading().getValue(), is(false));
     }
 

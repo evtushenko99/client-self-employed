@@ -13,5 +13,5 @@ public interface IExpertsCallBack {
      */
     void expertsIsLoaded(List<Expert> expertList);
 
-    void errorLoadingExperts(String errorLoadingExperts);
+    void messageLoadingExperts(String messageLoadingExperts);
 }

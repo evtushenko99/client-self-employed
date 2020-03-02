@@ -23,20 +23,20 @@ public interface IExpertRepository {
     /**
      * Загрузка расписания определенного эксперта
      */
-    void loadExpertSchedule(long expertId, IExpertScheduleCallback expertScheduleCallback);
+    void loadExpertSchedule(@NonNull Long expertId, IExpertScheduleCallback expertScheduleCallback);
 
     /**
      * Добавление нового клиента на свободную запись
      */
-    void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleCallback expertScheduleCallback);
+    void updateExpertAppointment(@NonNull Long appointmentId, long clientId, IExpertScheduleCallback expertScheduleCallback);
 
     /**
      * Загрузка информации об одном эксперте
      */
-    void loadOneExpert(@NonNull long expertId, ILoadOneExpertCallback callback);
+    void loadOneExpert(@NonNull Long expertId, ILoadOneExpertCallback callback);
 
     /**
      * Добавление или обновления uri - для фотографии эксперта.
      */
-    void loadNewExpertPhoto(@NonNull long expertId, String newExpertPhoto, ILoadExpertPhotoCallback callback);
+    void loadNewExpertPhoto(@NonNull Long expertId, String newExpertPhoto, ILoadExpertPhotoCallback callback);
 }

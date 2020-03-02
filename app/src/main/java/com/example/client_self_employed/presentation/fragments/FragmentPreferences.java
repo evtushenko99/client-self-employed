@@ -1,7 +1,6 @@
 package com.example.client_self_employed.presentation.fragments;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -18,13 +17,7 @@ public class FragmentPreferences extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.preferences, null);
         Preference notification = findPreference(getString(R.string.preferences_enable_notifications_switch_key));
         if (notification != null) {
-            notification.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Toast.makeText(requireContext(), "Ура", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
+            notification.setOnPreferenceClickListener(preference -> true);
         }
     }
 }

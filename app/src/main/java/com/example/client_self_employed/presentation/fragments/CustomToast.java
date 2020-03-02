@@ -15,7 +15,7 @@ public class CustomToast {
         TextView tV = layout.findViewById(R.id.toast);
         tV.setText(message);
         Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
     }

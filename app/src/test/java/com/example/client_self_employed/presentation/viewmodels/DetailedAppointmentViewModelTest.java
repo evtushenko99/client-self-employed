@@ -147,7 +147,7 @@ public class DetailedAppointmentViewModelTest {
         //arrange
         String message = "message";
         //act
-        mViewModel.getExpertCallback().errorLoadOneExpert(message);
+        mViewModel.getExpertCallback().messageLoadOneExpert(message);
         //assert
         assertThat(mViewModel.getMessage().getValue(), is(message));
     }
@@ -167,7 +167,7 @@ public class DetailedAppointmentViewModelTest {
         //arrange
         String message = "message";
         //act
-        mViewModel.getAppointmentCallback().errorLoadOneAppointment(message);
+        mViewModel.getAppointmentCallback().messageLoadOneAppointment(message);
         //assert
         assertThat(mViewModel.getMessage().getValue(), is(message));
 

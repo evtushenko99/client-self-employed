@@ -19,7 +19,7 @@ import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleDe
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
 
-public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
+public class DialogFragmentDetailedAppointment extends DialogFragment {
     private static final String DETAILED_APPOINTMENT = "DETAILED APPOINTMENT";
     private static final String CLIENT_ID = "CLIENT ID";
     private Appointment mAppointment;
@@ -29,19 +29,14 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
 
     private long mClientId;
 
-    public static FragmentExpertScheduleDetailedAppointment newInstance(Appointment appointment, long clientId) {
+    public static DialogFragmentDetailedAppointment newInstance(Appointment appointment, long clientId) {
 
         Bundle args = new Bundle();
         args.putParcelable(DETAILED_APPOINTMENT, appointment);
         args.putLong(CLIENT_ID, clientId);
-        FragmentExpertScheduleDetailedAppointment fragment = new FragmentExpertScheduleDetailedAppointment(appointment, clientId);
+        DialogFragmentDetailedAppointment fragment = new DialogFragmentDetailedAppointment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public FragmentExpertScheduleDetailedAppointment(Appointment appointment, long clientId) {
-        mAppointment = appointment;
-        mClientId = clientId;
     }
 
     @NonNull
@@ -49,7 +44,6 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
         return dialog;
     }
 
@@ -66,7 +60,6 @@ public class FragmentExpertScheduleDetailedAppointment extends DialogFragment {
         mExpertDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity())
                 .get(ExpertScheduleDetailedAppointmentViewModel.class);
         setDetailedAppointmentViewModel();
-
         ExpertScheduleDetailedAppointmentBinding binding = ExpertScheduleDetailedAppointmentBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
         binding.setViewModel(mExpertDetailedAppointmentViewModel);

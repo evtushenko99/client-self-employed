@@ -171,7 +171,7 @@ public class AccountViewModelTest {
         //arrange
         String message = "";
         //act
-        mViewModel.getCallback().errorWorkOnClient(message);
+        mViewModel.getCallback().messageWorkOnClient(message);
         assertThat(mViewModel.getMessage().getValue(), is(message));
     }
 }

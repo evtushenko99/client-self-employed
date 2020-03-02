@@ -29,7 +29,7 @@ public interface IExpertScheduleCallback {
      * Колбек для вывода ошибки при загрузке расписания эксперта или
      * добавления нового клиента на определенное время
      *
-     * @param errorOnWorkWithExpertSchedule
+     * @param messageOnWorkWithExpertSchedule
      */
-    void errorOnWorkWithExpertSchedule(String errorOnWorkWithExpertSchedule);
+    void messageOnWorkWithExpertSchedule(String messageOnWorkWithExpertSchedule);
 }

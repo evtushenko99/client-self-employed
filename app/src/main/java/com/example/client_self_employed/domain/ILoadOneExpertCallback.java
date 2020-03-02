@@ -9,5 +9,5 @@ import com.example.client_self_employed.domain.model.Expert;
 public interface ILoadOneExpertCallback {
     void oneExpertIsLoaded(Expert expert);
 
-    void errorLoadOneExpert(String errorLoadOneExpert);
+    void messageLoadOneExpert(String messageLoadOneExpert);
 }

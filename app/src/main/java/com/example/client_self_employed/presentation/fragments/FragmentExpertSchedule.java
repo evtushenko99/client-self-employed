@@ -59,10 +59,13 @@ public class FragmentExpertSchedule extends Fragment {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             mScheduleRecycler.setLayoutManager(layoutManager);
             mScheduleViewModel.getMessage().observe(getViewLifecycleOwner(), message -> {
-                CustomToast.makeToast(requireActivity(), message, view);
+                if (!message.equals("")) {
+                    CustomToast.makeToast(requireActivity(), message, view);
+                    mScheduleViewModel.setMessage("");
+                }
             });
         } else {
-            Toast.makeText(getActivity(), "ID эксперта не дошло", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -71,11 +74,9 @@ public class FragmentExpertSchedule extends Fragment {
         mHomeScreenViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                 .get(HomeScreenViewModel.class);
         mScheduleViewModel.loadExpertSchedule(id);
-        mScheduleViewModel.setMoreInformation(expert -> {
-            DialogFragmentDetailedExpert.newInstance(expert).show(getActivity().getSupportFragmentManager(), null);
-        });
+        mScheduleViewModel.setMoreInformation(expert -> DialogFragmentDetailedExpert.newInstance(expert).show(getActivity().getSupportFragmentManager(), null));
         mScheduleViewModel.getExpertSchedule().observe(getViewLifecycleOwner(), expertSchedule -> {
-            mScheduleRecycler.setAdapter(new AdapterExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), (appointment, clientId) -> FragmentExpertScheduleDetailedAppointment
+            mScheduleRecycler.setAdapter(new AdapterExpertSchedule(expertSchedule, mScheduleViewModel.getResourceWrapper(), (appointment, clientId) -> DialogFragmentDetailedAppointment
                     .newInstance(appointment, clientId)
                     .show(getActivity().getSupportFragmentManager(), null), mHomeScreenViewModel.getFilterInteractor()));
         });

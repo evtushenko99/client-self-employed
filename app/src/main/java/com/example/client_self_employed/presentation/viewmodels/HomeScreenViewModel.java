@@ -6,6 +6,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.client_self_employed.domain.AppointmentInteractor;
@@ -22,6 +23,9 @@ import com.example.client_self_employed.presentation.adapters.items.ClientActive
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
+import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
+import com.example.client_self_employed.presentation.clicklisteners.FindExpertButtonClickListener;
+import com.example.client_self_employed.presentation.clicklisteners.NewRecordToBestExpertButtonItemClickListener;
 import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
 
@@ -37,13 +41,18 @@ public class HomeScreenViewModel extends ViewModel {
     private final ModelsConverter mModelsConverter;
     private final MutableLiveData<Boolean> mIsBestExpertLoading = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> mIsActiveAppointmentLoading = new MutableLiveData<>(false);
-    private final MutableLiveData<String> mErrors = new MutableLiveData<>();
+    private MutableLiveData<String> mMessage = new MutableLiveData<>();
     private MutableLiveData<List<RowType>> mLiveData = new MutableLiveData<>();
     private List<RowType> mRowTypes = new ArrayList<>();
     //Переменная, которая говорит нам, сколько ответов пришло от БД при загрузки фотографий для каждого эксперта
     //Только если количество ответов от БД равно количеству экспертов в массиве (все фотографии загружены)
     //можно продолжать загрузку
     private int count = 0;
+
+    private ActiveAppointmentClickListener mActiveAppointmentsClickListener;
+    private NewRecordToBestExpertButtonItemClickListener mNewRecordToBestExpertButtonItemClickListener;
+    private FindExpertButtonClickListener mFindExpertButtonClickListener;
+
     private IExpertsCallBack mExpertsCallBack = new IExpertsCallBack() {
         @Override
         public void expertsIsLoaded(@NonNull List<Expert> expertList) {
@@ -67,8 +76,8 @@ public class HomeScreenViewModel extends ViewModel {
         }
 
         @Override
-        public void errorLoadingExperts(String errorLoadingExperts) {
-            mErrors.postValue(errorLoadingExperts);
+        public void messageLoadingExperts(String messageLoadingExperts) {
+            mMessage.postValue(messageLoadingExperts);
             mIsBestExpertLoading.setValue(false);
         }
     };
@@ -102,8 +111,8 @@ public class HomeScreenViewModel extends ViewModel {
         }
 
         @Override
-        public void errorMessage(String message) {
-            mErrors.postValue(message);
+        public void message(String message) {
+            mMessage.postValue(message);
             mIsActiveAppointmentLoading.setValue(false);
         }
     };
@@ -116,11 +125,100 @@ public class HomeScreenViewModel extends ViewModel {
 
         @Override
         public void onErrorLoadingActiveAppointments(String errorLoadingActiveAppointments) {
-            mErrors.postValue(errorLoadingActiveAppointments);
+            mMessage.postValue(errorLoadingActiveAppointments);
         }
 
     };
 
+    HomeScreenViewModel(
+            @NonNull AppointmentInteractor iteractor,
+            @NonNull ExpertInteractor expertsInteractor,
+            @NonNull FilterActiveAppointmentsInteractor filterActiveAppointmentsInteractor,
+            @NonNull Executor executor) {
+        mAppointmentInteractor = iteractor;
+        mExpertsInteractor = expertsInteractor;
+        mFilterInteractor = filterActiveAppointmentsInteractor;
+        mExecutor = executor;
+        mModelsConverter = new ModelsConverter(mFilterInteractor);
+
+    }
+
+    @BindingAdapter({"data", "activeAppointmentClickListener", "newRecordClickListener", "findExpertButtonClickListener"})
+    public static void setRecycler(RecyclerView recycler, List<RowType> data, ActiveAppointmentClickListener activeAppointmentClickListener,
+                                   NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener,
+                                   FindExpertButtonClickListener findExpertButtonClickListener) {
+        if (data != null) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recycler.getContext(), RecyclerView.VERTICAL, false);
+            recycler.setLayoutManager(linearLayoutManager);
+            recycler.setAdapter(new AdapterHomeScreen(data, activeAppointmentClickListener, newRecordToBestExpertButtonItemClickListener, findExpertButtonClickListener));
+        }
+    }
+
+    public void loadClientExperts() {
+        mIsBestExpertLoading.setValue(true);
+        mExecutor.execute(() -> mExpertsInteractor.loadAllExperts(mExpertsCallBack));
+    }
+
+    public void loadActiveAppointments() {
+        mIsActiveAppointmentLoading.setValue(true);
+        mExecutor.execute(() -> mAppointmentInteractor.loadClientsAppointments(2, mAppointmentsCallback));
+    }
+
+    public void deleteClientAppointment(long appointmentId) {
+        mExecutor.execute(() -> mAppointmentInteractor.deleteClientAppointment(appointmentId, mClientAppointmentCallback));
+    }
+
+
+    public void setActiveAppointmentsClickListener(ActiveAppointmentClickListener activeAppointmentsClickListener) {
+        mActiveAppointmentsClickListener = activeAppointmentsClickListener;
+    }
+
+
+    public void setNewRecordToBestExpertButtonItemClickListener(NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener) {
+        mNewRecordToBestExpertButtonItemClickListener = newRecordToBestExpertButtonItemClickListener;
+    }
+
+
+    public void setFindExpertButtonClickListener(FindExpertButtonClickListener findExpertButtonClickListener) {
+        mFindExpertButtonClickListener = findExpertButtonClickListener;
+    }
+
+
+    public LiveData<Boolean> getIsBestExpertLoading() {
+        return mIsBestExpertLoading;
+    }
+
+    public LiveData<Boolean> getIsActiveAppointmentLoading() {
+        return mIsActiveAppointmentLoading;
+    }
+
+    public LiveData<List<RowType>> getLiveData() {
+        return mLiveData;
+    }
+
+    public LiveData<String> getMessage() {
+        return mMessage;
+    }
+
+    public FilterActiveAppointmentsInteractor getFilterInteractor() {
+        return mFilterInteractor;
+    }
+
+    public ActiveAppointmentClickListener getActiveAppointmentsClickListener() {
+        return mActiveAppointmentsClickListener;
+    }
+
+    public NewRecordToBestExpertButtonItemClickListener getNewRecordToBestExpertButtonItemClickListener() {
+        return mNewRecordToBestExpertButtonItemClickListener;
+    }
+
+    public FindExpertButtonClickListener getFindExpertButtonClickListener() {
+        return mFindExpertButtonClickListener;
+    }
+
+    public void setMessage(String message) {
+        mMessage = new MutableLiveData<>(message);
+    }
 
     @VisibleForTesting
     IExpertsCallBack getExpertsCallBack() {
@@ -138,66 +236,8 @@ public class HomeScreenViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public void setRowTypes(List<RowType> rowTypes) {
+    void setRowTypes(List<RowType> rowTypes) {
         mRowTypes = rowTypes;
-    }
-
-
-    HomeScreenViewModel(
-            @NonNull AppointmentInteractor iteractor,
-            @NonNull ExpertInteractor expertsInteractor,
-            @NonNull FilterActiveAppointmentsInteractor filterActiveAppointmentsInteractor,
-            @NonNull Executor executor) {
-        mAppointmentInteractor = iteractor;
-        mExpertsInteractor = expertsInteractor;
-        mFilterInteractor = filterActiveAppointmentsInteractor;
-        mExecutor = executor;
-        mModelsConverter = new ModelsConverter(mFilterInteractor);
-
-    }
-
-    @BindingAdapter("data")
-    public static void setRecycler(RecyclerView recycler, List<RowType> data) {
-        if (data != null) {
-            ((AdapterHomeScreen) recycler.getAdapter()).setRowTypes(data);
-        }
-    }
-
-
-    public void loadClientExperts() {
-        mIsBestExpertLoading.setValue(true);
-        mExecutor.execute(() -> {
-            mExpertsInteractor.loadAllExperts(mExpertsCallBack);
-        });
-    }
-
-    public void loadActiveAppointments() {
-        mIsActiveAppointmentLoading.setValue(true);
-        mExecutor.execute(() -> mAppointmentInteractor.loadClientsAppointments(2, mAppointmentsCallback));
-    }
-
-    public void deleteClientAppointment(long appointmentId) {
-        mExecutor.execute(() -> mAppointmentInteractor.deleteClientAppointment(appointmentId, mClientAppointmentCallback));
-    }
-
-    public LiveData<Boolean> getIsBestExpertLoading() {
-        return mIsBestExpertLoading;
-    }
-
-    public LiveData<Boolean> getIsActiveAppointmentLoading() {
-        return mIsActiveAppointmentLoading;
-    }
-
-    public LiveData<List<RowType>> getLiveData() {
-        return mLiveData;
-    }
-
-    public LiveData<String> getErrors() {
-        return mErrors;
-    }
-
-    public FilterActiveAppointmentsInteractor getFilterInteractor() {
-        return mFilterInteractor;
     }
 
 

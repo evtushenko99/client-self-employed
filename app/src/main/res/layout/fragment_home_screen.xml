@@ -9,7 +9,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="ActiveAppointmentViewModel"
+            name="ViewModel"
             type="com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel" />
     </data>
 
@@ -23,7 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_medium"
-            app:data="@{ActiveAppointmentViewModel.liveData}" />
+            app:newRecordClickListener="@{ViewModel.newRecordToBestExpertButtonItemClickListener}"
+            app:findExpertButtonClickListener="@{ViewModel.findExpertButtonClickListener}"
+            app:activeAppointmentClickListener="@{ViewModel.activeAppointmentsClickListener}"
+            app:data="@{ViewModel.liveData}" />
 
         <ProgressBar
             android:id="@+id/progress_bar_load_recommendation_experts"
@@ -32,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="128dp"
-            android:visibility="@{ActiveAppointmentViewModel.isBestExpertLoading == true? View.VISIBLE: View.GONE}" />
+            android:visibility="@{ViewModel.isBestExpertLoading == true? View.VISIBLE: View.GONE}" />
 
         <ProgressBar
             android:id="@+id/progress_bar_load_active_appointments"
@@ -42,6 +45,6 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="128dp"
             android:longClickable="false"
-            android:visibility="@{ActiveAppointmentViewModel.isActiveAppointmentLoading == true? View.VISIBLE: View.GONE}" />
+            android:visibility="@{ViewModel.isActiveAppointmentLoading == true? View.VISIBLE: View.GONE}" />
     </FrameLayout>
 </layout>

@@ -27,16 +27,18 @@ import com.example.client_self_employed.databinding.AccountViewModelBinding;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
 
 import java.io.File;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-public class FragmentAccountSettings extends Fragment {
+public class FragmentAccount extends Fragment {
     private static final int REQUEST_EXTERNAL_STORAGE_RESULT = 1;
     private static final int START_CAMERA_APP = 2;
     private Uri mImageUri;
     private AccountViewModel mViewModel;
 
 
-    public static FragmentAccountSettings newInstance() {
-        return new FragmentAccountSettings();
+    public static FragmentAccount newInstance() {
+        return new FragmentAccount();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -60,22 +62,18 @@ public class FragmentAccountSettings extends Fragment {
         mViewModel.setOnChangePhoneNumberClickListener(v ->
                 DialogFragmentChangeExpertPhoneNumber.newInstance(mViewModel.getPhoneNumber().getValue())
                         .show(requireActivity().getSupportFragmentManager(), null));
-        mViewModel.setOnChangeFullNameClickListener(v -> {
-            DialogFragmentChangeExpertFullName.newInstance()
-                    .show(requireActivity().getSupportFragmentManager(), null);
-        });
-        mViewModel.setOnChangeGenderClickListener(v -> {
-            DialogFragmentChangeExpertGender.newInstance(mViewModel.getGender().getValue())
-                    .show(requireActivity().getSupportFragmentManager(), null);
-        });
-        mViewModel.setOnChangeBirthdayClickListener((year, month, day) -> setDatePicker(year, month, day));
+        mViewModel.setOnChangeFullNameClickListener(v -> DialogFragmentChangeExpertFullName.newInstance()
+                .show(requireActivity().getSupportFragmentManager(), null));
+        mViewModel.setOnChangeGenderClickListener(v -> DialogFragmentChangeExpertGender.newInstance(mViewModel.getGender().getValue())
+                .show(requireActivity().getSupportFragmentManager(), null));
+        mViewModel.setOnChangeBirthdayClickListener(this::setDatePicker);
         mViewModel.setOnChangePhotoClickListener(v -> {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 callCameraApp();
             } else {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    Toast.makeText(requireContext(), "Требуется разрешение на запись", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getResources().getString(R.string.required_write_external_permission), Toast.LENGTH_SHORT).show();
                 }
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_RESULT);
             }
@@ -91,7 +89,10 @@ public class FragmentAccountSettings extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel.getMessage().observe(getViewLifecycleOwner(), error -> {
-            CustomToast.makeToast(requireActivity(), error, view);
+            if (!error.equals("")) {
+                CustomToast.makeToast(requireActivity(), error, view);
+                mViewModel.setMessage("");
+            }
         });
     }
 
@@ -110,7 +111,7 @@ public class FragmentAccountSettings extends Fragment {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 callCameraApp();
             } else {
-                Toast.makeText(requireActivity(), "Нет разрешения на запись, фото не сохранено", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), getResources().getString(R.string.no_write_external_storage_permission), Toast.LENGTH_SHORT).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -141,11 +142,15 @@ public class FragmentAccountSettings extends Fragment {
      * Добавление фотографии в галерию
      */
     private void galleryAddPic() {
-        String imageFileLocation = mViewModel.getImageFileLocation();
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(imageFileLocation);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        requireContext().sendBroadcast(mediaScanIntent);
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String imageFileLocation = mViewModel.getImageFileLocation();
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            File f = new File(imageFileLocation);
+            Uri contentUri = Uri.fromFile(f);
+            mediaScanIntent.setData(contentUri);
+            requireContext().sendBroadcast(mediaScanIntent);
+        });
+
     }
 }

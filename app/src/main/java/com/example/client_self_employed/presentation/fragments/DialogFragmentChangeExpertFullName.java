@@ -19,19 +19,13 @@ import com.example.client_self_employed.presentation.viewmodels.AccountViewModel
 import com.google.android.material.textfield.TextInputEditText;
 
 public class DialogFragmentChangeExpertFullName extends DialogFragment implements View.OnClickListener {
-
     private AccountViewModel mAccountViewModel;
     private TextInputEditText mLastName;
     private TextInputEditText mName;
     private TextInputEditText mSecondName;
 
     public static DialogFragmentChangeExpertFullName newInstance() {
-
-        Bundle args = new Bundle();
-
-        DialogFragmentChangeExpertFullName fragment = new DialogFragmentChangeExpertFullName();
-        fragment.setArguments(args);
-        return fragment;
+        return new DialogFragmentChangeExpertFullName();
     }
 
     @NonNull

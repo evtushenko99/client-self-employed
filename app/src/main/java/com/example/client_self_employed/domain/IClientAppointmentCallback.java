@@ -28,9 +28,9 @@ public interface IClientAppointmentCallback {
     /**
      * Колбек- возвращающий ошибки при загрузке или удалении записей
      *
-     * @param message - ошибка, которую нужно показать пользователю
+     * @param message - сообщение, которую нужно показать пользователю
      */
-    void errorMessage(String message);
+    void message(String message);
 
 
 }

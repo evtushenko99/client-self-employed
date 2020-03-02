@@ -45,13 +45,12 @@ public class AdapterActiveAppointments extends RecyclerView.Adapter<AdapterActiv
         return mAppointments.size();
     }
 
-    public static class ActiveAppointmentViewHolder extends RecyclerView.ViewHolder {
+    static class ActiveAppointmentViewHolder extends RecyclerView.ViewHolder {
         private ItemActiveAppointmentBinding mBinding;
 
-        public ActiveAppointmentViewHolder(@NonNull ItemActiveAppointmentBinding binding) {
+        ActiveAppointmentViewHolder(@NonNull ItemActiveAppointmentBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-
         }
 
         void bindView(final ClientAppointment appointment, int position, ActiveAppointmentClickListener itemClickListener) {

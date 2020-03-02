@@ -16,7 +16,6 @@ import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Expert;
 
 public class DialogFragmentDetailedExpert extends DialogFragment {
-    private static final String DETAILED_EXPERT = "DETAILED_EXPERT";
     private Expert mExpert;
 
     private DialogFragmentDetailedExpert(Expert expert) {
@@ -24,12 +23,7 @@ public class DialogFragmentDetailedExpert extends DialogFragment {
     }
 
     public static DialogFragmentDetailedExpert newInstance(Expert expert) {
-
-        Bundle args = new Bundle();
-        args.putSerializable(DETAILED_EXPERT, expert);
-        DialogFragmentDetailedExpert fragment = new DialogFragmentDetailedExpert(expert);
-        fragment.setArguments(args);
-        return fragment;
+        return new DialogFragmentDetailedExpert(expert);
     }
 
     @Nullable
@@ -55,7 +49,6 @@ public class DialogFragmentDetailedExpert extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
         return dialog;
     }
 

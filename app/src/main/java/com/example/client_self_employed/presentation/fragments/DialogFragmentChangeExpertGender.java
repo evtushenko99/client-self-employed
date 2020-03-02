@@ -17,7 +17,6 @@ import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
 
 public class DialogFragmentChangeExpertGender extends DialogFragment {
-    public static final String CLIENT_OLD_GENDER = "client old gender";
     private final String mOldGender;
     private int mOldPosition = -1;
     private int mNewPosition = -1;
@@ -26,12 +25,7 @@ public class DialogFragmentChangeExpertGender extends DialogFragment {
 
 
     public static DialogFragmentChangeExpertGender newInstance(String oldGender) {
-
-        Bundle args = new Bundle();
-        args.putString(CLIENT_OLD_GENDER, oldGender);
-        DialogFragmentChangeExpertGender fragment = new DialogFragmentChangeExpertGender(oldGender);
-        fragment.setArguments(args);
-        return fragment;
+        return new DialogFragmentChangeExpertGender(oldGender);
     }
 
     private DialogFragmentChangeExpertGender(String oldGender) {

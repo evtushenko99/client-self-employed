@@ -135,7 +135,7 @@ public class ExpertScheduleViewModelTest {
         //arrange
         String exception = "exception";
         //act
-        mViewModel.getExpertScheduleCallback().errorOnWorkWithExpertSchedule(exception);
+        mViewModel.getExpertScheduleCallback().messageOnWorkWithExpertSchedule(exception);
         //assert
         assertThat(mViewModel.getMessage().getValue(), is(exception));
     }

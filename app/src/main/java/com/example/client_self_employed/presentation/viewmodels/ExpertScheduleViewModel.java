@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
@@ -54,13 +53,12 @@ public class ExpertScheduleViewModel extends ViewModel {
             if (isCreate && mExpertId != 0) {
                 loadExpertSchedule(mExpertId);
                 mIsChanged.postValue(true);
-                mMessage.postValue(mResourceWrapper.getString(R.string.expert_schedule_new_appointment));
             }
         }
 
         @Override
-        public void errorOnWorkWithExpertSchedule(String errorOnWorkWithExpertSchedule) {
-            mMessage.postValue(errorOnWorkWithExpertSchedule);
+        public void messageOnWorkWithExpertSchedule(String messageOnWorkWithExpertSchedule) {
+            mMessage.postValue(messageOnWorkWithExpertSchedule);
         }
     };
 
@@ -141,6 +139,11 @@ public class ExpertScheduleViewModel extends ViewModel {
 
     public void setMoreInformation(MoreInformationAboutExpertClickListener moreInformation) {
         mMoreInformation = v -> moreInformation.onMoreInformationAboutExpertClickListener(mExpert);
+    }
+
+
+    public void setMessage(String message) {
+        mMessage = new MutableLiveData<>(message);
     }
 
 

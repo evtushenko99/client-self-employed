@@ -18,7 +18,6 @@ import com.example.client_self_employed.presentation.viewmodels.AccountViewModel
 import com.google.android.material.textfield.TextInputEditText;
 
 public class DialogFragmentChangeExpertEmail extends DialogFragment implements View.OnClickListener {
-    private static final String EXPERT_OLD_EMAIL = "expert email";
     private String mOldEmail;
     private AccountViewModel mAccountViewModel;
     private TextInputEditText mTextInputEditText;
@@ -27,13 +26,12 @@ public class DialogFragmentChangeExpertEmail extends DialogFragment implements V
     public static DialogFragmentChangeExpertEmail newInstance(String email) {
 
         Bundle args = new Bundle();
-        args.putString(EXPERT_OLD_EMAIL, email);
         DialogFragmentChangeExpertEmail fragment = new DialogFragmentChangeExpertEmail(email);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public DialogFragmentChangeExpertEmail(String oldEmail) {
+    private DialogFragmentChangeExpertEmail(String oldEmail) {
         mOldEmail = oldEmail;
     }
 
@@ -48,10 +46,6 @@ public class DialogFragmentChangeExpertEmail extends DialogFragment implements V
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (this.getArguments() != null) {
-            mOldEmail = this.getArguments().getString(EXPERT_OLD_EMAIL);
-        }
-
         mAccountViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
         return inflater.inflate(R.layout.dialog_fragment_change_expert_email, container, false);

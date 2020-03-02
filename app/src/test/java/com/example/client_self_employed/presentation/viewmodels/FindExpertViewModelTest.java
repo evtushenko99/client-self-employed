@@ -110,7 +110,7 @@ public class FindExpertViewModelTest {
         //arrange
         String message = "message";
         //act
-        mViewModel.getExpertCallBack().errorLoadingExperts(message);
+        mViewModel.getExpertCallBack().messageLoadingExperts(message);
         //assert
         assertThat(mViewModel.getErrors().getValue(), is(message));
     }

@@ -5,13 +5,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.client_self_employed.R;
 import com.example.client_self_employed.data.model.FirebaseClient;
 import com.example.client_self_employed.domain.IClientCallback;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 
@@ -38,7 +35,7 @@ public class RepositoryClient implements IClientRepository {
 
 
     @Override
-    public void loadClient(@NonNull long clientId, IClientCallback callback) {
+    public void loadClient(@NonNull Long clientId, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -54,7 +51,7 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled loadClient: " + databaseError.getMessage();
-                        callback.errorWorkOnClient(error);
+                        callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
 
                     }
@@ -62,7 +59,7 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void updateClientBirthday(@NonNull long clientId, int dayOfBirth, int monthOfBirth, int yearOfBirth, IClientCallback callback) {
+    public void updateClientBirthday(@NonNull Long clientId, int dayOfBirth, int monthOfBirth, int yearOfBirth, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -78,6 +75,7 @@ public class RepositoryClient implements IClientRepository {
                                 mDatabaseReferenceClient.child(clientId)
                                         .setValue(client)
                                         .addOnCompleteListener(task -> callback.clientsChanged(true));
+                                callback.messageWorkOnClient(mResourceWrapper.getString(R.string.successful_update));
                             }
                         }
                     }
@@ -85,14 +83,14 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled updateClientBirthday: " + databaseError.getMessage();
-                        callback.errorWorkOnClient(error);
+                        callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
                     }
                 });
     }
 
     @Override
-    public void updateClientEmail(@NonNull long clientId, String newEmail, IClientCallback callback) {
+    public void updateClientEmail(@NonNull Long clientId, String newEmail, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -106,6 +104,7 @@ public class RepositoryClient implements IClientRepository {
                                 mDatabaseReferenceClient.child(clientId)
                                         .setValue(client)
                                         .addOnCompleteListener(task -> callback.clientsChanged(true));
+                                callback.messageWorkOnClient(mResourceWrapper.getString(R.string.successful_update));
                             }
                         }
                     }
@@ -113,14 +112,14 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled updateClientEmail: " + databaseError.getMessage();
-                        callback.errorWorkOnClient(error);
+                        callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
                     }
                 });
     }
 
     @Override
-    public void updateClientGender(@NonNull long clientId, String newGender, IClientCallback callback) {
+    public void updateClientGender(@NonNull Long clientId, String newGender, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,6 +133,7 @@ public class RepositoryClient implements IClientRepository {
                                 mDatabaseReferenceClient.child(clientId)
                                         .setValue(client)
                                         .addOnCompleteListener(task -> callback.clientsChanged(true));
+                                callback.messageWorkOnClient(mResourceWrapper.getString(R.string.successful_update));
                             }
                         }
                     }
@@ -141,14 +141,14 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled updateAppointmentRating: " + databaseError.getMessage();
-                        callback.errorWorkOnClient(error);
+                        callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
                     }
                 });
     }
 
     @Override
-    public void updateClientPhoneNumber(@NonNull long clientId, String newPhoneNumber, IClientCallback callback) {
+    public void updateClientPhoneNumber(@NonNull Long clientId, String newPhoneNumber, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -162,6 +162,7 @@ public class RepositoryClient implements IClientRepository {
                                 mDatabaseReferenceClient.child(clientId)
                                         .setValue(client)
                                         .addOnCompleteListener(task -> callback.clientsChanged(true));
+                                callback.messageWorkOnClient(mResourceWrapper.getString(R.string.successful_update));
                             }
                         }
                     }
@@ -169,35 +170,32 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled updateClientPhoneNumber: " + databaseError.getMessage();
-                        callback.errorWorkOnClient(error);
+                        callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
                     }
                 });
     }
 
     @Override
-    public void loadNewClientPhoto(@NonNull long clientId, String newClientPhoto, IClientCallback callback) {
+    public void loadNewClientPhoto(@NonNull Long clientId, String newClientPhoto, IClientCallback callback) {
         File file = new File(String.valueOf((newClientPhoto)));
         String fileName = file.getName();
         StorageReference reference = mStorageReference.child(fileName);
         reference.putFile(Uri.parse(newClientPhoto))
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        if (taskSnapshot.getMetadata() != null) {
-                            if (taskSnapshot.getMetadata().getReference() != null) {
-                                Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
-                                result.addOnSuccessListener(uri -> updateClientPhotoUrl(clientId, uri.toString(), callback));
-                            }
+                .addOnSuccessListener(taskSnapshot -> {
+                    if (taskSnapshot.getMetadata() != null) {
+                        if (taskSnapshot.getMetadata().getReference() != null) {
+                            Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                            result.addOnSuccessListener(uri -> updateClientPhotoUrl(clientId, uri.toString(), callback));
                         }
-
                     }
+
                 })
                 .addOnFailureListener(e -> callback.clientsChanged(false));
     }
 
     @Override
-    public void updateFullName(long clientId, String lastName, String name, String secondName, IClientCallback callback) {
+    public void updateFullName(@NonNull Long clientId, String lastName, String name, String secondName, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -213,6 +211,7 @@ public class RepositoryClient implements IClientRepository {
                                 mDatabaseReferenceClient.child(clientId)
                                         .setValue(client)
                                         .addOnCompleteListener(task -> callback.clientsChanged(true));
+                                callback.messageWorkOnClient(mResourceWrapper.getString(R.string.successful_update));
                             }
                         }
                     }
@@ -220,7 +219,7 @@ public class RepositoryClient implements IClientRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled updateFullName = [" + databaseError.getMessage() + "]";
-                        callback.errorWorkOnClient(error);
+                        callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
                     }
                 });
@@ -248,21 +247,11 @@ public class RepositoryClient implements IClientRepository {
                 });
     }
 
-    public void setNewClient(Client client, IClientCallback callback) {
+    private void setNewClient(Client client, IClientCallback callback) {
         mDatabaseReferenceClient.child(String.valueOf(client.getId()))
                 .setValue(client)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        callback.clientsChanged(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.clientsChanged(false);
-                    }
-                });
+                .addOnCompleteListener(task -> callback.clientsChanged(true))
+                .addOnFailureListener(e -> callback.clientsChanged(false));
     }
 
 }

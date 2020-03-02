@@ -22,19 +22,9 @@ public class AdapterBestExperts extends RecyclerView.Adapter<AdapterBestExperts.
     private List<ClientSelectedExpert> mExpertList;
     private NewRecordToBestExpertButtonItemClickListener mBestExpertItemClickListener;
 
-    private int index = -1;
-
     public AdapterBestExperts(List<ClientSelectedExpert> expertList, NewRecordToBestExpertButtonItemClickListener bestExpertItemClickListener) {
         mExpertList = expertList;
         mBestExpertItemClickListener = bestExpertItemClickListener;
-    }
-
-    public void setRowTypes(@NonNull List<ClientSelectedExpert> expertList) {
-        if (mExpertList != null) {
-            mExpertList.clear();
-        }
-        mExpertList = expertList;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -48,9 +38,6 @@ public class AdapterBestExperts extends RecyclerView.Adapter<AdapterBestExperts.
     @Override
     public void onBindViewHolder(@NonNull AdapterBestExperts.SelectedExpertHolder holder, int position) {
         holder.bindView(mExpertList.get(position), holder.getAdapterPosition(), mBestExpertItemClickListener);
-        //int color = index == position ? R.color.primaryLightColor : R.color.white;
-
-        //holder.mCardView.setBackgroundColor(mResources.getColor(color));
     }
 
     @Override
@@ -58,32 +45,18 @@ public class AdapterBestExperts extends RecyclerView.Adapter<AdapterBestExperts.
         return mExpertList != null ? mExpertList.size() : 0;
     }
 
-    public class SelectedExpertHolder extends RecyclerView.ViewHolder {
+    class SelectedExpertHolder extends RecyclerView.ViewHolder {
         private AdapterBestExpertsBinding mBinding;
 
-        //private CardView mCardView;
-
-        public SelectedExpertHolder(@NonNull AdapterBestExpertsBinding binding) {
+        SelectedExpertHolder(@NonNull AdapterBestExpertsBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            //mCardView = itemView.findViewById(R.id.material_expert_card);
-
-
         }
 
         void bindView(ClientSelectedExpert clientSelectedExpert, int adapterPosition, NewRecordToBestExpertButtonItemClickListener bestExpertItemClickListener) {
             ClientSelectedExpertBinding clientSelectedExpertBinding = new ClientSelectedExpertBinding(clientSelectedExpert, adapterPosition);
             clientSelectedExpertBinding.setOnClickListener(bestExpertItemClickListener);
             mBinding.setSelectedExpert(clientSelectedExpertBinding);
-            /*mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mBestExpertItemClickListener.onExpertItemClickListener(clientSelectedExpert.getExpertId());
-                    index = adapterPosition;
-                    notifyDataSetChanged();
-                }
-            });*/
-
         }
 
     }

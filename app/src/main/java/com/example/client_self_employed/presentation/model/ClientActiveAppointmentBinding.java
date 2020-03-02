@@ -13,7 +13,6 @@ public class ClientActiveAppointmentBinding {
     private ObservableField<String> mServiceName = new ObservableField<>();// Название услуги
     private ObservableField<String> mStartTime = new ObservableField<>();// Время начала занятия
     private ObservableInt mCost = new ObservableInt();//стоимость занятия
-    private ObservableField<String> mLocation = new ObservableField<>(); // место проведения
     private ObservableField<String> mDate = new ObservableField<>();
     private View.OnClickListener mOnItemClickListener;
 
@@ -23,7 +22,6 @@ public class ClientActiveAppointmentBinding {
         mServiceName.set(clientAppointment.getServiceName());
         mStartTime.set(clientAppointment.getStartTime());
         mCost.set(clientAppointment.getCost());
-        mLocation.set(clientAppointment.getLocation());
         mDate.set(clientAppointment.getDate());
     }
 
@@ -34,7 +32,6 @@ public class ClientActiveAppointmentBinding {
     public void setOnItemClickListener(ActiveAppointmentClickListener onItemClickListener, int position) {
         mOnItemClickListener = v -> onItemClickListener.onAppointmentsItemClickListener(mClientAppointment, position);
     }
-
 
     public ObservableField<String> getExpertName() {
         return mExpertName;

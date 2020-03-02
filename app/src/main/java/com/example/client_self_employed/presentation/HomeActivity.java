@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -14,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.notification.Constants;
-import com.example.client_self_employed.presentation.fragments.FragmentAccountSettings;
+import com.example.client_self_employed.presentation.fragments.FragmentAccount;
 import com.example.client_self_employed.presentation.fragments.FragmentDetailedAppointment;
 import com.example.client_self_employed.presentation.fragments.FragmentFindExpert;
 import com.example.client_self_employed.presentation.fragments.FragmentHomeScreen;
@@ -65,32 +64,6 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //getSupportFragmentManager().findFragmentById(R.id.fragment_host_appointments_with_experts).
-
-        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: Main ");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
     public void deleteAppointmentFromRecycler(int position) {
         Bundle bundle = new Bundle();
         bundle.putInt(SAVED_HOLDER_POSITION, position);
@@ -104,7 +77,6 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment selectedFragment = null;
-
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 selectedFragment = new FragmentHomeScreen();
@@ -115,12 +87,11 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
                 mToolBar.setTitle(R.string.title_expert_search);
                 break;
             case R.id.navigation_account_settings:
-                selectedFragment = new FragmentAccountSettings();
+                selectedFragment = new FragmentAccount();
                 mToolBar.setTitle(R.string.title_account_settings);
                 break;
         }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container, selectedFragment);
         transaction.commit();
         return true;

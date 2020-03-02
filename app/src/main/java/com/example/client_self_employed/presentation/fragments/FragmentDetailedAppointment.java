@@ -6,12 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -28,28 +26,22 @@ import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.FragmentDetailedAppointmentBinding;
 import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
+import com.example.client_self_employed.presentation.Arguments;
 import com.example.client_self_employed.presentation.HomeActivity;
-import com.example.client_self_employed.presentation.clicklisteners.RatingClickListeners;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
 
 public class FragmentDetailedAppointment extends Fragment {
-    private static final String APPOINTMENT_ID = "appointment id";
-    private static final String EXPERT_ID = "expert id";
-    private static final String POSITION = "position";
-
-
     private static final int REQUEST_CALL_PHONE = 0;
 
-    private HomeScreenViewModel mViewModel;
-
-    private DetailedAppointmentViewModel mDetailedAppointmentViewModel;
+    private HomeScreenViewModel mHomeScreenViewModel;
+    private DetailedAppointmentViewModel mViewModel;
     private long mExpertId;
     private long mAppointmentId;
     private int mPosition;
 
-    public FragmentDetailedAppointment(long appointmentId, long expertId) {
+    private FragmentDetailedAppointment(long appointmentId, long expertId) {
         mExpertId = expertId;
         mAppointmentId = appointmentId;
     }
@@ -57,9 +49,9 @@ public class FragmentDetailedAppointment extends Fragment {
     public static FragmentDetailedAppointment newInstance(long appointmentId, long expertId, int position) {
 
         Bundle args = new Bundle();
-        args.putLong(APPOINTMENT_ID, appointmentId);
-        args.putLong(EXPERT_ID, expertId);
-        args.putInt(POSITION, position);
+        args.putLong(Arguments.APPOINTMENT_ID, appointmentId);
+        args.putLong(Arguments.EXPERT_ID, expertId);
+        args.putInt(Arguments.POSITION, position);
         FragmentDetailedAppointment fragment = new FragmentDetailedAppointment(appointmentId, expertId);
         fragment.setArguments(args);
         return fragment;
@@ -68,35 +60,32 @@ public class FragmentDetailedAppointment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // setHasOptionsMenu(true);
-        long updateAppointment = -1;
-
+        mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getDetailedAppointmentViewModelFactory())
+                .get(DetailedAppointmentViewModel.class);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            mPosition = bundle.getInt(POSITION);
-            updateAppointment = bundle.getLong(Constants.UPDATE_APPOINTMENT, -1);
-        }
-
-        mDetailedAppointmentViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getDetailedAppointmentViewModelFactory())
-                .get(DetailedAppointmentViewModel.class);
-        if (updateAppointment != -1) {
-            mDetailedAppointmentViewModel.setUpdateButtonText(true);
+            mPosition = bundle.getInt(Arguments.POSITION);
+            long updateAppointment = bundle.getLong(Constants.UPDATE_APPOINTMENT, -1);
+            if (updateAppointment != -1) {
+                mViewModel.setUpdateButtonText(true);
+            }
         }
         setClickListeners();
         FragmentDetailedAppointmentBinding binding = FragmentDetailedAppointmentBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
-        binding.setViewModel(mDetailedAppointmentViewModel);
+        binding.setViewModel(mViewModel);
         return binding.getRoot();
     }
 
     private void setClickListeners() {
-        mDetailedAppointmentViewModel.setNotificationClickListener(new IAddNotificationClickListener() {
+        Resources resources = getResources();
+        mViewModel.setNotificationClickListener(new IAddNotificationClickListener() {
             @Override
             public void onAddNotificationClickListener() {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
                 boolean isActivated = sharedPreferences.getBoolean(getString(R.string.preferences_enable_notifications_switch_key), false);
                 if (isActivated) {
-                    mDetailedAppointmentViewModel.createNotification();
+                    mViewModel.createNotification();
                 } else {
                     requireActivity().getSupportFragmentManager().beginTransaction()
                             .addToBackStack(null)
@@ -107,28 +96,27 @@ public class FragmentDetailedAppointment extends Fragment {
 
             @Override
             public void onRemoveNotificationClickListenrs(long appointmentId) {
-                mDetailedAppointmentViewModel.updateAppointmentNotification();
+                mViewModel.updateAppointmentNotification();
                 NotificationHandler.cancelReminder(String.valueOf(appointmentId));
             }
         });
 
-        mDetailedAppointmentViewModel.setCancelAppointmentClickListener(appointmentId -> {
+        mViewModel.setCancelAppointmentClickListener(appointmentId -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Отмена записи");
-            builder.setMessage("Вы уверены что хотите отменить запись?");
-            builder.setPositiveButton("ДА", (dialog, which) -> {
-
-                mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
+            builder.setTitle(resources.getString(R.string.cancel_active_record));
+            builder.setMessage(resources.getString(R.string.are_you_sure_you_want_to_cancel_recording));
+            builder.setPositiveButton(resources.getString(R.string.positive_button), (dialog, which) -> {
+                mHomeScreenViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                         .get(HomeScreenViewModel.class);
-                mViewModel.deleteClientAppointment(appointmentId);
+                mHomeScreenViewModel.deleteClientAppointment(appointmentId);
                 ((HomeActivity) requireActivity()).deleteAppointmentFromRecycler(mPosition);
             });
-            builder.setNegativeButton("Нет", null);
+            builder.setNegativeButton(resources.getString(R.string.negative_button), null);
             AlertDialog dialog = builder.create();
             dialog.show();
         });
 
-        mDetailedAppointmentViewModel.setCallPhoneClickListener(expertPhoneNumber -> {
+        mViewModel.setCallPhoneClickListener(expertPhoneNumber -> {
             if ((ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE)
                     == PackageManager.PERMISSION_GRANTED)) {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + expertPhoneNumber));
@@ -138,14 +126,14 @@ public class FragmentDetailedAppointment extends Fragment {
             }
         });
 
-        mDetailedAppointmentViewModel.setWhatsAppClickListener(expertPhoneNumber -> {
+        mViewModel.setWhatsAppClickListener(expertPhoneNumber -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + expertPhoneNumber + "&text=" + "Hello"));
             requireContext().startActivity(intent);
         });
 
-        mDetailedAppointmentViewModel.setViberClickListener(v -> {
-            final String viberName = "com.viber.voip";
+        mViewModel.setViberClickListener(v -> {
+            final String viberName = resources.getString(R.string.viber_name);
             if (isAppAvailable(requireContext(), viberName)) {
                 Intent intent_viber = new Intent(Intent.ACTION_SEND);
                 intent_viber.setPackage(viberName);
@@ -153,12 +141,12 @@ public class FragmentDetailedAppointment extends Fragment {
                 intent_viber.putExtra(Intent.EXTRA_TEXT, "Hello");
                 requireContext().startActivity(intent_viber);
             } else {
-                Toast.makeText(requireActivity(), "Viber не установлен на телефоне", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), resources.getString(R.string.viber_not_available_on_this_phone), Toast.LENGTH_SHORT).show();
             }
         });
 
-        mDetailedAppointmentViewModel.setTelegramClickListener(v -> {
-            final String telegramName = "org.telegram.messenger";
+        mViewModel.setTelegramClickListener(v -> {
+            final String telegramName = resources.getString(R.string.telegram_name);
             if (isAppAvailable(requireContext(), telegramName)) {
 
                 Intent intent_telegramm = new Intent(Intent.ACTION_SEND);
@@ -167,41 +155,32 @@ public class FragmentDetailedAppointment extends Fragment {
                 intent_telegramm.putExtra(Intent.EXTRA_TEXT, "Hello");
                 requireContext().startActivity(intent_telegramm);
             } else {
-                Toast.makeText(requireActivity(), "Телеграмм не установлен на телефоне", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), resources.getString(R.string.telegram_not_available_on_this_phone), Toast.LENGTH_SHORT).show();
             }
         });
-        mDetailedAppointmentViewModel.setMoreInformationClickListener(v -> {
-            if (mDetailedAppointmentViewModel.getAdditionalInformationAboutExpert().getValue()) {
-                mDetailedAppointmentViewModel.setAdditionalInformationAboutExpert(false);
-                mDetailedAppointmentViewModel.setMoreInformationTextView(getString(R.string.fragment_detailed_information_expert_more_inf));
+        mViewModel.setMoreInformationClickListener(v -> {
+            if (mViewModel.getAdditionalInformationAboutExpert().getValue()) {
+                mViewModel.setAdditionalInformationAboutExpert(false);
+                mViewModel.setMoreInformationTextView(getString(R.string.fragment_detailed_information_expert_more_inf));
             } else {
-                mDetailedAppointmentViewModel.setAdditionalInformationAboutExpert(true);
-                mDetailedAppointmentViewModel.setMoreInformationTextView(getString(R.string.fragment_detailed_information_inf));
+                mViewModel.setAdditionalInformationAboutExpert(true);
+                mViewModel.setMoreInformationTextView(getString(R.string.fragment_detailed_information_inf));
             }
         });
-        mDetailedAppointmentViewModel.setRatingClickListener(new RatingClickListeners() {
-            @Override
-            public void onRatingClickListeners(float rating) {
-                mDetailedAppointmentViewModel.updateAppointmentRating(mAppointmentId, rating);
-            }
-        });
+        mViewModel.setRatingClickListener(rating -> mViewModel.updateAppointmentRating(mAppointmentId, rating));
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-        mDetailedAppointmentViewModel.getMessage().observe(getViewLifecycleOwner(), error -> {
-            CustomToast.makeToast(requireActivity(), error, view);
-        });
+        mViewModel.getMessage().observe(getViewLifecycleOwner(), error ->
+                CustomToast.makeToast(requireActivity(), error, view));
     }
 
     @Override
     public void onStart() {
-        mDetailedAppointmentViewModel.loadDetailedInformation(mAppointmentId, mExpertId);
-
+        mViewModel.loadDetailedInformation(mAppointmentId, mExpertId);
         super.onStart();
     }
 
@@ -213,31 +192,5 @@ public class FragmentDetailedAppointment extends Fragment {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.find_expert_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_find_expert: {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, FragmentFindExpert.newInstance())
-                        .addToBackStack("active_appointments")
-                        .commit();
-            }
-            break;
-            case R.id.menu_settings: {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, FragmentAccountSettings.newInstance())
-                        .addToBackStack("active_appointments")
-                        .commit();
-            }
-            break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

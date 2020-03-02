@@ -30,8 +30,7 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
     private long mExpertId = -1;
 
     public static FragmentFindExpert newInstance() {
-        FragmentFindExpert fragment = new FragmentFindExpert();
-        return fragment;
+        return new FragmentFindExpert();
     }
 
     @Nullable
@@ -46,8 +45,6 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_find_expert);
         mSearchView = view.findViewById(R.id.find_expert_search_view);
-
-
         mFindRecycler = view.findViewById(R.id.find_expert_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
@@ -71,9 +68,7 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
         mFindExpertViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getFindExpertViewModelFactory())
                 .get(FindExpertViewModel.class);
         mFindExpertViewModel.loadAllExperts();
-        mFindExpertViewModel.getLiveData().observe(getViewLifecycleOwner(), experts -> {
-            ((AdapterFindExperts) mFindRecycler.getAdapter()).setExperts(experts);
-        });
+        mFindExpertViewModel.getLiveData().observe(getViewLifecycleOwner(), experts -> ((AdapterFindExperts) mFindRecycler.getAdapter()).setExperts(experts));
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -91,20 +86,18 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fragment_new_appointment_to_expert_button: {
-                if (mExpertId != -1) {
-                    FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(Arguments.EXPERT_ID, mExpertId);
-                    fragmentExpertSchedule.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, fragmentExpertSchedule)
-                            .addToBackStack("active_appointments")
-                            .commit();
-                } else {
-                    Toast.makeText(getActivity(), "Выберите эксперта", Toast.LENGTH_SHORT).show();
-                }
+        if (v.getId() == R.id.fragment_new_appointment_to_expert_button) {
+            if (mExpertId != -1) {
+                FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
+                Bundle bundle = new Bundle();
+                bundle.putLong(Arguments.EXPERT_ID, mExpertId);
+                fragmentExpertSchedule.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragmentExpertSchedule)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Toast.makeText(getActivity(), getResources().getString(R.string.need_to_choose_expert), Toast.LENGTH_SHORT).show();
             }
         }
     }

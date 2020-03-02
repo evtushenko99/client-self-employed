@@ -22,7 +22,7 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
     private final List<Appointment> mExpertDayTimes;
     private ExpertScheduleDetailedAppointment mClickListners;
 
-    public AdapterExpertScheduleDaysTime(@NonNull List<Appointment> expertDayTimes, ExpertScheduleDetailedAppointment clickListeners) {
+    AdapterExpertScheduleDaysTime(@NonNull List<Appointment> expertDayTimes, ExpertScheduleDetailedAppointment clickListeners) {
         mExpertDayTimes = new ArrayList<>(expertDayTimes);
         mClickListners = clickListeners;
     }
@@ -45,12 +45,12 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
         return mExpertDayTimes.size();
     }
 
-    public static class ScheduleDaysTimeHolder extends RecyclerView.ViewHolder {
+    static class ScheduleDaysTimeHolder extends RecyclerView.ViewHolder {
 
         private TextView mTime;
         private ExpertScheduleDetailedAppointment mClickListners;
 
-        public ScheduleDaysTimeHolder(@NonNull View itemView, ExpertScheduleDetailedAppointment clickListners) {
+        ScheduleDaysTimeHolder(@NonNull View itemView, ExpertScheduleDetailedAppointment clickListners) {
             super(itemView);
             mTime = itemView.findViewById(R.id.item_schedule_time);
 
@@ -58,8 +58,7 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
 
         }
 
-
-        public void bindView(@NonNull Appointment appointment) {
+        void bindView(@NonNull Appointment appointment) {
             mTime.setText(appointment.getStringTime());
             if (appointment.getClientId() != 0) {
                 mTime.setBackgroundColor(itemView.getResources().getColor(R.color.primaryColor));
@@ -68,7 +67,5 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
                 itemView.setOnClickListener(v -> mClickListners.onExpertScheduleDetailedAppointmentClickListners(appointment, 2));
             }
         }
-
-
     }
 }

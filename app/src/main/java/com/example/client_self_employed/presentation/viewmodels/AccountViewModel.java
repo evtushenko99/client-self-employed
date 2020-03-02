@@ -61,7 +61,6 @@ public class AccountViewModel extends ViewModel {
     private View.OnClickListener mOnNewClientPhoneNumberClickListener;
     private View.OnClickListener mOnNewClientBirthdayClickListener;*/
     private View.OnClickListener mOnNewClientFullNameClickListener;
-
     /**
      * Для вывода сообщения пользователю
      */
@@ -75,14 +74,13 @@ public class AccountViewModel extends ViewModel {
         @Override
         public void clientsChanged(boolean isChanged) {
             if (isChanged) {
-                mMessage.postValue(mResourceWrapper.getString(R.string.client_information_changed));
                 loadInformationAboutClient();
             }
         }
 
         @Override
-        public void errorWorkOnClient(String error) {
-            mMessage.postValue(error);
+        public void messageWorkOnClient(String message) {
+            mMessage.postValue(message);
         }
     };
 
@@ -270,6 +268,10 @@ public class AccountViewModel extends ViewModel {
 
     public void setOnNotificationClickListener(View.OnClickListener onNotificationClickListener) {
         mOnNotificationClickListener = onNotificationClickListener;
+    }
+
+    public void setMessage(String message) {
+        mMessage = new MutableLiveData<>(message);
     }
 
     public LiveData<String> getMessage() {

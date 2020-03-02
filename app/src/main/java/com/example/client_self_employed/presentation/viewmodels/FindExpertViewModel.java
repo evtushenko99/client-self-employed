@@ -34,8 +34,8 @@ public class FindExpertViewModel extends ViewModel {
         }
 
         @Override
-        public void errorLoadingExperts(String errorLoadingExperts) {
-            mErrors.postValue(errorLoadingExperts);
+        public void messageLoadingExperts(String messageLoadingExperts) {
+            mErrors.postValue(messageLoadingExperts);
         }
     };
 

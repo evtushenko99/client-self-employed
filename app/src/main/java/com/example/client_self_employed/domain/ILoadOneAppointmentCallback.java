@@ -9,7 +9,7 @@ import com.example.client_self_employed.domain.model.Appointment;
 public interface ILoadOneAppointmentCallback {
     void oneAppointmentIsLoaded(Appointment appointment);
 
-    void errorLoadOneAppointment(String errorLoadOneAppointment);
+    void messageLoadOneAppointment(String errorLoadOneAppointment);
 
     void onUpdateCallback(boolean isRatingUpdate);
 }

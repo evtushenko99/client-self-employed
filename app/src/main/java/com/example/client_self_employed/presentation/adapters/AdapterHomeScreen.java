@@ -1,6 +1,5 @@
 package com.example.client_self_employed.presentation.adapters;
 
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,21 +33,19 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
     private ActiveAppointmentClickListener mItemClickListener;
     private NewRecordToBestExpertButtonItemClickListener mNewRecordToBestExpertButtonItemClickListener;
     private FindExpertButtonClickListener mFindExpertButtonClickListener;
-    private Resources mResources;
     private List<RowType> mDataSet = new ArrayList<>();
 
     public AdapterHomeScreen(
             List<RowType> rowTypes,
             ActiveAppointmentClickListener itemClickListener,
             NewRecordToBestExpertButtonItemClickListener newRecordToBestExpertButtonItemClickListener,
-            FindExpertButtonClickListener findExpertListener, @NonNull Resources resources) {
+            FindExpertButtonClickListener findExpertListener) {
         if (rowTypes != null) {
             mDataSet.addAll(rowTypes);
         }
         mItemClickListener = itemClickListener;
         mNewRecordToBestExpertButtonItemClickListener = newRecordToBestExpertButtonItemClickListener;
         mFindExpertButtonClickListener = findExpertListener;
-        mResources = resources;
     }
 
     @Override
@@ -106,13 +103,6 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
             return 0;
         }
     }
-
-    public void setRowTypes(@NonNull List<RowType> rowTypes) {
-        mDataSet.clear();
-        mDataSet.addAll(rowTypes);
-        notifyDataSetChanged();
-    }
-
 
     /**
      * Holder, отвечающий за дополнительный горизонтальный recycler, который показывает

@@ -83,6 +83,22 @@
     <string name="detailed_appointment_location">Место:</string>
     <string name="detailed_appointment_time">Время:</string>
     <string name="detailed_appointment_cost">Стоимость</string>
+    <string name="required_write_external_permission">Требуется разрешение на запись</string>
+    <string name="no_write_external_storage_permission">Нет разрешения на запись, фото не сохранено</string>
+    <string name="need_to_choose_expert">Выберите эксперта</string>
+    <string name="something_went_wrong">Что-то пошла не так, попробуйте еще раз выбрать эксперта</string>
+    <string name="cancel_active_record">Отмена записи</string>
+    <string name="are_you_sure_you_want_to_cancel_recording">Вы уверены что хотите отменить запись?</string>
+    <string name="positive_button">ДА</string>
+    <string name="negative_button">Нет</string>
+    <string name="viber_not_available_on_this_phone">Viber не установлен на телефоне</string>
+    <string name="telegram_not_available_on_this_phone">Телеграмм не установлен на телефоне</string>
+    <string name="telegram_name">org.telegram.messenger</string>
+    <string name="viber_name">com.viber.voip</string>
+    <string name="exception_item_is_not_supportend_by_adapter">The following item is not supported by adapter:</string>
+    <string name="cant_load_one_appointment">Не удалось загрузить информацию о записи</string>
+    <string name="successful_update">Информация успешно изменена</string>
+    <string name="appointment_successful_deleted">Запись успешно удалена</string>
 
     <string-array name="professions">
         <item>Тренер по фигурному катанию</item>

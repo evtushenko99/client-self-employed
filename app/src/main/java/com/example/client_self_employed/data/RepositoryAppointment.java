@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.client_self_employed.R;
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
@@ -37,6 +38,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
     public RepositoryAppointment(ResourceWrapper resourceWrapper) {
         mResourceWrapper = resourceWrapper;
     }
+
     @Override
     public void deleteClientsAppointment(@NonNull Long id, IClientAppointmentCallback callback) {
 
@@ -49,13 +51,14 @@ public class RepositoryAppointment implements IAppointmentRepository {
                             appointment.setClientId(0);
                             mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment)
                                     .addOnCompleteListener(task -> callback.clientAppointmentIsDeleted(true));
+                            callback.message(mResourceWrapper.getString(R.string.appointment_successful_deleted));
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled() deleteClientsAppointment = [" + databaseError.getMessage() + "]";
-                        callback.errorMessage(error);
+                        callback.message(error);
                         Log.d(TAG, error);
                     }
                 });
@@ -107,6 +110,9 @@ public class RepositoryAppointment implements IAppointmentRepository {
                                 mDatabaseReferenceAppointment.child(appointmentId)
                                         .setValue(appointment)
                                         .addOnCompleteListener(task -> callback.onUpdateCallback(true));
+                                callback.messageLoadOneAppointment(mResourceWrapper.getString(R.string.successful_update));
+                            } else {
+                                callback.messageLoadOneAppointment(mResourceWrapper.getString(R.string.cant_load_one_appointment));
                             }
                         }
                     }
@@ -129,6 +135,8 @@ public class RepositoryAppointment implements IAppointmentRepository {
                             Appointment appointment = appoinmentSnapshot.getValue(Appointment.class);
                             if (appointment != null) {
                                 callback.oneAppointmentIsLoaded(appointment);
+                            } else {
+                                callback.messageLoadOneAppointment(mResourceWrapper.getString(R.string.cant_load_one_appointment));
                             }
                         }
                     }
@@ -136,7 +144,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         String error = "onCancelled loadOneAppointment = {" + databaseError.getMessage() + "]";
-                        callback.errorLoadOneAppointment(error);
+                        callback.messageLoadOneAppointment(error);
                         Log.d(TAG, error);
                     }
                 });
@@ -179,13 +187,17 @@ public class RepositoryAppointment implements IAppointmentRepository {
                                 mDatabaseReferenceAppointment.child(appointmentId)
                                         .setValue(appointment)
                                         .addOnCompleteListener(task -> callback.onUpdateCallback(true));
+                            } else {
+                                callback.messageLoadOneAppointment(mResourceWrapper.getString(R.string.cant_load_one_appointment));
                             }
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        String error = "onCancelled updateAppointmentNotification = {" + databaseError.getMessage() + "]";
+                        callback.messageLoadOneAppointment(error);
+                        Log.d(TAG, error);
                     }
                 });
     }

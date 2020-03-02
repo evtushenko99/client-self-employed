@@ -94,8 +94,8 @@ public class DetailedAppointmentViewModel extends ViewModel {
         }
 
         @Override
-        public void errorLoadOneExpert(String errorLoadOneExpert) {
-            mMessage.postValue(errorLoadOneExpert);
+        public void messageLoadOneExpert(String messageLoadOneExpert) {
+            mMessage.postValue(messageLoadOneExpert);
         }
     };
     private ILoadOneAppointmentCallback mAppointmentCallback = new ILoadOneAppointmentCallback() {
@@ -111,7 +111,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
         }
 
         @Override
-        public void errorLoadOneAppointment(String errorLoadOneAppointment) {
+        public void messageLoadOneAppointment(String errorLoadOneAppointment) {
             mMessage.postValue(errorLoadOneAppointment);
         }
 

@@ -72,7 +72,7 @@ public class AdapterFindExperts extends RecyclerView.Adapter<AdapterFindExperts.
         return mExperts != null ? mExperts.size() : 0;
     }
 
-    public class FindExpertsHolder extends RecyclerView.ViewHolder {
+    class FindExpertsHolder extends RecyclerView.ViewHolder {
         private TextView mExpertName;
         private TextView mExpertProfession;
         private TextView mExpertEmail;
@@ -84,7 +84,7 @@ public class AdapterFindExperts extends RecyclerView.Adapter<AdapterFindExperts.
         private ConstraintLayout mExpandConstraintLayout;
         private ImageButton mExpandButton;
 
-        public FindExpertsHolder(@NonNull View itemView) {
+        FindExpertsHolder(@NonNull View itemView) {
             super(itemView);
             mConstraintLayout = itemView.findViewById(R.id.item_expert_holder_constraint_layout);
             mExpandConstraintLayout = itemView.findViewById(R.id.item_expert_holder_expandable);
@@ -100,7 +100,7 @@ public class AdapterFindExperts extends RecyclerView.Adapter<AdapterFindExperts.
             mExpandButton = itemView.findViewById(R.id.item_expert_holder_expend_button);
         }
 
-        public void bind(Expert expert, NewAppointmentToFindedExpert clickListener, int adapterPosition) {
+        void bind(Expert expert, NewAppointmentToFindedExpert clickListener, int adapterPosition) {
             mExpertName.setText(expert.getFullName());
             mExpertProfession.setText(expert.getProfession());
             mExpertEmail.setText(expert.getEmail());
@@ -109,27 +109,21 @@ public class AdapterFindExperts extends RecyclerView.Adapter<AdapterFindExperts.
             mExpertPhoneNumber.setText(expert.getPhoneNumber());
 
 
-            mExpandButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mExpandConstraintLayout.getVisibility() == View.GONE) {
+            mExpandButton.setOnClickListener(v -> {
+                if (mExpandConstraintLayout.getVisibility() == View.GONE) {
 
-                        mExpandConstraintLayout.setVisibility(View.VISIBLE);
-                        mExpandButton.setBackgroundResource(R.drawable.ic_arrow_up_black_24dp);
-                    } else {
-                        mExpandConstraintLayout.setVisibility(View.GONE);
-                        mExpandButton.setBackgroundResource(R.drawable.ic_arrow_down_black_24dp);
-                    }
-                    TransitionManager.beginDelayedTransition(mConstraintLayout, new AutoTransition());
+                    mExpandConstraintLayout.setVisibility(View.VISIBLE);
+                    mExpandButton.setBackgroundResource(R.drawable.ic_arrow_up_black_24dp);
+                } else {
+                    mExpandConstraintLayout.setVisibility(View.GONE);
+                    mExpandButton.setBackgroundResource(R.drawable.ic_arrow_down_black_24dp);
                 }
+                TransitionManager.beginDelayedTransition(mConstraintLayout, new AutoTransition());
             });
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickListener.onNewAppointmentToFoundExpert(expert.getId());
-                    index = adapterPosition;
-                    notifyDataSetChanged();
-                }
+            itemView.setOnClickListener(v -> {
+                clickListener.onNewAppointmentToFoundExpert(expert.getId());
+                index = adapterPosition;
+                notifyDataSetChanged();
             });
 
             DrawableCrossFadeFactory factory =

@@ -35,5 +35,4 @@ public class SelfEmployedApp extends Application {
         return mDaggerComponent;
     }
 
-
 }
