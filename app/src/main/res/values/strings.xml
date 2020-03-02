@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Online diary</string>
+    <string name="app_name">Мой эксперт</string>
     <string name="notification_channel_name">Notification channel name</string>
     <string name="notification_channel_description">Notification channel description</string>
     <string name="caption_for_expert_selection">Поиск эксперта</string>
@@ -15,7 +15,6 @@
     <string name="expert_schedule_no_time">В ближайшее время нет записи у данного специалиста</string>
 
     <string name="button_expert_detailed_appointment">Записаться</string>
-
 
     <string name="fragment_search_new_appointment">Записаться к эксперту</string>
     <string name="find_expert_filters">Фильтры</string>

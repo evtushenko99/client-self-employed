@@ -9,4 +9,5 @@
     <color name="primaryDarkColor">#c41c00</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
+    <color name="ic_app_image_background">#FF8A50</color>
 </resources>
