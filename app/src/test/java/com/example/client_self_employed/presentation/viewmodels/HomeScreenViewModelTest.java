@@ -84,6 +84,7 @@ public class HomeScreenViewModelTest {
         //arrange
         List<Expert> experts = new ArrayList<>(createExpertList());
         List<RowType> expected = new ArrayList<>(createExpectedRowType(experts));
+        mViewModel.setCount(experts.size() - 1);
         //act
         mViewModel.getExpertsCallBack().expertsIsLoaded(experts);
         //assert

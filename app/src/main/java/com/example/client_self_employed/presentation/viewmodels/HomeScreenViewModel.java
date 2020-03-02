@@ -240,6 +240,10 @@ public class HomeScreenViewModel extends ViewModel {
         mRowTypes = rowTypes;
     }
 
+    @VisibleForTesting
+    public void setCount(int count) {
+        this.count = count;
+    }
 
 }
 
