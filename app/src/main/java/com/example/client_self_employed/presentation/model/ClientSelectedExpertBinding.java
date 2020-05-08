@@ -23,7 +23,7 @@ public class ClientSelectedExpertBinding implements RowType {
     private ObservableInt mCardColor = new ObservableInt();
     private int mIndex = -1;
     private int mPosition;
-    private long mExpertId;
+    private String mExpertId;
     private View.OnClickListener mOnClickListener;
 
     private int mColor;

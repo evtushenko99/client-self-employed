@@ -257,6 +257,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/elevation_medium"
+                android:onClick="@{ViewModel.onSignOutClickListener}"
                 android:text="@string/fragment_account_log_out"
                 app:layout_constraintEnd_toEndOf="@+id/fragment_account_notifications"
                 app:layout_constraintStart_toStartOf="@+id/fragment_account_notifications"

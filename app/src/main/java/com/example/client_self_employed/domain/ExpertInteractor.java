@@ -31,15 +31,15 @@ public class ExpertInteractor {
         return findedExperts;
     }
 
-    public void loadExpertSchedule(long expertId, IExpertScheduleCallback iExpertScheduleCallback) {
+    public void loadExpertSchedule(String expertId, IExpertScheduleCallback iExpertScheduleCallback) {
         mRepositoryExperts.loadExpertSchedule(expertId, iExpertScheduleCallback);
     }
 
-    public void updateExpertAppointment(long appointmentId, long clientId, IExpertScheduleCallback iExpertScheduleCallback) {
+    public void updateExpertAppointment(long appointmentId, String clientId, IExpertScheduleCallback iExpertScheduleCallback) {
         mRepositoryExperts.updateExpertAppointment(appointmentId, clientId, iExpertScheduleCallback);
     }
 
-    public void loadExperNameForActiveAppointment(List<Appointment> activeAppointment, List<Long> expertsId, IClientAppointmentCallback dataStatus) {
+    public void loadExperNameForActiveAppointment(List<Appointment> activeAppointment, List<String> expertsId, IClientAppointmentCallback dataStatus) {
         mRepositoryExperts.loadExpertsNameForActiveAppointments(activeAppointment, expertsId, dataStatus);
     }
 }

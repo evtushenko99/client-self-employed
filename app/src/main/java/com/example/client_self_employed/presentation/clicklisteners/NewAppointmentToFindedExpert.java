@@ -5,5 +5,5 @@ package com.example.client_self_employed.presentation.clicklisteners;
  * на странице поиска эксперта
  */
 public interface NewAppointmentToFindedExpert {
-    void onNewAppointmentToFoundExpert(long expertId);
+    void onNewAppointmentToFoundExpert(String expertId);
 }

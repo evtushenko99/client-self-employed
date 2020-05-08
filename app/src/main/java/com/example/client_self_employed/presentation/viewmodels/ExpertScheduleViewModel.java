@@ -25,8 +25,9 @@ public class ExpertScheduleViewModel extends ViewModel {
     private final FilterActiveAppointmentsInteractor mFilterInteractor;
     private final Executor mExecutor;
 
+
     private Expert mExpert;
-    private long mExpertId;
+    private String mExpertId;
 
     private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
     private MutableLiveData<String> mExpertName = new MutableLiveData<>();
@@ -50,7 +51,7 @@ public class ExpertScheduleViewModel extends ViewModel {
 
         @Override
         public void newAppointment(Boolean isCreate) {
-            if (isCreate && mExpertId != 0) {
+            if (isCreate && mExpertId != "0") {
                 loadExpertSchedule(mExpertId);
                 mIsChanged.postValue(true);
             }
@@ -80,7 +81,7 @@ public class ExpertScheduleViewModel extends ViewModel {
      * Загружает расписание эксперта
      * @param id id эксперта
      */
-    public void loadExpertSchedule(long id) {
+    public void loadExpertSchedule(String id) {
 
         mIsLoading.setValue(true);
         mExpertId = id;
@@ -96,7 +97,7 @@ public class ExpertScheduleViewModel extends ViewModel {
      * @param appointmentId - id записи
      * @param clientId      - id клиента
      */
-    public void updateExpertAppointment(long appointmentId, long clientId) {
+    public void updateExpertAppointment(long appointmentId, String clientId) {
         mIsChanged.postValue(false);
         mExecutor.execute(() -> {
             mExpertScheduleInteractor.updateExpertAppointment(appointmentId, clientId, mExpertScheduleCallback);
@@ -148,7 +149,7 @@ public class ExpertScheduleViewModel extends ViewModel {
 
 
     @VisibleForTesting
-    public long getExpertId() {
+    public String getExpertId() {
         return mExpertId;
     }
 
@@ -162,7 +163,7 @@ public class ExpertScheduleViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public void setExpertId(long expertId) {
+    public void setExpertId(String expertId) {
         mExpertId = expertId;
     }
 

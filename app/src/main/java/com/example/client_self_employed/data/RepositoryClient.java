@@ -8,9 +8,14 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.data.model.FirebaseClient;
 import com.example.client_self_employed.domain.IClientCallback;
+import com.example.client_self_employed.domain.ICreateClientCallback;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +33,7 @@ public class RepositoryClient implements IClientRepository {
     private DatabaseReference mDatabaseReferenceClient = mReference.child("clients");
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
     private ResourceWrapper mResourceWrapper;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public RepositoryClient(ResourceWrapper resourceWrapper) {
         mResourceWrapper = resourceWrapper;
@@ -35,7 +41,28 @@ public class RepositoryClient implements IClientRepository {
 
 
     @Override
-    public void loadClient(@NonNull Long clientId, IClientCallback callback) {
+    public void createClient(@NonNull Client newClient, String password, ICreateClientCallback createClientCallback) {
+        mAuth.createUserWithEmailAndPassword(newClient.getEmail(), password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uid = user.getUid();
+                            newClient.setId(uid);
+                            mDatabaseReferenceClient.child(uid)
+                                    .setValue(newClient)
+                                    .addOnCompleteListener(task1 -> createClientCallback.clientIsCreated(true, uid))
+                                    .addOnFailureListener(e -> createClientCallback.clientIsCreated(false, null));
+                        } else {
+                            createClientCallback.clientIsCreated(false, null);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void loadClient(@NonNull String clientId, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -59,7 +86,7 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void updateClientBirthday(@NonNull Long clientId, int dayOfBirth, int monthOfBirth, int yearOfBirth, IClientCallback callback) {
+    public void updateClientBirthday(@NonNull String clientId, int dayOfBirth, int monthOfBirth, int yearOfBirth, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,7 +117,7 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void updateClientEmail(@NonNull Long clientId, String newEmail, IClientCallback callback) {
+    public void updateClientEmail(@NonNull String clientId, String newEmail, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -119,7 +146,7 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void updateClientGender(@NonNull Long clientId, String newGender, IClientCallback callback) {
+    public void updateClientGender(@NonNull String clientId, String newGender, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -148,7 +175,7 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void updateClientPhoneNumber(@NonNull Long clientId, String newPhoneNumber, IClientCallback callback) {
+    public void updateClientPhoneNumber(@NonNull String clientId, String newPhoneNumber, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -177,11 +204,12 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void loadNewClientPhoto(@NonNull Long clientId, String newClientPhoto, IClientCallback callback) {
+    public void loadNewClientPhoto(@NonNull String clientId, String newClientPhoto, IClientCallback callback) {
         File file = new File(String.valueOf((newClientPhoto)));
         String fileName = file.getName();
+        Uri uriFile = Uri.fromFile(new File(String.valueOf((newClientPhoto))));
         StorageReference reference = mStorageReference.child(fileName);
-        reference.putFile(Uri.parse(newClientPhoto))
+        reference.putFile(uriFile)
                 .addOnSuccessListener(taskSnapshot -> {
                     if (taskSnapshot.getMetadata() != null) {
                         if (taskSnapshot.getMetadata().getReference() != null) {
@@ -195,7 +223,7 @@ public class RepositoryClient implements IClientRepository {
     }
 
     @Override
-    public void updateFullName(@NonNull Long clientId, String lastName, String name, String secondName, IClientCallback callback) {
+    public void updateFullName(@NonNull String clientId, String lastName, String name, String secondName, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -225,7 +253,7 @@ public class RepositoryClient implements IClientRepository {
                 });
     }
 
-    private void updateClientPhotoUrl(long clientId, String newUri, IClientCallback callback) {
+    private void updateClientPhotoUrl(String clientId, String newUri, IClientCallback callback) {
         mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
                 .equalTo(clientId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {

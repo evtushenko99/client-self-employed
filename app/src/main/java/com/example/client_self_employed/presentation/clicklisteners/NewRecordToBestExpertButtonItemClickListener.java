@@ -5,5 +5,5 @@ package com.example.client_self_employed.presentation.clicklisteners;
  * на главной странице
  */
 public interface NewRecordToBestExpertButtonItemClickListener {
-    void onButtonItemClickListener(long expertId);
+    void onButtonItemClickListener(String expertId);
 }

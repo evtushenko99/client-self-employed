@@ -1,10 +1,5 @@
 package com.example.client_self_employed.domain.model;
 
-import com.example.client_self_employed.data.model.FirebaseClient;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -12,7 +7,7 @@ import java.util.Objects;
  */
 public class Client {
 
-    private long mId;
+    private String mId;
     private String mLastName;
     private String mFirstName;
     private String mSecondName;//Отчество
@@ -28,7 +23,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(long id, String lastName, String firstName, String secondName, int age, int dayOfBirth, int monthOfBirth, int yearOfBirth, String email, String phoneNumber, String gender, String clientPhotoUri) {
+    public Client(String id, String lastName, String firstName, String secondName, int age, int dayOfBirth, int monthOfBirth, int yearOfBirth, String email, String phoneNumber, String gender, String clientPhotoUri) {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
@@ -52,13 +47,7 @@ public class Client {
         return mDayOfBirth + "." + month + "." + mYearOfBirth;
     }
 
-    public String getNewImageFileName() {
-        String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault()).format(new Date());
-
-        return FirebaseClient.PARENT_NAME + getId() + timeStamp;
-    }
-
-    public long getId() {
+    public String getId() {
         return mId;
     }
 
@@ -106,7 +95,7 @@ public class Client {
         return mClientPhotoUri;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         mId = id;
     }
 
@@ -169,8 +158,7 @@ public class Client {
                 Objects.equals(getSecondName(), client.getSecondName()) &&
                 Objects.equals(getEmail(), client.getEmail()) &&
                 Objects.equals(getPhoneNumber(), client.getPhoneNumber()) &&
-                Objects.equals(getGender(), client.getGender()) &&
-                Objects.equals(getClientPhotoUri(), client.getClientPhotoUri());
+                Objects.equals(getGender(), client.getGender());
     }
 
     @Override
@@ -192,7 +180,6 @@ public class Client {
                 ", mEmail='" + mEmail + '\'' +
                 ", mPhoneNumber='" + mPhoneNumber + '\'' +
                 ", mGender='" + mGender + '\'' +
-                ", mClientPhotoUri='" + mClientPhotoUri + '\'' +
                 '}';
     }
 }

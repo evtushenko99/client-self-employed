@@ -19,12 +19,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.AccountViewModelBinding;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -47,6 +49,7 @@ public class FragmentAccount extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getAccountViewModelFactory())
                 .get(AccountViewModel.class);
+        mViewModel.setUserUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
         AccountViewModelBinding binding = AccountViewModelBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
         binding.setViewModel(mViewModel);
@@ -82,7 +85,9 @@ public class FragmentAccount extends Fragment {
                 .addToBackStack(null)
                 .replace(R.id.fragment_container, FragmentPreferences.newInstance())
                 .commit());
-
+        mViewModel.setOnSignOutClickListener(v -> {
+            SignOutDialogFragment.newInstance().show(requireActivity().getSupportFragmentManager(), null);
+        });
     }
 
     @Override
@@ -119,14 +124,32 @@ public class FragmentAccount extends Fragment {
     }
 
     private void callCameraApp() {
-        Intent cameraAppIntent = new Intent();
-        cameraAppIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraAppIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        mImageUri = mViewModel.createNewImageURI();
-        if (mImageUri != null) {
+
+        mViewModel.createNewImageURI();
+        //mImageUri = mViewModel.createNewImageURI();
+        mViewModel.getUriForFile().observe(getViewLifecycleOwner(), new Observer<Uri>() {
+            @Override
+            public void onChanged(Uri uri) {
+                if (uri != null) {
+                    mImageUri = uri;
+                    Intent cameraAppIntent = new Intent();
+                    cameraAppIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraAppIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    cameraAppIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                    startPhoto(cameraAppIntent);
+                    //startActivityForResult(cameraAppIntent, START_CAMERA_APP);
+                }
+            }
+        });
+
+        /*if (mImageUri != null) {
             cameraAppIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             this.startActivityForResult(cameraAppIntent, START_CAMERA_APP);
-        }
+        }*/
+    }
+
+    private void startPhoto(Intent intent) {
+        this.startActivityForResult(intent, START_CAMERA_APP);
     }
 
     @Override

@@ -23,12 +23,12 @@ public class ModelsConverter {
     public List<ClientAppointment> convertAppointmentToRowType(@NonNull List<Appointment> appointments, @NonNull List<Expert> experts) {
         List<ClientAppointment> data = new ArrayList<>();
         Map<Integer, String> expertsName = new HashMap<>();
-        Map<Integer, Long> expertsId = new HashMap<>();
+        Map<Integer, String> expertsId = new HashMap<>();
 
         for (int i = 0; i < appointments.size(); i++) {
             for (int j = 0; j < experts.size(); j++) {
                 Expert expert = experts.get(j);
-                if (appointments.get(i).getExpertId() == expert.getId()) {
+                if (appointments.get(i).getExpertId().equals(expert.getId())) {
                     expertsName.put(i, expert.getFullName());
                     expertsId.put(i, expert.getId());
                 }

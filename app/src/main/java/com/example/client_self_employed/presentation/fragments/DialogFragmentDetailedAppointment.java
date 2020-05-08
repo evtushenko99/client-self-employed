@@ -18,6 +18,7 @@ import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleDetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModel;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DialogFragmentDetailedAppointment extends DialogFragment {
     private static final String DETAILED_APPOINTMENT = "DETAILED APPOINTMENT";
@@ -27,13 +28,13 @@ public class DialogFragmentDetailedAppointment extends DialogFragment {
     private ExpertScheduleViewModel mExpertViewModel;
     private ExpertScheduleDetailedAppointmentViewModel mExpertDetailedAppointmentViewModel;
 
-    private long mClientId;
+    private String mClientId;
 
-    public static DialogFragmentDetailedAppointment newInstance(Appointment appointment, long clientId) {
+    public static DialogFragmentDetailedAppointment newInstance(Appointment appointment, String clientId) {
 
         Bundle args = new Bundle();
         args.putParcelable(DETAILED_APPOINTMENT, appointment);
-        args.putLong(CLIENT_ID, clientId);
+        args.putString(CLIENT_ID, clientId);
         DialogFragmentDetailedAppointment fragment = new DialogFragmentDetailedAppointment();
         fragment.setArguments(args);
         return fragment;
@@ -52,7 +53,8 @@ public class DialogFragmentDetailedAppointment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (this.getArguments() != null) {
             mAppointment = this.getArguments().getParcelable(DETAILED_APPOINTMENT);
-            mClientId = this.getArguments().getLong(CLIENT_ID);
+            mClientId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            //this.getArguments().getLong(CLIENT_ID);
         }
         ExpertScheduleViewModelFactory expertScheduleViewModelFactory = ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getExpertScheduleViewModelFactory();
         mExpertViewModel = ViewModelProviders.of(getActivity(), expertScheduleViewModelFactory)

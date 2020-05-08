@@ -136,7 +136,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
         mMoreInformationTextView.setValue(mResourceWrapper.getString(R.string.fragment_detailed_information_expert_more_inf));
     }
 
-    public void loadDetailedInformation(@NonNull Long appointmentId, @NonNull Long expertId) {
+    public void loadDetailedInformation(@NonNull Long appointmentId, @NonNull String expertId) {
         mIsLoadingAppointment.setValue(true);
         mIsLoadingExpert.setValue(true);
         mExecutor.execute(() ->

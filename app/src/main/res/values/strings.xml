@@ -99,6 +99,11 @@
     <string name="cant_load_one_appointment">Не удалось загрузить информацию о записи</string>
     <string name="successful_update">Информация успешно изменена</string>
     <string name="appointment_successful_deleted">Запись успешно удалена</string>
+    <string name="login_hint_edit_text">Логин</string>
+    <string name="heading_authorization">Авторизация</string>
+    <string name="password_hint_field">Пароль</string>
+    <string name="sign_in_button">Sign in</string>
+    <string name="sing_up_button">Sing up</string>
 
     <string-array name="professions">
         <item>Тренер по фигурному катанию</item>
@@ -116,6 +121,19 @@
         <item quantity="two">%d года</item>
         <item quantity="few">%d года</item>
         <item quantity="many">%d лет</item>
-        <item quantity="other">%d года</item>
     </plurals>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="create_account">No account yet? Create one</string>
+    <string name="select_client_button">Клиент</string>
+    <string name="select_Expert_button">Эксперт</string>
+    <string name="create_new_account">Создать аккаунт</string>
+    <string name="passwordError">Пароли должны совпадать</string>
 </resources>

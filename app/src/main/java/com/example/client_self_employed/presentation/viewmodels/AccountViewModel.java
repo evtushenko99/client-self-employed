@@ -33,8 +33,32 @@ public class AccountViewModel extends ViewModel {
     private final Executor mExecutor;
     private final ResourceWrapper mResourceWrapper;
     private Client mClient;
+
+    private String mUserUid;
+    private MutableLiveData<Uri> mUriForFile = new MutableLiveData<>();
     private String mImageFileLocation = "";
-    private Uri mUriForFile;
+    private View.OnClickListener mOnSignOutClickListener;
+    private IClientCallback mCallback = new IClientCallback() {
+        @Override
+        public void clientIsLoaded(Client client) {
+            if (client != null)
+                setClientViews(client);
+        }
+
+        @Override
+        public void clientsChanged(boolean isChanged) {
+            if (isChanged) {
+                loadInformationAboutClient();
+            } else {
+                mMessage.postValue("Не успешно");
+            }
+        }
+
+        @Override
+        public void messageWorkOnClient(String message) {
+            mMessage.postValue(message);
+        }
+    };
     private MutableLiveData<String> mLastName = new MutableLiveData<>();
     private MutableLiveData<String> mName = new MutableLiveData<>();
     private MutableLiveData<String> mSecondName = new MutableLiveData<>();
@@ -54,35 +78,22 @@ public class AccountViewModel extends ViewModel {
     private View.OnClickListener mOnChangeFullNameClickListener;
     private View.OnClickListener mOnNotificationClickListener;
 
+    public void setUserUid(String userUid) {
+        mUserUid = userUid;
+    }
+
     /**
      * Слушатели для изменения существующих параметров аккаунта
      */
-    /*private View.OnClickListener mOnNewClientEmailClickListener;
-    private View.OnClickListener mOnNewClientPhoneNumberClickListener;
-    private View.OnClickListener mOnNewClientBirthdayClickListener;*/
     private View.OnClickListener mOnNewClientFullNameClickListener;
     /**
      * Для вывода сообщения пользователю
      */
     private MutableLiveData<String> mMessage = new MutableLiveData<>();
-    private IClientCallback mCallback = new IClientCallback() {
-        @Override
-        public void clientIsLoaded(Client client) {
-            setClientViews(client);
-        }
 
-        @Override
-        public void clientsChanged(boolean isChanged) {
-            if (isChanged) {
-                loadInformationAboutClient();
-            }
-        }
-
-        @Override
-        public void messageWorkOnClient(String message) {
-            mMessage.postValue(message);
-        }
-    };
+    public LiveData<Uri> getUriForFile() {
+        return mUriForFile;
+    }
 
 
     public AccountViewModel(
@@ -96,6 +107,8 @@ public class AccountViewModel extends ViewModel {
     }
 
     void setClientViews(Client client) {
+
+
         mClient = client;
         mLastName.setValue(client.getLastName());
         mName.setValue(client.getFirstName());
@@ -106,6 +119,7 @@ public class AccountViewModel extends ViewModel {
         mPhoneNumber.setValue(client.getPhoneNumber());
         mBirthDay.setValue(client.getStringDate());
         mGender.setValue(client.getGender());
+
     }
 
     @BindingAdapter("clientPhotoUri")
@@ -125,44 +139,45 @@ public class AccountViewModel extends ViewModel {
 
     }
 
-    public Uri createNewImageURI() {
+    public void createNewImageURI() {
         if (mClient != null) {
             mExecutor.execute(() -> {
-                File imageFile = mClientInteractor.createImageFile(mClient.getNewImageFileName());
+                File imageFile = mClientInteractor.createImageFile();
                 mImageFileLocation = imageFile.getAbsolutePath();
-                mUriForFile = mClientInteractor.createNewImageURI(imageFile);
+                Uri newUri = mClientInteractor.createNewImageURI(imageFile);
+                mUriForFile.postValue(newUri);
             });
         }
-        return mUriForFile;
+        // return mUriForFile;
 
     }
 
     public void loadInformationAboutClient() {
-        mExecutor.execute(() -> mClientInteractor.loadClient(2, mCallback));
+        mExecutor.execute(() -> mClientInteractor.loadClient(mUserUid, mCallback));
     }
 
     public void updateFullName(String lastName, String name, String secondName) {
-        mExecutor.execute(() -> mClientInteractor.updateFullName(2, lastName, name, secondName, mCallback));
+        mExecutor.execute(() -> mClientInteractor.updateFullName(mUserUid, lastName, name, secondName, mCallback));
     }
 
     public void updateClientBirthday(int dayOfBirth, int monthOfBirth, int yearOfBirth) {
-        mExecutor.execute(() -> mClientInteractor.updateClientBirthday(2, dayOfBirth, monthOfBirth, yearOfBirth, mCallback));
+        mExecutor.execute(() -> mClientInteractor.updateClientBirthday(mUserUid, dayOfBirth, monthOfBirth, yearOfBirth, mCallback));
     }
 
     public void updateClientEmail(String email) {
-        mExecutor.execute(() -> mClientInteractor.updateClientEmail(2, email, mCallback));
+        mExecutor.execute(() -> mClientInteractor.updateClientEmail(mUserUid, email, mCallback));
     }
 
     public void updateClientPhoneNumber(String phoneNumber) {
-        mExecutor.execute(() -> mClientInteractor.updateClientPhoneNumber(2, phoneNumber, mCallback));
+        mExecutor.execute(() -> mClientInteractor.updateClientPhoneNumber(mUserUid, phoneNumber, mCallback));
     }
 
     public void updateClientGender(String gender) {
-        mExecutor.execute(() -> mClientInteractor.updateClientGender(2, gender, mCallback));
+        mExecutor.execute(() -> mClientInteractor.updateClientGender(mUserUid, gender, mCallback));
     }
 
     public void loadClientImageToStorage(String newClientPhotoUri) {
-        mExecutor.execute(() -> mClientInteractor.loadNewClientPhoto(2, newClientPhotoUri, mCallback));
+        mExecutor.execute(() -> mClientInteractor.loadNewClientPhoto(mUserUid, newClientPhotoUri, mCallback));
     }
 
     public LiveData<String> getLastName() {
@@ -261,6 +276,13 @@ public class AccountViewModel extends ViewModel {
         mOnChangeFullNameClickListener = onChangeFullNameClickListener;
     }
 
+    public View.OnClickListener getOnSignOutClickListener() {
+        return mOnSignOutClickListener;
+    }
+
+    public void setOnSignOutClickListener(View.OnClickListener onSignOutClickListener) {
+        mOnSignOutClickListener = onSignOutClickListener;
+    }
 
     public View.OnClickListener getOnNotificationClickListener() {
         return mOnNotificationClickListener;

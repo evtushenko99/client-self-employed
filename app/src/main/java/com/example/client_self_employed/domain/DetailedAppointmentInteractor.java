@@ -17,7 +17,7 @@ public class DetailedAppointmentInteractor {
         mDataWrapper = dataWrapper;
     }
 
-    public void loadExpert(long expertId, ILoadOneExpertCallback oneExpertCallback) {
+    public void loadExpert(String expertId, ILoadOneExpertCallback oneExpertCallback) {
         mExpertsRepository.loadOneExpert(expertId, oneExpertCallback);
     }
 
@@ -33,7 +33,7 @@ public class DetailedAppointmentInteractor {
         mAppointmentsRepository.updateAppointmentNotification(appointmentId, isNotification, appointmentsCallback);
     }
 
-    public Data createWorkInputData(String serviceName, String startTime, long appointmentId, long expertId) {
+    public Data createWorkInputData(String serviceName, String startTime, long appointmentId, String expertId) {
         return mDataWrapper.createInputData(serviceName, startTime, appointmentId, expertId);
     }
 }

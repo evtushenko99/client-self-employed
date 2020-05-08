@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class Expert implements Serializable {
 
-    private long mId;
+    private String mId;
     private String mLastName;
     private String mFirstName;
     private String mSecondName;//Отчество
@@ -25,7 +25,7 @@ public class Expert implements Serializable {
 
     }
 
-    public Expert(long id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri) {
+    public Expert(String id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri) {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
@@ -38,7 +38,7 @@ public class Expert implements Serializable {
         mExpertPhotoUri = expertPhotoUri;
     }
 
-    public Expert(long id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri, int reviewCount, int totalRating) {
+    public Expert(String id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri, int reviewCount, int totalRating) {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
@@ -62,7 +62,7 @@ public class Expert implements Serializable {
 
     }
 
-    public long getId() {
+    public String getId() {
         return mId;
     }
 
@@ -106,7 +106,7 @@ public class Expert implements Serializable {
         mExpertPhotoUri = expertPhotoUri;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         mId = id;
     }
 

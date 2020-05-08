@@ -27,6 +27,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -63,7 +64,7 @@ public class HomeScreenViewModelTest {
     public void appointmentCallback_happyCase() {
         //arrange
         List<Appointment> appointments = new ArrayList<>(Arrays.asList(mock(Appointment.class)));
-        List<Long> expertsId = new ArrayList<>(Arrays.asList(1L, 2L));
+        List<String> expertsId = new ArrayList<>(Arrays.asList("1", "2"));
         //act
         mViewModel.getAppointmentsCallback().onAppointmentCallback(appointments, expertsId);
         //assert
@@ -198,7 +199,7 @@ public class HomeScreenViewModelTest {
         mViewModel.loadClientExperts();
         //assert
         assertThat(mViewModel.getIsBestExpertLoading().getValue(), is(true));
-        verify(mExpertsInteractor).loadAllExperts(mViewModel.getExpertsCallBack());
+        verify(mExpertsInteractor, times(2)).loadAllExperts(mViewModel.getExpertsCallBack());
 
     }
 

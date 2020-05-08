@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ClientAppointment implements RowType, Serializable {
 
     private long mAppointmentId;
-    private long mExpertId;
+    private String mExpertId;
     private String mExpertName;
     private String mServiceName;// Название услуги
     private String mStartTime;// Время начала занятия
@@ -17,7 +17,7 @@ public class ClientAppointment implements RowType, Serializable {
     private String mDate;
 
 
-    public ClientAppointment(long appointmentId, long expertId, String expertName, String serviceName, String startTime, int cost, String location, String date) {
+    public ClientAppointment(long appointmentId, String expertId, String expertName, String serviceName, String startTime, int cost, String location, String date) {
         mAppointmentId = appointmentId;
         mExpertId = expertId;
         mExpertName = expertName;
@@ -28,7 +28,7 @@ public class ClientAppointment implements RowType, Serializable {
         mDate = date;
     }
 
-    public long getExpertId() {
+    public String getExpertId() {
         return mExpertId;
     }
 

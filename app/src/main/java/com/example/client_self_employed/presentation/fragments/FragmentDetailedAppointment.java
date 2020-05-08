@@ -37,20 +37,20 @@ public class FragmentDetailedAppointment extends Fragment {
 
     private HomeScreenViewModel mHomeScreenViewModel;
     private DetailedAppointmentViewModel mViewModel;
-    private long mExpertId;
+    private String mExpertId;
     private long mAppointmentId;
     private int mPosition;
 
-    private FragmentDetailedAppointment(long appointmentId, long expertId) {
+    private FragmentDetailedAppointment(long appointmentId, String expertId) {
         mExpertId = expertId;
         mAppointmentId = appointmentId;
     }
 
-    public static FragmentDetailedAppointment newInstance(long appointmentId, long expertId, int position) {
+    public static FragmentDetailedAppointment newInstance(long appointmentId, String expertId, int position) {
 
         Bundle args = new Bundle();
         args.putLong(Arguments.APPOINTMENT_ID, appointmentId);
-        args.putLong(Arguments.EXPERT_ID, expertId);
+        args.putString(Arguments.EXPERT_ID, expertId);
         args.putInt(Arguments.POSITION, position);
         FragmentDetailedAppointment fragment = new FragmentDetailedAppointment(appointmentId, expertId);
         fragment.setArguments(args);

@@ -7,6 +7,7 @@ import com.example.client_self_employed.data.IExpertRepository;
 import com.example.client_self_employed.data.IFileWrapper;
 import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ClientInteractor;
+import com.example.client_self_employed.domain.CreateClientInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
 import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
@@ -41,6 +42,11 @@ public class InteractorModule {
     @Provides
     public FilterActiveAppointmentsInteractor getFIlterActiveAppointmentsInteractor() {
         return new FilterActiveAppointmentsInteractor();
+    }
+
+    @Provides
+    public CreateClientInteractor getCreateClientInteractor(IClientRepository clientRepository) {
+        return new CreateClientInteractor(clientRepository);
     }
 
 }

@@ -8,4 +8,5 @@ public final class Constants {
     public static final String EXTRA_APPOINTMENT_ID = "EXTRA APPOINTMENT ID";
     public static final String OPEN_DETAILED_FRAGMENT = "OPEN DETAILED FRAGMENT";
     public static final String UPDATE_APPOINTMENT = "UPDATE_APPOINTMENT";
+    public static final String CLIENT_UID = "Client uid";
 }

@@ -5,7 +5,7 @@ import com.example.client_self_employed.domain.model.Appointment;
 import java.util.List;
 
 public interface IAppointmentsCallback {
-    void onAppointmentCallback(List<Appointment> appointments, List<Long> expertsId);
+    void onAppointmentCallback(List<Appointment> appointments, List<String> expertsId);
 
     void onErrorLoadingActiveAppointments(String errorLoadingActiveAppointments);
 

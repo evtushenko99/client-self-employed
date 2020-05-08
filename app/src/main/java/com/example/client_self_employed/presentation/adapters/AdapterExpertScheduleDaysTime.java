@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.presentation.clicklisteners.ExpertScheduleDetailedAppointment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +61,11 @@ public class AdapterExpertScheduleDaysTime extends RecyclerView.Adapter<AdapterE
 
         void bindView(@NonNull Appointment appointment) {
             mTime.setText(appointment.getStringTime());
-            if (appointment.getClientId() != 0) {
+            if (!appointment.getClientId().equals("0")) {
                 mTime.setBackgroundColor(itemView.getResources().getColor(R.color.primaryColor));
                 mTime.setTextColor(itemView.getResources().getColor(R.color.white));
             } else {
-                itemView.setOnClickListener(v -> mClickListners.onExpertScheduleDetailedAppointmentClickListners(appointment, 2));
+                itemView.setOnClickListener(v -> mClickListners.onExpertScheduleDetailedAppointmentClickListners(appointment, FirebaseAuth.getInstance().getCurrentUser().getUid()));
             }
         }
     }

@@ -5,17 +5,17 @@ import com.example.client_self_employed.presentation.adapters.items.RowType;
 import java.util.Objects;
 
 public class ClientSelectedExpert implements RowType {
-    private long mExpertId;
+    private String mExpertId;
     private String mExpertName;
     private String mUri;
 
-    public ClientSelectedExpert(long expertId, String expertName, String uri) {
+    public ClientSelectedExpert(String expertId, String expertName, String uri) {
         mExpertId = expertId;
         mExpertName = expertName;
         mUri = uri;
     }
 
-    public long getExpertId() {
+    public String getExpertId() {
         return mExpertId;
     }
 

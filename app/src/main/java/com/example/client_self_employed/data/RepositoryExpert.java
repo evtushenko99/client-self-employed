@@ -9,6 +9,7 @@ import com.example.client_self_employed.R;
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.data.model.FirebaseExpert;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
+import com.example.client_self_employed.domain.ICreateExpertCallback;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
 import com.example.client_self_employed.domain.IExpertsCallBack;
 import com.example.client_self_employed.domain.ILoadExpertPhotoCallback;
@@ -46,7 +47,7 @@ public class RepositoryExpert implements IExpertRepository {
         mResourceWrapper = resourceWrapper;
     }
 
-    private void loadExpertName(long expertId, List<Appointment> appointments, IExpertScheduleCallback expertScheduleStatus) {
+    private void loadExpertName(String expertId, List<Appointment> appointments, IExpertScheduleCallback expertScheduleStatus) {
         mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)
                 .equalTo(expertId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -93,13 +94,13 @@ public class RepositoryExpert implements IExpertRepository {
 
 
     @Override
-    public void loadExpertsNameForActiveAppointments(List<Appointment> activeAppointment, List<Long> expertsId, IClientAppointmentCallback callback) {
+    public void loadExpertsNameForActiveAppointments(List<Appointment> activeAppointment, List<String> expertsId, IClientAppointmentCallback callback) {
 
         if (expertsId.size() == 0) {
             callback.clientsAppointmentsIsLoaded(activeAppointment, new ArrayList<>());
         } else {
             List<Expert> experts = new ArrayList<>();
-            for (Long expertId : expertsId) {
+            for (String expertId : expertsId) {
                 mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID).equalTo(expertId)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -130,7 +131,7 @@ public class RepositoryExpert implements IExpertRepository {
     }
 
     @Override
-    public void loadExpertSchedule(@NonNull Long expertId, IExpertScheduleCallback expertScheduleCallback) {
+    public void loadExpertSchedule(@NonNull String expertId, IExpertScheduleCallback expertScheduleCallback) {
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.EXPERT_ID)
                 .equalTo(expertId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -158,7 +159,7 @@ public class RepositoryExpert implements IExpertRepository {
      * Запись нового клиента на свободгую запиь клиента
      */
     @Override
-    public void updateExpertAppointment(@NonNull Long appointmentId, long clientId, IExpertScheduleCallback expertScheduleCallback) {
+    public void updateExpertAppointment(@NonNull Long appointmentId, String clientId, IExpertScheduleCallback expertScheduleCallback) {
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.ID)
                 .equalTo(appointmentId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -189,7 +190,7 @@ public class RepositoryExpert implements IExpertRepository {
     }
 
     @Override
-    public void loadOneExpert(@NonNull Long expertId, ILoadOneExpertCallback callback) {
+    public void loadOneExpert(@NonNull String expertId, ILoadOneExpertCallback callback) {
         mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)
                 .equalTo(expertId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -213,7 +214,13 @@ public class RepositoryExpert implements IExpertRepository {
     }
 
     @Override
-    public void loadNewExpertPhoto(@NonNull Long expertId, String newExpertPhoto, ILoadExpertPhotoCallback callback) {
+    public void createExpert(@NonNull Expert expert, ICreateExpertCallback createExpertCallback) {
+
+    }
+
+
+    @Override
+    public void loadNewExpertPhoto(@NonNull String expertId, String newExpertPhoto, ILoadExpertPhotoCallback callback) {
 
     }
 

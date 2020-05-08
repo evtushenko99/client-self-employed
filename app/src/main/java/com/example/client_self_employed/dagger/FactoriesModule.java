@@ -2,10 +2,12 @@ package com.example.client_self_employed.dagger;
 
 import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ClientInteractor;
+import com.example.client_self_employed.domain.CreateClientInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
 import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
+import com.example.client_self_employed.presentation.createAccount.CreateClientViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
@@ -56,5 +58,13 @@ class FactoriesModule {
                                               ResourceWrapper resourceWrapper) {
         return new AccountViewModelFactory(executor, clientInteractor, resourceWrapper);
     }
+
+    @Provides
+    CreateClientViewModelFactory getCreateClientFactory(Executor executor,
+                                                        CreateClientInteractor createClientInteractor,
+                                                        ResourceWrapper resourceWrapper) {
+        return new CreateClientViewModelFactory(executor, createClientInteractor, resourceWrapper);
+    }
+
 
 }

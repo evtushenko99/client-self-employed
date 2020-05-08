@@ -39,9 +39,7 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
         BottomNavigationView navigationView = findViewById(R.id.bottom_navigation_view);
         navigationView.setOnNavigationItemSelectedListener(this);
         Log.d(TAG, "onCreate: ");
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, FragmentHomeScreen.newInstance())
-                .commit();
+
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
@@ -62,7 +60,7 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
         if (extras != null) {
             if (extras.containsKey(Constants.OPEN_DETAILED_FRAGMENT)) {
                 long appointmentId = extras.getLong(Constants.EXTRA_APPOINTMENT_ID);
-                long expertId = extras.getLong(Constants.EXTRA_EXPERT_ID);
+                String expertId = extras.getString(Constants.EXTRA_EXPERT_ID);
                 FragmentDetailedAppointment fragmentDetailedAppointment = FragmentDetailedAppointment.newInstance(appointmentId, expertId, 0);
                 Bundle arg = new Bundle();
                 arg.putLong(Constants.UPDATE_APPOINTMENT, appointmentId);
@@ -70,6 +68,11 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragmentDetailedAppointment)
                         .addToBackStack(null)
+                        .commit();
+            } else if (extras.containsKey(Constants.CLIENT_UID)) {
+                String uid = extras.getString(Constants.CLIENT_UID);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, FragmentHomeScreen.newInstance(uid))
                         .commit();
             }
         }

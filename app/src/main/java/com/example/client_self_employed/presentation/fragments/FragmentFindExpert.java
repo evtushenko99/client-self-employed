@@ -27,7 +27,7 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
     private RecyclerView mFindRecycler;
     private FindExpertViewModel mFindExpertViewModel;
     private Button mNewAppointmentButton;
-    private long mExpertId = -1;
+    private String mExpertId = "-1";
 
     public static FragmentFindExpert newInstance() {
         return new FragmentFindExpert();
@@ -87,10 +87,10 @@ public class FragmentFindExpert extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fragment_new_appointment_to_expert_button) {
-            if (mExpertId != -1) {
+            if (mExpertId != "-1") {
                 FragmentExpertSchedule fragmentExpertSchedule = new FragmentExpertSchedule();
                 Bundle bundle = new Bundle();
-                bundle.putLong(Arguments.EXPERT_ID, mExpertId);
+                bundle.putString(Arguments.EXPERT_ID, mExpertId);
                 fragmentExpertSchedule.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, fragmentExpertSchedule)

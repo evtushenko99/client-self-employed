@@ -34,6 +34,32 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class HomeScreenViewModel extends ViewModel {
+    private String mUserId;
+    private IAppointmentsCallback mAppointmentsCallback = new IAppointmentsCallback() {
+        @Override
+        public void onAppointmentCallback(List<Appointment> appointments, List<String> expertsId) {
+            mExpertsInteractor.loadExperNameForActiveAppointment(appointments, expertsId, mClientAppointmentCallback);
+        }
+
+        @Override
+        public void onErrorLoadingActiveAppointments(String errorLoadingActiveAppointments) {
+            mMessage.postValue(errorLoadingActiveAppointments);
+        }
+
+    };
+
+    HomeScreenViewModel(
+            @NonNull AppointmentInteractor iteractor,
+            @NonNull ExpertInteractor expertsInteractor,
+            @NonNull FilterActiveAppointmentsInteractor filterActiveAppointmentsInteractor,
+            @NonNull Executor executor) {
+        mAppointmentInteractor = iteractor;
+        mExpertsInteractor = expertsInteractor;
+        mFilterInteractor = filterActiveAppointmentsInteractor;
+        mExecutor = executor;
+        mModelsConverter = new ModelsConverter(mFilterInteractor);
+        loadClientExperts();
+    }
     private final AppointmentInteractor mAppointmentInteractor;
     private final ExpertInteractor mExpertsInteractor;
     private final FilterActiveAppointmentsInteractor mFilterInteractor;
@@ -102,30 +128,12 @@ public class HomeScreenViewModel extends ViewModel {
         }
     };
 
-    private IAppointmentsCallback mAppointmentsCallback = new IAppointmentsCallback() {
-        @Override
-        public void onAppointmentCallback(List<Appointment> appointments, List<Long> expertsId) {
-            mExpertsInteractor.loadExperNameForActiveAppointment(appointments, expertsId, mClientAppointmentCallback);
-        }
+    public String getUserId() {
+        return mUserId;
+    }
 
-        @Override
-        public void onErrorLoadingActiveAppointments(String errorLoadingActiveAppointments) {
-            mMessage.postValue(errorLoadingActiveAppointments);
-        }
-
-    };
-
-    HomeScreenViewModel(
-            @NonNull AppointmentInteractor iteractor,
-            @NonNull ExpertInteractor expertsInteractor,
-            @NonNull FilterActiveAppointmentsInteractor filterActiveAppointmentsInteractor,
-            @NonNull Executor executor) {
-        mAppointmentInteractor = iteractor;
-        mExpertsInteractor = expertsInteractor;
-        mFilterInteractor = filterActiveAppointmentsInteractor;
-        mExecutor = executor;
-        mModelsConverter = new ModelsConverter(mFilterInteractor);
-
+    public void setUserId(String userId) {
+        mUserId = userId;
     }
 
     @BindingAdapter({"data", "activeAppointmentClickListener", "newRecordClickListener", "findExpertButtonClickListener"})
@@ -146,7 +154,8 @@ public class HomeScreenViewModel extends ViewModel {
 
     public void loadActiveAppointments() {
         mIsActiveAppointmentLoading.setValue(true);
-        mExecutor.execute(() -> mAppointmentInteractor.loadClientsAppointments(2, mAppointmentsCallback));
+        if (mUserId != null)
+            mExecutor.execute(() -> mAppointmentInteractor.loadClientsAppointments(mUserId, mAppointmentsCallback));
     }
 
     public void deleteClientAppointment(long appointmentId) {

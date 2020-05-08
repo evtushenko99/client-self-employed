@@ -19,8 +19,8 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     private int mDayOfMonth;
     private int mStartHourOfDay;// Время начала занятия
     private int mStartMinute;
-    private long mExpertId;
-    private long mClientId;
+    private String mExpertId;
+    private String mClientId;
     private float mRating;
 
     public boolean getNotification() {
@@ -38,7 +38,7 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
     }
 
     public Appointment(long id, String serviceName, String sessionDuration, int cost, String location, int year, int month, int dayOfMonth,
-                       int startHourOfDay, int startMinute, long expertId, long clientId, float rating) {
+                       int startHourOfDay, int startMinute, String expertId, String clientId, float rating) {
         mId = id;
         mServiceName = serviceName;
         mSessionDuration = sessionDuration;
@@ -66,8 +66,8 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         mDayOfMonth = in.readInt();
         mStartHourOfDay = in.readInt();
         mStartMinute = in.readInt();
-        mExpertId = in.readLong();
-        mClientId = in.readLong();
+        mExpertId = in.readString();
+        mClientId = in.readString();
     }
 
     public static final Creator<Appointment> CREATOR = new Creator<Appointment>() {
@@ -120,8 +120,8 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         dest.writeInt(mDayOfMonth);
         dest.writeInt(mStartHourOfDay);
         dest.writeInt(mStartMinute);
-        dest.writeLong(mExpertId);
-        dest.writeLong(mClientId);
+        dest.writeString(mExpertId);
+        dest.writeString(mClientId);
     }
 
     @Override
@@ -226,16 +226,16 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         return mStartMinute;
     }
 
-    public long getExpertId() {
+    public String getExpertId() {
         return mExpertId;
     }
 
-    public long getClientId() {
-        return mClientId;
+    public void setExpertId(String expertId) {
+        mExpertId = expertId;
     }
 
-    public void setClientId(long clientId) {
-        mClientId = clientId;
+    public String getClientId() {
+        return mClientId;
     }
 
 
@@ -279,8 +279,8 @@ public class Appointment implements Comparable<Appointment>, Parcelable {
         mStartMinute = startMinute;
     }
 
-    public void setExpertId(long expertId) {
-        mExpertId = expertId;
+    public void setClientId(String clientId) {
+        mClientId = clientId;
     }
 
     public float getRating() {

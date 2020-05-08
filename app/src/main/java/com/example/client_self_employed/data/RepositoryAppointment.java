@@ -48,7 +48,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot keyExpert : dataSnapshot.getChildren()) {
                             Appointment appointment = keyExpert.getValue(Appointment.class);
-                            appointment.setClientId(0);
+                            appointment.setClientId("0");
                             mDatabaseReferenceAppointment.child(String.valueOf(appointment.getId())).setValue(appointment)
                                     .addOnCompleteListener(task -> callback.clientAppointmentIsDeleted(true));
                             callback.message(mResourceWrapper.getString(R.string.appointment_successful_deleted));
@@ -65,7 +65,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
     }
 
     @Override
-    public void loadClientActiveAppointments(@NonNull Long clientId, IAppointmentsCallback callback) {
+    public void loadClientActiveAppointments(@NonNull String clientId, IAppointmentsCallback callback) {
 
         mDatabaseReferenceAppointment.orderByChild(FirebaseAppoinment.Fields.CLIENT_ID)
                 .equalTo(clientId)
@@ -73,9 +73,9 @@ public class RepositoryAppointment implements IAppointmentRepository {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         List<Appointment> appointments = new ArrayList<>();
-                        List<Long> expertId = new ArrayList<>();
+                        List<String> expertId = new ArrayList<>();
                         for (DataSnapshot keyMode : dataSnapshot.getChildren()) {
-                            long id = keyMode.getValue(Appointment.class).getExpertId();
+                            String id = keyMode.getValue(Appointment.class).getExpertId();
                             if (!expertId.contains(id)) {
                                 expertId.add(id);
                             }

@@ -53,7 +53,7 @@ public class FragmentExpertSchedule extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (this.getArguments() != null) {
-            long id = this.getArguments().getLong(Arguments.EXPERT_ID);
+            String id = this.getArguments().getString(Arguments.EXPERT_ID);
             setupScheduleMVVM(id);
             mScheduleRecycler = view.findViewById(R.id.schedule_recycler);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -70,7 +70,7 @@ public class FragmentExpertSchedule extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setupScheduleMVVM(long id) {
+    private void setupScheduleMVVM(String id) {
         mHomeScreenViewModel = ViewModelProviders.of(getActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                 .get(HomeScreenViewModel.class);
         mScheduleViewModel.loadExpertSchedule(id);
