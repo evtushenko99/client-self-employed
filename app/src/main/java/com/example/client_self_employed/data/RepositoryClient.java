@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.data.model.FirebaseClient;
+import com.example.client_self_employed.domain.IAllUsersCallback;
 import com.example.client_self_employed.domain.IClientCallback;
 import com.example.client_self_employed.domain.ICreateClientCallback;
 import com.example.client_self_employed.domain.model.Client;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -81,6 +83,27 @@ public class RepositoryClient implements IClientRepository {
                         callback.messageWorkOnClient(error);
                         Log.d(TAG, error);
 
+                    }
+                });
+    }
+
+    public void findClient(@NotNull String clientId, IAllUsersCallback callback) {
+        mDatabaseReferenceClient.orderByChild(FirebaseClient.Fields.ID)
+                .equalTo(clientId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyClient : dataSnapshot.getChildren()) {
+                            Client client = keyClient.getValue(Client.class);
+                            if (client.getId().equals(clientId)) {
+                                callback.onClientCallBack(true);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onExpertCallBack(false);
                     }
                 });
     }

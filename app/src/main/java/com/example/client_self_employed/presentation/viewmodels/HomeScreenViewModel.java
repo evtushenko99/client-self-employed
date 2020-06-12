@@ -21,7 +21,7 @@ import com.example.client_self_employed.presentation.Utils.ModelsConverter;
 import com.example.client_self_employed.presentation.adapters.AdapterHomeScreen;
 import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
-import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
+import com.example.client_self_employed.presentation.adapters.items.NoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.FindExpertButtonClickListener;
@@ -108,7 +108,7 @@ public class HomeScreenViewModel extends ViewModel {
                     }
                 }
             } else {
-                mRowTypes.add(new ClientNoAppointmentItem());
+                mRowTypes.add(new NoAppointmentItem());
                 mLiveData.setValue(mRowTypes);
             }
             mIsActiveAppointmentLoading.setValue(false);

@@ -39,7 +39,8 @@ public class DialogFragmentDetailedExpert extends DialogFragment {
         ((TextView) view.findViewById(R.id.fragment_detailed_expert_name)).setText(mExpert.getFullName());
         ((TextView) view.findViewById(R.id.fragment_detailed_expert_age)).setText((String.valueOf(mExpert.getAge())));
         ((TextView) view.findViewById(R.id.fragment_detailed_email)).setText(mExpert.getEmail());
-        String work_experience = view.getResources().getQuantityString(R.plurals.declination_of_years, mExpert.getWorkExperience(), mExpert.getWorkExperience());
+        //  String work_experience = view.getResources().getQuantityString(R.plurals.declination_of_years, mExpert.getWorkExperience(), mExpert.getWorkExperience());
+        String work_experience = mExpert.getWorkExperience();
         ((TextView) view.findViewById(R.id.fragment_detailed_work_experience)).setText(work_experience);
         ((TextView) view.findViewById(R.id.fragment_detailed_phone_number)).setText(mExpert.getPhoneNumber());
     }

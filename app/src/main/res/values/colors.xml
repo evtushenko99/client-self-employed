@@ -3,11 +3,12 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorRecycler">#5e91f2</color>
 
-    <color name="primaryColor">#ff5722</color>
-    <color name="primaryLightColor">#ff8a50</color>
-    <color name="primaryDarkColor">#c41c00</color>
+    <color name="primaryColor">#1564bf</color>
+    <color name="primaryLightColor">#1564bf</color>
+    <color name="primaryDarkColor">#003b8e</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
-    <color name="ic_app_image_background">#FF8A50</color>
+    <color name="ic_app_image_background">#5e91f2</color>
 </resources>

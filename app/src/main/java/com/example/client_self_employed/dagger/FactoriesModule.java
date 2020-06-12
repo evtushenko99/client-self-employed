@@ -3,11 +3,14 @@ package com.example.client_self_employed.dagger;
 import com.example.client_self_employed.domain.AppointmentInteractor;
 import com.example.client_self_employed.domain.ClientInteractor;
 import com.example.client_self_employed.domain.CreateClientInteractor;
+import com.example.client_self_employed.domain.CreateExpertInteractor;
 import com.example.client_self_employed.domain.DetailedAppointmentInteractor;
 import com.example.client_self_employed.domain.ExpertInteractor;
 import com.example.client_self_employed.domain.FilterActiveAppointmentsInteractor;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.example.client_self_employed.presentation.createAccount.CreateClientViewModelFactory;
+import com.example.client_self_employed.presentation.createAccount.CreateExpertViewModelFactory;
+import com.example.client_self_employed.presentation.expert.ExpertHomeViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
@@ -66,5 +69,18 @@ class FactoriesModule {
         return new CreateClientViewModelFactory(executor, createClientInteractor, resourceWrapper);
     }
 
+    @Provides
+    CreateExpertViewModelFactory getCreateExpertFactory(Executor executor,
+                                                        CreateExpertInteractor createExpertInteractor,
+                                                        ResourceWrapper resourceWrapper) {
+        return new CreateExpertViewModelFactory(executor, createExpertInteractor, resourceWrapper);
+    }
+
+    @Provides
+    ExpertHomeViewModelFactory getExpertHomeFactory(ExpertInteractor interactor,
+                                                    AppointmentInteractor appointmentInteractor,
+                                                    Executor executor) {
+        return new ExpertHomeViewModelFactory(interactor, appointmentInteractor, executor);
+    }
 
 }

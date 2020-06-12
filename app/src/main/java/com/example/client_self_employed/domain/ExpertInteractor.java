@@ -27,6 +27,10 @@ public class ExpertInteractor {
                     expert.getLastName().toLowerCase().contains(queryLowerCase)) {
                 findedExperts.add(expert);
             }
+            if (expert.getProfession().toLowerCase().contains(queryLowerCase)) {
+                findedExperts.add(expert);
+            }
+
         }
         return findedExperts;
     }

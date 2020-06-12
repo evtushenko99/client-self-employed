@@ -19,7 +19,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.client_self_employed.R;
-import com.example.client_self_employed.presentation.HomeActivity;
+import com.example.client_self_employed.presentation.HomeClientActivity;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 
 import java.util.concurrent.TimeUnit;
@@ -60,7 +60,7 @@ public class NotificationHandler extends Worker {
         String text = data.getString(Constants.EXTRA_TEXT);
         String uri = data.getString(Constants.EXTRA_EXPERT_PHOTO);
         long id = data.getLong(Constants.EXTRA_APPOINTMENT_ID, 1);
-        long expertId = data.getLong(Constants.EXTRA_EXPERT_ID, 1);
+        long expertId = data.getLong(Constants.EXPERT_ID, 1);
 
 
         createNotification(title, text, id, expertId, null);
@@ -74,10 +74,10 @@ public class NotificationHandler extends Worker {
         mNotificationLayout.setTextViewText(R.id.notification_time, text);
 
 
-        Intent intent = new Intent(mContext, HomeActivity.class);
+        Intent intent = new Intent(mContext, HomeClientActivity.class);
         intent.putExtra(Constants.OPEN_DETAILED_FRAGMENT, "update fragment");
         intent.putExtra(Constants.EXTRA_APPOINTMENT_ID, id);
-        intent.putExtra(Constants.EXTRA_EXPERT_ID, expertId);
+        intent.putExtra(Constants.EXPERT_ID, expertId);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

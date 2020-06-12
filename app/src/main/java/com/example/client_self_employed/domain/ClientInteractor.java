@@ -17,6 +17,7 @@ public class ClientInteractor {
 
     public ClientInteractor(IClientRepository clientRepository, IFileWrapper fileWrapper) {
         mClientRepository = clientRepository;
+
         mFileWrapper = fileWrapper;
     }
 

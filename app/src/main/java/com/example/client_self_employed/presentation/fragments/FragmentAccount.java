@@ -124,32 +124,25 @@ public class FragmentAccount extends Fragment {
     }
 
     private void callCameraApp() {
-
         mViewModel.createNewImageURI();
-        //mImageUri = mViewModel.createNewImageURI();
         mViewModel.getUriForFile().observe(getViewLifecycleOwner(), new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
                 if (uri != null) {
                     mImageUri = uri;
-                    Intent cameraAppIntent = new Intent();
-                    cameraAppIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    cameraAppIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    cameraAppIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                    startPhoto(cameraAppIntent);
+                    startPhoto(uri);
                     //startActivityForResult(cameraAppIntent, START_CAMERA_APP);
                 }
             }
         });
-
-        /*if (mImageUri != null) {
-            cameraAppIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-            this.startActivityForResult(cameraAppIntent, START_CAMERA_APP);
-        }*/
     }
 
-    private void startPhoto(Intent intent) {
-        this.startActivityForResult(intent, START_CAMERA_APP);
+    private void startPhoto(Uri uri) {
+        Intent cameraAppIntent = new Intent();
+        cameraAppIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraAppIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        cameraAppIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        this.startActivityForResult(cameraAppIntent, START_CAMERA_APP);
     }
 
     @Override

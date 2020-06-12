@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".SelfEmployedApp"
         android:allowBackup="true"
@@ -23,7 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.createAccount.CreateActivity"></activity>
+        <activity android:name=".presentation.expert.ExpertActivity"></activity>
+        <activity android:name=".presentation.createAccount.CreateActivity" />
         <activity
             android:name=".presentation.LoginActivity"
             android:launchMode="singleTop">
@@ -34,8 +36,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.HomeActivity"
-            android:launchMode="singleTop"></activity>
+            android:name=".presentation.HomeClientActivity"
+            android:launchMode="singleTop" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

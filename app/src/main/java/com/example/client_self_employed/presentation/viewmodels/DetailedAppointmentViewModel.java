@@ -48,7 +48,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
     private MutableLiveData<String> mExpertPhoneNumber = new MutableLiveData<>();
     private MutableLiveData<String> mExpertEmail = new MutableLiveData<>();
     private MutableLiveData<Integer> mExpertAge = new MutableLiveData();
-    private MutableLiveData<Integer> mExpertWorkExperience = new MutableLiveData();
+    private MutableLiveData<String> mExpertWorkExperience = new MutableLiveData();
 
     private MutableLiveData<String> mAppointmentServiceName = new MutableLiveData<>();
     private MutableLiveData<String> mAppointmentDate = new MutableLiveData<>();
@@ -370,7 +370,7 @@ public class DetailedAppointmentViewModel extends ViewModel {
         return mExpertAge;
     }
 
-    public LiveData<Integer> getExpertWorkExperience() {
+    public LiveData<String> getExpertWorkExperience() {
         return mExpertWorkExperience;
     }
 

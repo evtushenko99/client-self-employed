@@ -16,7 +16,7 @@ public class Expert implements Serializable {
     private String mEmail;
     private String mPhoneNumber;
     private String mProfession;
-    private int mWorkExperience;
+    private String mWorkExperience;
     private String mExpertPhotoUri;
     private int mReviewCount;
     private int mTotalRating;
@@ -25,7 +25,7 @@ public class Expert implements Serializable {
 
     }
 
-    public Expert(String id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri) {
+    public Expert(String id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, String workExperience, String expertPhotoUri) {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
@@ -38,7 +38,7 @@ public class Expert implements Serializable {
         mExpertPhotoUri = expertPhotoUri;
     }
 
-    public Expert(String id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, int workExperience, String expertPhotoUri, int reviewCount, int totalRating) {
+    public Expert(String id, String lastName, String firstName, String secondName, int age, String email, String phoneNumber, String profession, String workExperience, String expertPhotoUri, int reviewCount, int totalRating) {
         mId = id;
         mLastName = lastName;
         mFirstName = firstName;
@@ -94,7 +94,7 @@ public class Expert implements Serializable {
         return mProfession;
     }
 
-    public int getWorkExperience() {
+    public String getWorkExperience() {
         return mWorkExperience;
     }
 
@@ -138,7 +138,7 @@ public class Expert implements Serializable {
         mProfession = profession;
     }
 
-    public void setWorkExperience(int workExperience) {
+    public void setWorkExperience(String workExperience) {
         mWorkExperience = workExperience;
     }
 

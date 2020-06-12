@@ -24,7 +24,7 @@
     <string name="title_find_expert">Поиск эксперта</string>
 
     <string name="item_expert_holder_phone_number">Телефон:</string>
-    <string name="fragment_find_expert_search_view_hint">Фамилия, Имя эксперта</string>
+    <string name="fragment_find_expert_search_view_hint">Фамилия или вид деятельности эксперта</string>
     <string name="preferences_enable_notifications_switch_key">enable notifications</string>
     <string name="preferences_title_notification">Уведомления</string>
     <string name="preferences_enable_notifications_title">Включить</string>
@@ -136,4 +136,17 @@
     <string name="select_Expert_button">Эксперт</string>
     <string name="create_new_account">Создать аккаунт</string>
     <string name="passwordError">Пароли должны совпадать</string>
+    <string name="create_expert_profession">Вид деятельности</string>
+    <string name="create_expert_work_experience">Опыт работы</string>
+    <string name="empty_expert_recycler">У вас нет активных записей</string>
+    <string name="expert_appointment_name">Наименование услуги</string>
+    <string name="expert_appointment_location">Место проведения</string>
+    <string name="expert_appointment_cost">Стоимость</string>
+    <string name="expert_appointment_date">Дата</string>
+    <string name="expert_appointment_time">Время</string>
+    <string name="expert_appointment_duration">Продолжительность</string>
+    <string name="expert_add_appointment_button">Добавить</string>
+    <string name="expert_detailed_appointment_client">Записанный клиент</string>
+    <string name="expert_detailed_appointment_delete">Удалить запись</string>
+    <string name="menu_delete">Delete</string>
 </resources>

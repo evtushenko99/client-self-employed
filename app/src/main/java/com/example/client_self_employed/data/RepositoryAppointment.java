@@ -9,6 +9,7 @@ import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
 import com.example.client_self_employed.domain.ILoadOneAppointmentCallback;
+import com.example.client_self_employed.domain.INewAppoinmentCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
@@ -153,7 +154,7 @@ public class RepositoryAppointment implements IAppointmentRepository {
 
 
     @Override
-    public void uploadAppointment(Appointment appointment) {
+    public void uploadAppointment(Appointment appointment, INewAppoinmentCallback callback) {
         mDatabaseReferenceAppointment.child(String.valueOf((appointment.getId()))).setValue(appointment);
     }
 

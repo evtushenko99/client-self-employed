@@ -34,7 +34,7 @@ public class SelectingFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if (v.getId() == R.id.select_expert) {
             requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.create_activity_container, CreateExpertAccount.newInstance())
+                    .replace(R.id.create_activity_container, CreateExpertAccountFragment.newInstance())
                     .commit();
         } else {
             requireActivity().getSupportFragmentManager().beginTransaction()

@@ -27,7 +27,7 @@ import com.example.client_self_employed.databinding.FragmentDetailedAppointmentB
 import com.example.client_self_employed.notification.Constants;
 import com.example.client_self_employed.notification.NotificationHandler;
 import com.example.client_self_employed.presentation.Arguments;
-import com.example.client_self_employed.presentation.HomeActivity;
+import com.example.client_self_employed.presentation.HomeClientActivity;
 import com.example.client_self_employed.presentation.fragments.fragmentdetailedcliclicklisteners.IAddNotificationClickListener;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModel;
 import com.example.client_self_employed.presentation.viewmodels.HomeScreenViewModel;
@@ -115,7 +115,7 @@ public class FragmentDetailedAppointment extends Fragment {
                 mHomeScreenViewModel = ViewModelProviders.of(requireActivity(), ((SelfEmployedApp) requireContext().getApplicationContext()).getDaggerComponent().getHomeScreenModelFactory())
                         .get(HomeScreenViewModel.class);
                 mHomeScreenViewModel.deleteClientAppointment(appointmentId);
-                ((HomeActivity) requireActivity()).deleteAppointmentFromRecycler(mPosition);
+                ((HomeClientActivity) requireActivity()).deleteAppointmentFromRecycler(mPosition);
             });
             builder.setNegativeButton(resources.getString(R.string.negative_button), null);
             AlertDialog dialog = builder.create();

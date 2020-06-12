@@ -26,7 +26,7 @@ public class AppointmentInteractorTest {
 
     @Test
     public void loadClientsAppointments() {
-        long clientId = 0;
+        String clientId = "";
         mAppointmentInteractor.loadClientsAppointments(clientId, mAppointmentsCallback);
         verify(mAppointmentsRepository, times(1)).loadClientActiveAppointments(clientId, mAppointmentsCallback);
     }

@@ -40,7 +40,7 @@ public interface IExpertRepository {
     /**
      * Создание нового эксперта
      */
-    void createExpert(@NonNull Expert expert, ICreateExpertCallback createExpertCallback);
+    void createExpert(@NonNull Expert expert, String password, ICreateExpertCallback createExpertCallback);
 
     /**
      * Добавление или обновления uri - для фотографии эксперта.

@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.client_self_employed.SelfEmployedApp;
 import com.example.client_self_employed.databinding.CreateClientViewModelBinding;
 import com.example.client_self_employed.notification.Constants;
-import com.example.client_self_employed.presentation.HomeActivity;
+import com.example.client_self_employed.presentation.HomeClientActivity;
 import com.example.client_self_employed.presentation.fragments.CustomToast;
 
 public class CreateClientAccountFragment extends Fragment {
@@ -49,7 +49,7 @@ public class CreateClientAccountFragment extends Fragment {
             @Override
             public void onChanged(String s) {
                 if (s != null) {
-                    Intent intent = new Intent(requireActivity(), HomeActivity.class);
+                    Intent intent = new Intent(requireActivity(), HomeClientActivity.class);
                     intent.putExtra(Constants.CLIENT_UID, s);
                     startActivity(intent);
                 }

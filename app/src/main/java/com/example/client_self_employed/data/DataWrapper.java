@@ -10,7 +10,7 @@ public class DataWrapper implements IDataWrapper {
         return new Data.Builder()
                 .putString(Constants.EXTRA_TITLE, serviceName)
                 .putString(Constants.EXTRA_TEXT, startTime)
-                .putString(Constants.EXTRA_EXPERT_ID, expertId)
+                .putString(Constants.EXPERT_ID, expertId)
                 .putLong(Constants.EXTRA_APPOINTMENT_ID, appointmentId)
                 .build();
     }

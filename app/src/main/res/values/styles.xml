@@ -14,6 +14,8 @@
 
     <style name="MyButton" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textColor">@color/primaryLightColor</item>
+        <item name="borderWidth">4dp</item>
+        <item name="colorButtonNormal">#A9787070</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 

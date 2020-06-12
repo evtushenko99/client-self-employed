@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.R;
 import com.example.client_self_employed.data.model.FirebaseAppoinment;
 import com.example.client_self_employed.data.model.FirebaseExpert;
+import com.example.client_self_employed.domain.IAllUsersCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
 import com.example.client_self_employed.domain.ICreateExpertCallback;
 import com.example.client_self_employed.domain.IExpertScheduleCallback;
@@ -18,8 +19,13 @@ import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.ResourceWrapper;
 import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +46,7 @@ public class RepositoryExpert implements IExpertRepository {
     private final DatabaseReference mDatabaseReferenceExpert = mReference.getReference().child("experts");
     private final DatabaseReference mDatabaseConnection = mReference.getReference(".info/connected");
     private StorageReference mStorageReference = FirebaseStorage.getInstance().getReference();
-
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ResourceWrapper mResourceWrapper;
 
     public RepositoryExpert(ResourceWrapper resourceWrapper) {
@@ -92,6 +98,26 @@ public class RepositoryExpert implements IExpertRepository {
                 });
     }
 
+    public void findExpert(String uid, IAllUsersCallback callback) {
+        mDatabaseReferenceExpert.orderByChild(FirebaseExpert.Fields.ID)
+                .equalTo(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot expertKey : dataSnapshot.getChildren()) {
+                            Expert expert = expertKey.getValue(Expert.class);
+                            if (expert.getId().equals(uid)) {
+                                callback.onExpertCallBack(true);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onExpertCallBack(false);
+                    }
+                });
+    }
 
     @Override
     public void loadExpertsNameForActiveAppointments(List<Appointment> activeAppointment, List<String> expertsId, IClientAppointmentCallback callback) {
@@ -214,8 +240,24 @@ public class RepositoryExpert implements IExpertRepository {
     }
 
     @Override
-    public void createExpert(@NonNull Expert expert, ICreateExpertCallback createExpertCallback) {
-
+    public void createExpert(@NonNull Expert expert, String password, ICreateExpertCallback createExpertCallback) {
+        mAuth.createUserWithEmailAndPassword(expert.getEmail(), password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uid = user.getUid();
+                            expert.setId(uid);
+                            mDatabaseReferenceExpert.child(uid)
+                                    .setValue(expert)
+                                    .addOnCompleteListener(task1 -> createExpertCallback.expertIsCreated(true, uid))
+                                    .addOnFailureListener(e -> createExpertCallback.expertIsCreated(false, null));
+                        } else {
+                            createExpertCallback.expertIsCreated(false, null);
+                        }
+                    }
+                });
     }
 
 

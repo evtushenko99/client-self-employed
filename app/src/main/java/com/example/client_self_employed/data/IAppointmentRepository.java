@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.client_self_employed.domain.IAppointmentsCallback;
 import com.example.client_self_employed.domain.IClientAppointmentCallback;
 import com.example.client_self_employed.domain.ILoadOneAppointmentCallback;
+import com.example.client_self_employed.domain.INewAppoinmentCallback;
 import com.example.client_self_employed.domain.model.Appointment;
 import com.example.client_self_employed.domain.model.Client;
 import com.example.client_self_employed.domain.model.Expert;
@@ -28,7 +29,7 @@ public interface IAppointmentRepository {
 
     void uploadExpert(Expert expert);
 
-    void uploadAppointment(Appointment appointment);
+    void uploadAppointment(Appointment appointment, INewAppoinmentCallback callback);
 
     void uploadClient(Client client);
 

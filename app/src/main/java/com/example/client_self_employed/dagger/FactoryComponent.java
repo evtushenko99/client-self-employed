@@ -1,6 +1,8 @@
 package com.example.client_self_employed.dagger;
 
 import com.example.client_self_employed.presentation.createAccount.CreateClientViewModelFactory;
+import com.example.client_self_employed.presentation.createAccount.CreateExpertViewModelFactory;
+import com.example.client_self_employed.presentation.expert.ExpertHomeViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.AccountViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.DetailedAppointmentViewModelFactory;
 import com.example.client_self_employed.presentation.viewmodels.ExpertScheduleViewModelFactory;
@@ -32,5 +34,9 @@ public interface FactoryComponent {
     @Singleton
     CreateClientViewModelFactory getCreateClientViewModelFactory();
 
+    @Singleton
+    CreateExpertViewModelFactory getCreateExpertViewModelFactory();
 
+    @Singleton
+    ExpertHomeViewModelFactory getExpertHomeViewModelFactory();
 }

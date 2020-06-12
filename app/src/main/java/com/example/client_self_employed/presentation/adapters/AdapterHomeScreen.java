@@ -13,7 +13,7 @@ import com.example.client_self_employed.databinding.ClientActiveAppointmentsBind
 import com.example.client_self_employed.databinding.ItemBestExpertsBinding;
 import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
-import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
+import com.example.client_self_employed.presentation.adapters.items.NoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 import com.example.client_self_employed.presentation.clicklisteners.ActiveAppointmentClickListener;
 import com.example.client_self_employed.presentation.clicklisteners.FindExpertButtonClickListener;
@@ -55,7 +55,7 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
             return RowType.APPOINTMENT_ROW_TYPE;
         } else if (item instanceof ClientExpertItem) {
             return RowType.EXPERT_PHOTO_ROW_TYPE;
-        } else if (item instanceof ClientNoAppointmentItem) {
+        } else if (item instanceof NoAppointmentItem) {
             return RowType.NO_APPOINTMENT_ROW_TYPE;
         } else {
             throw new RuntimeException("The following item is not supported by adapter: " + item);
@@ -129,7 +129,7 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
     /**
      * Holder отвечающий за отображение активных записей клиента
      */
-    public static class AppointmentViewHolder extends RecyclerView.ViewHolder {
+    private static class AppointmentViewHolder extends RecyclerView.ViewHolder {
 
         private ClientActiveAppointmentsBinding mAppointmentsBinding;
 
@@ -146,7 +146,7 @@ public class AdapterHomeScreen extends RecyclerView.Adapter {
         }
     }
 
-    public static class NoAppointmentViewHolder extends RecyclerView.ViewHolder {
+    private static class NoAppointmentViewHolder extends RecyclerView.ViewHolder {
 
         public NoAppointmentViewHolder(@NonNull View itemView, FindExpertButtonClickListener findExpertButtonClickListener) {
             super(itemView);

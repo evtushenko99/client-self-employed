@@ -3,12 +3,14 @@ package com.example.client_self_employed.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.client_self_employed.presentation.adapters.items.RowType;
+
 import java.util.Objects;
 
 /**
  * Сущность записи, содержащая освновные ее характеристики
  */
-public class Appointment implements Comparable<Appointment>, Parcelable {
+public class Appointment implements Comparable<Appointment>, Parcelable, RowType {
     private long mId;
     private String mServiceName;// Название услуги
     private String mSessionDuration;//Продолжительность занятия

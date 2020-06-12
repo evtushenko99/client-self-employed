@@ -20,7 +20,7 @@ import com.example.client_self_employed.presentation.fragments.FragmentFindExper
 import com.example.client_self_employed.presentation.fragments.FragmentHomeScreen;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class HomeClientActivity extends AppCompatActivity implements IUpdateRecyclerListener, BottomNavigationView.OnNavigationItemSelectedListener {
     private static final String SAVED_HOLDER_POSITION = "POSITION";
     private static final String TAG = "TAG";
     private Toolbar mToolBar;
@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity implements IUpdateRecyclerLi
         if (extras != null) {
             if (extras.containsKey(Constants.OPEN_DETAILED_FRAGMENT)) {
                 long appointmentId = extras.getLong(Constants.EXTRA_APPOINTMENT_ID);
-                String expertId = extras.getString(Constants.EXTRA_EXPERT_ID);
+                String expertId = extras.getString(Constants.EXPERT_ID);
                 FragmentDetailedAppointment fragmentDetailedAppointment = FragmentDetailedAppointment.newInstance(appointmentId, expertId, 0);
                 Bundle arg = new Bundle();
                 arg.putLong(Constants.UPDATE_APPOINTMENT, appointmentId);

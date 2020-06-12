@@ -11,7 +11,7 @@ import com.example.client_self_employed.domain.model.Expert;
 import com.example.client_self_employed.presentation.Utils.ModelsConverter;
 import com.example.client_self_employed.presentation.adapters.items.ClientActiveAppointmentsItem;
 import com.example.client_self_employed.presentation.adapters.items.ClientExpertItem;
-import com.example.client_self_employed.presentation.adapters.items.ClientNoAppointmentItem;
+import com.example.client_self_employed.presentation.adapters.items.NoAppointmentItem;
 import com.example.client_self_employed.presentation.adapters.items.RowType;
 import com.example.client_self_employed.presentation.model.ClientAppointment;
 import com.example.client_self_employed.presentation.model.ClientSelectedExpert;
@@ -161,7 +161,7 @@ public class HomeScreenViewModelTest {
         List<Expert> experts = new ArrayList<>();
 
         List<RowType> expected = new ArrayList<>(Arrays.asList(mock(ClientExpertItem.class)));
-        expected.add(new ClientNoAppointmentItem());
+        expected.add(new NoAppointmentItem());
         //act
         mViewModel.setRowTypes(Arrays.asList(mock(ClientExpertItem.class)));
         mViewModel.getClientAppointmentCallback().clientsAppointmentsIsLoaded(appointmentList, experts);
